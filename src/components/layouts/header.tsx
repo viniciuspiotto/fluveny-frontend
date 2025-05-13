@@ -1,5 +1,5 @@
-import { UserProfile } from '@/features/module/components/user-profile';
-import { UserProfileSkeleton } from '@/features/module/components/user-profile-skeleton';
+import { UserProfile } from '@/components/user-profile';
+import { UserProfileSkeleton } from '@/components/user-profile-skeleton';
 import { Menu } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '../ui/button';

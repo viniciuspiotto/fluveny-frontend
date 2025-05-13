@@ -1,5 +1,5 @@
 import type { ModuleCardProps } from '@/@types/module';
-import { Tag } from './panel/tag';
+import { Tag } from './tag';
 
 export const ModuleCard = ({ title, topics }: ModuleCardProps) => {
   return (
