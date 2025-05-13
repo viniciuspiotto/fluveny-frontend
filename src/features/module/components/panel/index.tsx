@@ -7,7 +7,7 @@ import { ModuleList } from './module-list';
 export function Panel() {
   return (
     <div className="flex flex-col space-y-4 lg:space-y-5">
-      <h1 className="text-center text-3xl font-bold tracking-widest lg:text-4xl">
+      <h1 className="mt-2 text-center text-3xl font-bold tracking-widest lg:mt-8 lg:text-4xl">
         Módulos
       </h1>
       <Button

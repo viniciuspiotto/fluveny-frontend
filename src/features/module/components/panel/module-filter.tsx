@@ -16,7 +16,7 @@ export const ModuleFilter = () => {
     <form className="mb-6 flex gap-4 lg:mb-7">
       <div className="relative lg:w-140">
         <Input
-          className="text-md placeholder:text-md px-4 py-5 pr-10 placeholder:text-zinc-400 lg:px-5 lg:py-6 lg:text-lg"
+          className="placeholder:text-md px-4 py-5 pr-10 text-sm placeholder:text-zinc-400 lg:px-5 lg:py-6 lg:text-lg"
           placeholder="Regras gramaticais..."
         />
         <Search className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-zinc-400 lg:size-5" />

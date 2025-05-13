@@ -1,0 +1,21 @@
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+
+export const UserProfile = () => {
+  return (
+    <div className="hidden gap-10 lg:flex">
+      <div className="flex flex-col">
+        <div className="flex items-end gap-2">
+          <span className="text-xl font-bold">Joe Doe</span>
+          <span className="font-light text-zinc-400">O escritor</span>
+        </div>
+        <div className="flex flex-col">
+          {/* Barra de progresso */}
+          <span className="text-zinc-400">12830 / 18000 xp</span>
+        </div>
+      </div>
+      <Avatar className="size-14">
+        <AvatarImage src="https://github.com/shadcn.png" />
+      </Avatar>
+    </div>
+  );
+};
