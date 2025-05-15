@@ -1,6 +1,6 @@
 export type Topic = {
   id: string;
-  name: string;
+  title: string;
 };
 
 export interface ModuleCardProps {
