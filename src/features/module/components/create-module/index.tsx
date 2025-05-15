@@ -1,27 +1,36 @@
+import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
+import { useModuleInformationForm } from '../../hooks/useModuleInformationForm';
 import { Back } from '../back';
 import { BannerUpload } from './banner-upload';
-import { DescriptionSection } from './description-section';
-import { LevelSelection } from './level-selection';
-import { TitleUpload } from './title-upload';
-import { TopicsSelection } from './topics-selection';
+import { DescriptionField } from './description-field';
+import { FormSectionWrapper } from './form-section-wrapper';
+import { TitleInput } from './title-input';
+import { TopicsField } from './topics-field';
 
 export const CreateModule = () => {
+  const { control, handleSubmit, onSubmit, register } =
+    useModuleInformationForm();
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="relative">
         <BannerUpload />
         <Back />
       </div>
       <div className="mx-auto mt-10 w-full max-w-300 px-4 pb-8">
-        <TitleUpload />
-        <TopicsSelection />
-        <LevelSelection />
-        <DescriptionSection />
+        <TitleInput register={register} />
+        <TopicsField control={control} />
+        <FormSectionWrapper label="Nível de dificuldade" htmlFor="level">
+          <LevelSelect control={control} />
+        </FormSectionWrapper>
+        <FormSectionWrapper label="Descrição" htmlFor="description">
+          <DescriptionField control={control} />
+        </FormSectionWrapper>
         <Button
           type="submit"
           className="mt-8 w-full py-8 text-xl font-bold"
-          size={'xl'}
+          size="xl"
         >
           Criar
         </Button>

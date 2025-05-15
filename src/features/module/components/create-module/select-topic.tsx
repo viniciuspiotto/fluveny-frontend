@@ -17,10 +17,28 @@ import { topicsMock } from '@/mocks/topics';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 
-// TODO: Melhorar o commandContent
-export const SelectTopic = () => {
+interface SelectTopicProps {
+  onSelectTopic: (values: string[]) => void;
+}
+
+export const SelectTopic = ({ onSelectTopic }: SelectTopicProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [selected, setSelected] = useState<string[]>([]);
+
+  const toggleTopic = (value: string) => {
+    const isSelected = selected.includes(value);
+    let next: string[];
+
+    if (isSelected) {
+      next = selected.filter((v) => v !== value);
+    } else {
+      if (selected.length >= 5) return;
+      next = [...selected, value];
+    }
+
+    setSelected(next);
+    onSelectTopic(next);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -31,14 +49,13 @@ export const SelectTopic = () => {
           aria-expanded={open}
           className="text-md w-full justify-between overflow-hidden py-6 text-zinc-700"
         >
-          {value
-            ? topicsMock.find((topic) => topic.value === value)?.label
-            : 'Selecione um tópico...'}
+          Selecione os tópicos...
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent align="start" side="bottom" className="w-85 p-0 lg:w-120">
-        <Command>
+        <Command className="text-left">
           <CommandInput placeholder="Selecione um tópico..." />
           <CommandList>
             <CommandEmpty>Tópico não encontrado.</CommandEmpty>
@@ -47,15 +64,14 @@ export const SelectTopic = () => {
                 <CommandItem
                   key={topic.value}
                   value={topic.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
+                  onSelect={() => toggleTopic(topic.value)}
                 >
                   <Check
                     className={cn(
                       'mr-2 h-4 w-4',
-                      value === topic.value ? 'opacity-100' : 'opacity-0',
+                      selected.includes(topic.value)
+                        ? 'opacity-100'
+                        : 'opacity-0',
                     )}
                   />
                   {topic.label}
