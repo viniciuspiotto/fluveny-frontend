@@ -7,7 +7,7 @@ export const SECTIONS_CREATION_MODULE = {
   topic: {
     icon: PencilRuler,
   },
-  finalChallenger: {
+  finalChallenge: {
     icon: BookOpenText,
   },
   revision: {
