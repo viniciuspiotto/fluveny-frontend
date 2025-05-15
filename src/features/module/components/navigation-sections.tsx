@@ -1,27 +1,26 @@
 import { SectionButton } from './section-button';
 
 const api = {
-  // topics: [{ title: 'Simple Present' }, { title: 'Simple Past' }],
   topics: [
     {
-      title: 'Simple Present',
-      isModified: true,
-    },
-    {
-      title: 'Simple Past',
+      title: 'Past Perfect',
       isModified: false,
     },
     {
       title: 'Past Perfect',
-      isModified: true,
+      isModified: false,
+    },
+    {
+      title: 'Past Perfect',
+      isModified: false,
     },
   ],
 };
 
 export const NavigationSections = () => {
   return (
-    <footer className="bg-primary fixed bottom-0 left-0 w-full overflow-x-auto whitespace-nowrap">
-      <div className="md:flex md:justify-center">
+    <footer className="bg-primary fixed bottom-0 left-0 w-full">
+      <div className="flex w-full items-center gap-4 overflow-x-auto px-8 py-4 whitespace-nowrap md:justify-center">
         <SectionButton variant="introduction" title="Introdução" isStarted />
         {api.topics.map((topic) => {
           return (
@@ -33,8 +32,12 @@ export const NavigationSections = () => {
             />
           );
         })}
-        <SectionButton variant="finalChallenge" title="Desafio Final" />
-        <SectionButton variant="revision" title="Revisão" />
+        <SectionButton
+          isStarted={false}
+          variant="finalChallenge"
+          title="Desafio Final"
+        />
+        <SectionButton isStarted={false} variant="revision" title="Revisão" />
       </div>
     </footer>
   );
