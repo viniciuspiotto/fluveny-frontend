@@ -16,7 +16,7 @@ export const CreateModule = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="relative">
         <BannerUpload />
-        <Back />
+        <Back className="absolute -bottom-6 left-4 z-10" />
       </div>
       <div className="mx-auto mt-10 w-full max-w-300 px-4 pb-8">
         <TitleInput register={register} />
