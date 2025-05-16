@@ -4,12 +4,14 @@ import { ArrowLeft } from 'lucide-react';
 
 interface BackProps {
   className?: string;
+  onClick?: () => void;
 }
 
-export const Back = ({ className }: BackProps) => {
+export const Back = ({ className, onClick }: BackProps) => {
   return (
     <Button
       size={'icon'}
+      onClick={onClick}
       className={clsx('cursor-pointer rounded-full p-6', className)}
     >
       <ArrowLeft className="size-7" />

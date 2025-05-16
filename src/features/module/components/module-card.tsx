@@ -9,7 +9,7 @@ export const ModuleCard = ({ title, topics }: ModuleCardProps) => {
       </span>
       <ul className="flex gap-2">
         {topics.map((topic) => {
-          return <Tag key={topic.id} name={topic.name} />;
+          return <Tag key={topic.slug} name={topic.name} />;
         })}
       </ul>
     </div>

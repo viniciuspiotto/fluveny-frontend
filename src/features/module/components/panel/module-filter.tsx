@@ -1,4 +1,3 @@
-import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -14,7 +13,7 @@ export const ModuleFilter = () => {
         />
         <Search className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-zinc-400 lg:size-5" />
       </div>
-      <LevelSelect />
+      {/* <LevelSelect /> */}
       <Button
         type="submit"
         className="flex h-10 items-center gap-2 rounded-md text-lg font-normal lg:px-4 lg:py-6 lg:text-lg"

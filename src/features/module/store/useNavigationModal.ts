@@ -1,23 +1,19 @@
 import { create } from 'zustand';
 
 type State = {
-  nextPath: string | null;
+  nextPath: string | number | null;
   isModalOpen: boolean;
-  openModal: (path: string) => void;
+  openModal: (path: string | number) => void;
   closeModal: () => void;
   confirmNavigation: () => void;
 };
 
-export const useNavigationModal = create<State>((set, get) => ({
+export const useNavigationModal = create<State>((set) => ({
   nextPath: null,
   isModalOpen: false,
   openModal: (path) => set({ isModalOpen: true, nextPath: path }),
   closeModal: () => set({ isModalOpen: false, nextPath: null }),
   confirmNavigation: () => {
-    const path = get().nextPath;
-    if (path) {
-      window.location.href = path;
-    }
-    set({ isModalOpen: false, nextPath: null });
+    set({ isModalOpen: false });
   },
 }));

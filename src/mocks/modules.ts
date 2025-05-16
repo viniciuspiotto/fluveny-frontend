@@ -8,6 +8,8 @@ export const modulesMock: ModuleCardProps[] = [
     topics: [
       { slug: 'simple-present', name: 'simple present' },
       { slug: 'pronoums', name: 'pronoums' },
+      { slug: 'pronoums', name: 'pronoums' },
+      { slug: 'pronoums', name: 'pronoums' },
     ],
   },
 ];

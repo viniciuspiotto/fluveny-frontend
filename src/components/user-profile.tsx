@@ -1,5 +1,6 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
+// TODO: fazer componente de barra de progresso
 export const UserProfile = () => {
   return (
     <div className="hidden gap-10 lg:flex">
