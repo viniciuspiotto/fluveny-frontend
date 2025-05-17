@@ -3,21 +3,26 @@ import { Button } from '@/components/ui/button';
 import { SECTIONS_CREATION_MODULE } from '@/constants/module';
 import clsx from 'clsx';
 import { useSectionStep } from '../hooks/use-section-step';
+import { useModuleWizard } from '../store/use-module-wizard';
 import { useNavigationModal } from '../store/use-navigation-modal';
 
 interface SectionButtonProps {
   variant: 'introduction' | 'topic' | 'finalChallenge' | 'revision';
   title: string;
+  slug: string;
 }
 
-export const SectionButton = ({ variant, title }: SectionButtonProps) => {
-  const { path, isCurrent, isAccessible } = useSectionStep(variant, title);
+export const SectionButton = ({ variant, title, slug }: SectionButtonProps) => {
+  const { path, isAccessible, isCurrent } = useSectionStep(slug);
   const { openModal } = useNavigationModal();
+
+  const { nextStep } = useModuleWizard();
 
   const Icon = SECTIONS_CREATION_MODULE[variant].icon;
 
   const handleClick = () => {
-    if (!isCurrent) openModal(path);
+    nextStep();
+    if (isCurrent) openModal(path);
   };
 
   return (

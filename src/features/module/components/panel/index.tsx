@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
 import { useGetModules } from '../../hooks/use-get-modules';
+import { ModuleCard } from '../module-card';
 import { ModuleFilter } from './module-filter';
-import { ModuleList } from './module-list';
 
 export function Panel() {
   const { data: response } = useGetModules();
@@ -21,7 +21,11 @@ export function Panel() {
         <Link to="drafts">Rascunhos</Link>
       </Button>
       <ModuleFilter />
-      <ModuleList modules={modules} />
+      <ul className="grid grid-rows-4 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 lg:gap-6">
+        {modules.map((module) => {
+          return <ModuleCard key={module.id} {...module} />;
+        })}
+      </ul>
     </div>
   );
 }

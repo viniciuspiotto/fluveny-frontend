@@ -10,11 +10,13 @@ export function Header() {
   return (
     <header className="flex h-16 w-full items-center justify-between border-b-1 px-4 py-4 lg:px-8 lg:py-10">
       <div className="flex items-center lg:gap-16">
-        <img
-          src="/assets/logo.svg"
-          alt="Logo da empresa"
-          className="h-10 lg:h-12"
-        />
+        <Link to={'/'}>
+          <img
+            src="/assets/logo.svg"
+            alt="Letra F com dois pedaços de pergaminhos atrás, um azul e outro vermelho, com a palavra fluveny com um degrade de azul e vermelho ao lado direito"
+            className="h-10 lg:h-12"
+          />
+        </Link>
         <nav className="hidden space-x-12 lg:block">
           <Link to="/modules" className="text-lg">
             Módulos

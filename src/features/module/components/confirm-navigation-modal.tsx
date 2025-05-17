@@ -1,6 +1,7 @@
 import { useNavigationModal } from '@/features/module/store/use-navigation-modal';
 import { useNavigate } from 'react-router';
 
+// TODO: ajustar modal
 export const ConfirmNavigationModal = () => {
   const navigate = useNavigate();
   const { isModalOpen, closeModal, confirmNavigation, nextPath } =
