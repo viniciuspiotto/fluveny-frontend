@@ -12,6 +12,7 @@ export type Level = {
 export type GrammarRule = {
   id: string;
   title: string;
+  slug: string;
 };
 
 export type Module = {

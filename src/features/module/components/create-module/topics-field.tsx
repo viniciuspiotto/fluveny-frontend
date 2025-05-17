@@ -10,8 +10,6 @@ export const TopicsField = ({ control }: Props) => (
   <Controller
     control={control}
     name="id_grammarRules"
-    render={({ field }) => (
-      <TopicsSelection value={field.value} onChange={field.onChange} />
-    )}
+    render={({ field }) => <TopicsSelection onChange={field.onChange} />}
   />
 );

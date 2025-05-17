@@ -1,3 +1,4 @@
+import type { GrammarRule } from '@/@types/module';
 import { cn } from '@/app/utils/cn';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,29 +19,26 @@ import { useState } from 'react';
 import { useGetGrammarRules } from '../../hooks/use-get-grammar-rules';
 
 interface SelectTopicProps {
-  onSelectTopic: (values: string[]) => void;
+  value: GrammarRule[];
+  onSelectTopic: (grammarRules: GrammarRule[]) => void;
 }
 
-export const SelectTopic = ({ onSelectTopic }: SelectTopicProps) => {
+export const SelectTopic = ({ value, onSelectTopic }: SelectTopicProps) => {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<string[]>([]);
-
   const { data: response, isLoading, isError } = useGetGrammarRules();
-
   const grammarRules = response?.data ?? [];
 
-  const toggleTopic = (value: string) => {
-    const isSelected = selected.includes(value);
-    let next: string[];
+  const toggleTopic = (rule: GrammarRule) => {
+    const isSelected = value.some((r) => r.id === rule.id);
+    let next: GrammarRule[];
 
     if (isSelected) {
-      next = selected.filter((v) => v !== value);
+      next = value.filter((r) => r.id !== rule.id);
     } else {
-      if (selected.length >= 5) return;
-      next = [...selected, value];
+      if (value.length >= 5) return;
+      next = [...value, rule];
     }
 
-    setSelected(next);
     onSelectTopic(next);
   };
 
@@ -57,7 +55,6 @@ export const SelectTopic = ({ onSelectTopic }: SelectTopicProps) => {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-
       <PopoverContent align="start" side="bottom" className="w-85 p-0 lg:w-120">
         <Command className="text-left">
           <CommandInput placeholder="Selecione um tópico..." />
@@ -72,12 +69,12 @@ export const SelectTopic = ({ onSelectTopic }: SelectTopicProps) => {
                 <CommandItem
                   key={grammarRule.id}
                   value={grammarRule.id}
-                  onSelect={() => toggleTopic(grammarRule.title)}
+                  onSelect={() => toggleTopic(grammarRule)}
                 >
                   <Check
                     className={cn(
                       'mr-2 h-4 w-4',
-                      selected.includes(grammarRule.id)
+                      value.some((r) => r.id === grammarRule.id)
                         ? 'opacity-100'
                         : 'opacity-0',
                     )}
