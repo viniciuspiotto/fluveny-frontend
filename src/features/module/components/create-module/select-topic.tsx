@@ -13,9 +13,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { topicsMock } from '@/mocks/topics';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
+import { useGetGrammarRules } from '../../hooks/use-get-grammar-rules';
 
 interface SelectTopicProps {
   onSelectTopic: (values: string[]) => void;
@@ -24,6 +24,10 @@ interface SelectTopicProps {
 export const SelectTopic = ({ onSelectTopic }: SelectTopicProps) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+
+  const { data: response, isLoading, isError } = useGetGrammarRules();
+
+  const grammarRules = response?.data ?? [];
 
   const toggleTopic = (value: string) => {
     const isSelected = selected.includes(value);
@@ -58,23 +62,27 @@ export const SelectTopic = ({ onSelectTopic }: SelectTopicProps) => {
         <Command className="text-left">
           <CommandInput placeholder="Selecione um tópico..." />
           <CommandList>
-            <CommandEmpty>Tópico não encontrado.</CommandEmpty>
+            {isLoading && <CommandItem disabled>Carregando...</CommandItem>}
+            {isError && <CommandEmpty>Erro ao carregar tópicos.</CommandEmpty>}
+            {!isLoading && grammarRules.length === 0 && (
+              <CommandEmpty>Nenhum tópico encontrado.</CommandEmpty>
+            )}
             <CommandGroup>
-              {topicsMock.map((topic) => (
+              {grammarRules.map((grammarRule) => (
                 <CommandItem
-                  key={topic.value}
-                  value={topic.value}
-                  onSelect={() => toggleTopic(topic.value)}
+                  key={grammarRule.id}
+                  value={grammarRule.id}
+                  onSelect={() => toggleTopic(grammarRule.title)}
                 >
                   <Check
                     className={cn(
                       'mr-2 h-4 w-4',
-                      selected.includes(topic.value)
+                      selected.includes(grammarRule.id)
                         ? 'opacity-100'
                         : 'opacity-0',
                     )}
                   />
-                  {topic.label}
+                  {grammarRule.title}
                 </CommandItem>
               ))}
             </CommandGroup>

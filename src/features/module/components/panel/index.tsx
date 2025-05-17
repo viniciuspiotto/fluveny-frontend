@@ -1,10 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { modulesMock } from '@/mocks/modules';
 import { Link } from 'react-router';
+import { useGetModules } from '../../hooks/use-get-modules';
 import { ModuleFilter } from './module-filter';
 import { ModuleList } from './module-list';
 
 export function Panel() {
+  const { data: response } = useGetModules();
+
+  const modules = response?.data ?? [];
+
   return (
     <div className="flex flex-col space-y-4 p-4 lg:space-y-5">
       <h1 className="mt-2 text-center text-3xl font-bold tracking-widest lg:mt-8 lg:text-4xl">
@@ -17,7 +21,7 @@ export function Panel() {
         <Link to="drafts">Rascunhos</Link>
       </Button>
       <ModuleFilter />
-      <ModuleList modules={modulesMock} />
+      <ModuleList modules={modules} />
     </div>
   );
 }

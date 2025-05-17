@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input';
 import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLocation } from 'react-router';
-import { useModuleWizard } from '../../store/useModuleWizard';
+import { useModuleWizard } from '../../store/use-module-wizard';
 
 export const Introduction = () => {
   const location = useLocation();
