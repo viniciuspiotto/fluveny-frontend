@@ -18,7 +18,7 @@ export const Tag = ({ name, variant = 'white', className }: TagProps) => {
         className,
       )}
     >
-      {name}
+      {name.toLocaleLowerCase()}
     </li>
   );
 };

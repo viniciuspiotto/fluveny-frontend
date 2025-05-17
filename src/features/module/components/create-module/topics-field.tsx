@@ -1,14 +1,15 @@
 import { type Control, Controller } from 'react-hook-form';
+import type { CreateInformationModuleData } from '../../schemas/module-information-schema';
 import { TopicsSelection } from './topics-selection';
 
 type Props = {
-  control: Control<any>;
+  control: Control<CreateInformationModuleData>;
 };
 
 export const TopicsField = ({ control }: Props) => (
   <Controller
     control={control}
-    name="topics"
+    name="id_grammarRules"
     render={({ field }) => (
       <TopicsSelection value={field.value} onChange={field.onChange} />
     )}

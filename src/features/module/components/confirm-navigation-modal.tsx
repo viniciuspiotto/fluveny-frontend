@@ -1,4 +1,4 @@
-import { useNavigationModal } from '@/features/module/store/useNavigationModal';
+import { useNavigationModal } from '@/features/module/store/use-navigation-modal';
 import { useNavigate } from 'react-router';
 
 export const ConfirmNavigationModal = () => {

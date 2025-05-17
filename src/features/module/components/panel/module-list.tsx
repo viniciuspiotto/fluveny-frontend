@@ -1,8 +1,8 @@
-import type { ModuleCardProps } from '@/@types/module';
+import type { Module } from '@/@types/module';
 import { ModuleCard } from '../module-card';
 
 interface ModuleListProps {
-  modules: ModuleCardProps[];
+  modules: Module[];
 }
 
 export const ModuleList = ({ modules }: ModuleListProps) => {

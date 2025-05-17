@@ -1,6 +1,6 @@
 import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
-import { useModuleInformationForm } from '../../hooks/useModuleInformationForm';
+import { useModuleInformationForm } from '../../hooks/use-module-information-form';
 import { Back } from '../back';
 import { BannerUpload } from './banner-upload';
 import { DescriptionField } from './description-field';

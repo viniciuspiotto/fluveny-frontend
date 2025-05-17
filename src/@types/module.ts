@@ -1,6 +1,25 @@
 export type Topic = {
-  slug: string;
+  id: string;
   name: string;
+};
+
+export type Level = {
+  id: string;
+  title: string;
+  experienceValue: number;
+};
+
+export type GrammarRule = {
+  id: string;
+  title: string;
+};
+
+export type Module = {
+  id: string;
+  title: string;
+  description: string;
+  level: Level;
+  grammarRules: GrammarRule[];
 };
 
 export interface ModuleCardProps {

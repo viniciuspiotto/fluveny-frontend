@@ -1,7 +1,7 @@
 import { Back } from '@/features/module/components/back';
 import { ConfirmNavigationModal } from '@/features/module/components/confirm-navigation-modal';
 import { NavigationSections } from '@/features/module/components/navigation-sections';
-import { useNavigationModal } from '@/features/module/store/useNavigationModal';
+import { useNavigationModal } from '@/features/module/store/use-navigation-modal';
 import { Outlet, useLocation } from 'react-router';
 
 const getTitle = (

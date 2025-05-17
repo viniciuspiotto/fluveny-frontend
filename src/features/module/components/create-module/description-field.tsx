@@ -1,8 +1,9 @@
 import { AutosizeTextarea } from '@/components/ui/autosize-textarea';
 import { type Control, Controller } from 'react-hook-form';
+import type { CreateInformationModuleData } from '../../schemas/module-information-schema';
 
 type DescriptionFieldProps = {
-  control: Control<any>;
+  control: Control<CreateInformationModuleData>;
 };
 
 export const DescriptionField = ({ control }: DescriptionFieldProps) => (

@@ -2,8 +2,8 @@ import { capitalizeWords } from '@/app/utils/capitalize-words';
 import { Button } from '@/components/ui/button';
 import { SECTIONS_CREATION_MODULE } from '@/constants/module';
 import clsx from 'clsx';
-import { useSectionStep } from '../hooks/useSectionStep';
-import { useNavigationModal } from '../store/useNavigationModal';
+import { useSectionStep } from '../hooks/use-section-step';
+import { useNavigationModal } from '../store/use-navigation-modal';
 
 interface SectionButtonProps {
   variant: 'introduction' | 'topic' | 'finalChallenge' | 'revision';
