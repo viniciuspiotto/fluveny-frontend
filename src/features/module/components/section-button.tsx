@@ -7,7 +7,7 @@ import { useModuleWizard } from '../store/use-module-wizard';
 import { useNavigationModal } from '../store/use-navigation-modal';
 
 interface SectionButtonProps {
-  variant: 'introduction' | 'topic' | 'finalChallenge' | 'revision';
+  variant: 'introduction' | 'grammarRule' | 'finalChallenge' | 'revision';
   title: string;
   slug: string;
 }

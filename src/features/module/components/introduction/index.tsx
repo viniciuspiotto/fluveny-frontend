@@ -9,7 +9,7 @@ export const Introduction = () => {
   const { register, control } = useForm({ mode: 'onChange' });
   const { setStepCompletion } = useModuleWizard();
 
-  const topic = location.pathname.split('/').at(-1);
+  const GrammarRule = location.pathname.split('/').at(-1);
 
   const values = useWatch({ control });
 
@@ -21,10 +21,10 @@ export const Introduction = () => {
       return typeof value === 'string' && value.trim() !== '';
     });
 
-    if (topic) {
-      setStepCompletion(topic, allFilled);
+    if (GrammarRule) {
+      setStepCompletion(GrammarRule, allFilled);
     }
-  }, [values, topic, setStepCompletion, expectedFields]);
+  }, [values, GrammarRule, setStepCompletion, expectedFields]);
 
   return (
     <div>

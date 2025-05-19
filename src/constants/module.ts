@@ -4,7 +4,7 @@ export const SECTIONS_CREATION_MODULE = {
   introduction: {
     icon: Home,
   },
-  topic: {
+  grammarRule: {
     icon: PencilRuler,
   },
   finalChallenge: {

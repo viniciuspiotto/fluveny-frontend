@@ -1,3 +1,4 @@
+import { cn } from '@/app/utils/cn';
 import {
   Select,
   SelectContent,
@@ -6,15 +7,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useGetLevels } from '@/features/module/hooks/use-get-levels';
-import type { CreateInformationModuleData } from '@/features/module/schemas/module-information-schema';
-import { Controller, type Control } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
-type LevelSelectProps = {
-  control: Control<CreateInformationModuleData>;
-};
-
-export const LevelSelect = ({ control }: LevelSelectProps) => {
+export const LevelSelect = () => {
   const { data: response } = useGetLevels();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   const levels = response?.data ?? [];
 
@@ -25,7 +25,14 @@ export const LevelSelect = ({ control }: LevelSelectProps) => {
         control={control}
         render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value ?? ''}>
-            <SelectTrigger className="w-[110px] min-w-[100px] px-4 text-lg lg:w-[120px] lg:py-6 lg:text-lg">
+            <SelectTrigger
+              id="id_level"
+              className={cn(
+                'peer w-[110px] min-w-[100px] px-4 text-lg lg:w-[120px] lg:py-6 lg:text-lg',
+                errors.id_level &&
+                  'border-red-500 data-[placeholder]:text-red-500',
+              )}
+            >
               <SelectValue placeholder="Nível" />
             </SelectTrigger>
             <SelectContent>

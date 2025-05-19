@@ -4,7 +4,7 @@ import { CreateModulePage } from '@/features/module/pages/create-module-page';
 import { FinalChallengePage } from '@/features/module/pages/final-challenge';
 import { IntroductionPage } from '@/features/module/pages/introduction';
 import { PanelPage } from '@/features/module/pages/panel-page';
-import { TopicPage } from '@/features/module/pages/topic-page';
+import { GrammarRulePage } from '@/features/module/pages/topic-page';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
@@ -17,7 +17,7 @@ export function AppRoutes() {
           <Route path="setup" element={<CreateModulePage />} />
           <Route path="create/:id" element={<ModuleLayout />}>
             <Route path="introduction" element={<IntroductionPage />} />
-            <Route path=":topic" element={<TopicPage />} />
+            <Route path=":grammarRule" element={<GrammarRulePage />} />
             <Route path="final-challenge" element={<FinalChallengePage />} />
           </Route>
         </Route>

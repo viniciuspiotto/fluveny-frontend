@@ -16,19 +16,28 @@ import {
 } from '@/components/ui/popover';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useGetGrammarRules } from '../../hooks/use-get-grammar-rules';
 
-interface SelectTopicProps {
+interface SelectGrammarRuleProps {
   value: GrammarRule[];
-  onSelectTopic: (grammarRules: GrammarRule[]) => void;
+  onSelectGrammarRule: (grammarRules: GrammarRule[]) => void;
+  error?: string;
 }
 
-export const SelectTopic = ({ value, onSelectTopic }: SelectTopicProps) => {
+export const SelectGrammarRule = ({
+  value,
+  onSelectGrammarRule,
+}: SelectGrammarRuleProps) => {
   const [open, setOpen] = useState(false);
   const { data: response, isLoading, isError } = useGetGrammarRules();
   const grammarRules = response?.data ?? [];
 
-  const toggleTopic = (rule: GrammarRule) => {
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  const toggleGrammarRule = (rule: GrammarRule) => {
     const isSelected = value.some((r) => r.id === rule.id);
     let next: GrammarRule[];
 
@@ -39,7 +48,7 @@ export const SelectTopic = ({ value, onSelectTopic }: SelectTopicProps) => {
       next = [...value, rule];
     }
 
-    onSelectTopic(next);
+    onSelectGrammarRule(next);
   };
 
   return (
@@ -49,7 +58,11 @@ export const SelectTopic = ({ value, onSelectTopic }: SelectTopicProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="text-md w-full justify-between overflow-hidden py-6 text-zinc-700"
+          className={cn(
+            'text-md w-full justify-between overflow-hidden py-6 text-zinc-700',
+            errors.id_grammarRules &&
+              'animate-shake border-red-500 text-red-500',
+          )}
         >
           Selecione os tópicos...
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -69,7 +82,7 @@ export const SelectTopic = ({ value, onSelectTopic }: SelectTopicProps) => {
                 <CommandItem
                   key={grammarRule.id}
                   value={grammarRule.id}
-                  onSelect={() => toggleTopic(grammarRule)}
+                  onSelect={() => toggleGrammarRule(grammarRule)}
                 >
                   <Check
                     className={cn(

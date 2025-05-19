@@ -31,7 +31,6 @@ export const ModuleLayout = () => {
     return response?.data.grammarRules ?? [];
   }, [response]);
 
-  // populando os steps
   useEffect(() => {
     setSteps([
       'introduction',
@@ -41,7 +40,6 @@ export const ModuleLayout = () => {
     ]);
   }, [setSteps, grammarRules]);
 
-  // setando as grammarRules
   useEffect(() => {
     setGrammarRules(grammarRules);
   }, [setGrammarRules, grammarRules]);

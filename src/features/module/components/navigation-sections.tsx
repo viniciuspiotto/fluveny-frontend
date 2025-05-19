@@ -32,7 +32,7 @@ export const NavigationSections = () => {
           return (
             <SectionButton
               key={grammarRule.id}
-              variant="topic"
+              variant="grammarRule"
               title={grammarRule.title}
               slug={grammarRule.slug}
             />

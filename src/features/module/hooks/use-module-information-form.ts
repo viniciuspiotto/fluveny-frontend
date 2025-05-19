@@ -10,12 +10,7 @@ import { useModuleWizard } from '../store/use-module-wizard';
 import { useCreateModule } from './use-create-module';
 
 export const useModuleInformationForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<CreateInformationModuleData>({
+  const methods = useForm<CreateInformationModuleData>({
     resolver: zodResolver(createInformationModuleSchema),
     defaultValues: {
       description: '',
@@ -39,15 +34,20 @@ export const useModuleInformationForm = () => {
         setCurrentStep('introduction');
         navigate(`/modules/create/${id}/introduction`);
       },
+      onError: (error: any) => {
+        if (error?.response?.status === 409) {
+          methods.setError('title', {
+            type: 'manual',
+            message: 'Um módulo com esse título já existe',
+          });
+        }
+      },
     });
   };
 
   return {
-    register,
-    handleSubmit,
-    errors,
+    methods,
     onSubmit,
-    control,
     isLoading: isPending,
   };
 };

@@ -1,4 +1,4 @@
-export type Topic = {
+export type grammarRule = {
   id: string;
   name: string;
 };
@@ -27,5 +27,5 @@ export interface ModuleCardProps {
   id: string;
   title: string;
   imgSrc: string;
-  topics: Topic[];
+  grammarRules: grammarRule[];
 }
