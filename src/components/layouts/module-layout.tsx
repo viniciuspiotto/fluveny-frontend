@@ -56,12 +56,14 @@ export const ModuleLayout = () => {
       <div className="flex flex-col">
         <div className="relative flex w-full items-center justify-center py-10">
           <Back
-            className="absolute left-3 md:left-40 lg:left-90"
+            className="mdd:left-90 absolute top-4 left-4 md:top-auto md:left-40"
             onClick={handleBack}
           />
-          <h2 className="text-3xl font-bold tracking-widest">{title}</h2>
+          <h2 className="px-15 text-center text-3xl font-bold tracking-widest">
+            {title}
+          </h2>
         </div>
-        <main>
+        <main className="mx-auto mt-10 w-full max-w-300 px-4 pb-8">
           <Outlet />
         </main>
       </div>

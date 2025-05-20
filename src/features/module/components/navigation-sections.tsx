@@ -22,7 +22,7 @@ export const NavigationSections = () => {
 
   return (
     <footer className="bg-primary fixed bottom-0 left-0 w-full overflow-x-auto">
-      <div className="flex w-max items-center justify-center gap-4 px-8 py-4 lg:w-full">
+      <div className="flex w-max items-center justify-center gap-4 px-8 py-4 xl:w-full">
         <SectionButton
           variant="introduction"
           title="Introdução"
