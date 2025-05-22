@@ -1,3 +1,4 @@
+import Blockquote from '@tiptap/extension-blockquote';
 import Color from '@tiptap/extension-color';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
@@ -18,6 +19,7 @@ export const Editor = () => {
       TextStyle,
       Color,
       Image,
+      Blockquote,
       Link.configure({
         autolink: true,
         defaultProtocol: 'https',

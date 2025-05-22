@@ -1,4 +1,5 @@
 import { BlockTypeSelect } from './block-type-select';
+import CitationButton from './citation-button';
 import { FormattingButtons } from './formatting-buttons';
 import { ImageButton } from './image-button';
 import LinkButton from './link-button';
@@ -18,7 +19,7 @@ export function Toolbar() {
       <FormattingButtons />
       <LinkButton />
       <ImageButton />
-      {/* Citation */}
+      <CitationButton />
       {/* Tables */}
       {/* Info(?) */}
     </div>
