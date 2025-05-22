@@ -16,11 +16,11 @@ export default function CitationButton() {
   };
 
   return (
-    <Button onClick={handleClick} variant="ghost">
-      <Quote
-        className="size-5"
-        fill={editor.isActive('blockquote') ? '#000000' : '#ffffff'}
-      />
+    <Button
+      onClick={handleClick}
+      variant={editor.isActive('blockquote') ? 'default' : 'ghost'}
+    >
+      <Quote className="size-5" />
     </Button>
   );
 }

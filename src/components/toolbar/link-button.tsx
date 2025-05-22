@@ -16,13 +16,13 @@ export default function LinkButton() {
 
   if (!editor) return;
 
-  const handleLink = (e: FormEvent<HTMLFormElement>) => {
+  const handleClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     editor.chain().focus().run();
     if (editor.isActive('link')) {
       // empty
       if (link === '' || !link) {
-        editor.chain().focus().extendMarkRange('link').unsetLink().run();
+        editor.chain().focus().unsetLink().run();
 
         return;
       }
@@ -55,7 +55,7 @@ export default function LinkButton() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
-        <form onSubmit={(e) => handleLink(e)}>
+        <form onSubmit={(e) => handleClick(e)}>
           <div className="grid gap-4 pb-4">
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="link">Link</Label>
