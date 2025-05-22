@@ -1,6 +1,7 @@
 import { BlockTypeSelect } from './block-type-select';
 import { FormattingButtons } from './formatting-buttons';
 import { ImageButton } from './image-button';
+import LinkButton from './link-button';
 import { SolidColorPicker } from './solid-color-picker';
 import { TextAlignSelect } from './text-align-select';
 
@@ -15,7 +16,11 @@ export function Toolbar() {
       <TextAlignSelect />
       <SolidColorPicker />
       <FormattingButtons />
+      <LinkButton />
       <ImageButton />
+      {/* Citation */}
+      {/* Tables */}
+      {/* Info(?) */}
     </div>
   );
 }
