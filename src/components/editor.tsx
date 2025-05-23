@@ -26,7 +26,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
   const { currentStep, setStepCompletion } = useModuleWizard();
 
   useEffect(() => {
-    register('textBlock');
+    register('textblock');
   }, [register]);
 
   const editor = useEditor({
@@ -114,7 +114,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
     onUpdate({ editor }) {
       const html = editor.getHTML();
       setIsEmpty(editor.isEmpty);
-      setValue('textBlock', html, { shouldDirty: true });
+      setValue('textblock', html, { shouldDirty: true });
     },
   });
 

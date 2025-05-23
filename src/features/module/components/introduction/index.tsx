@@ -26,13 +26,12 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   const { mutate: updateIntroduction } = useUpdateIntroduction();
   const { mutate: createIntroduction } = useCreateIntroduction();
 
-  const { methods } = useModuleIntroductionForm({ textBlock: '' });
+  const { methods } = useModuleIntroductionForm({ textblock: '' });
 
   const { handleSubmit } = methods;
 
   const onSubmit = useCallback(
     (data: IntroductionData) => {
-      console.log(data);
       if (mode === 'edit') {
         updateIntroduction({ moduleId, data });
       } else {
@@ -49,7 +48,7 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   return (
     <FormProvider {...methods}>
       <form className="mb-20">
-        <Editor initialContent={introductionData?.data.textBlock ?? ''} />
+        <Editor initialContent={introductionData?.data.textblock ?? ''} />
       </form>
     </FormProvider>
   );

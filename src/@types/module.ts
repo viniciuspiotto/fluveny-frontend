@@ -31,7 +31,7 @@ export interface ModuleCardProps {
 }
 
 export interface Introduction {
-  textBlock: string;
+  textblock: string;
 }
 
 export type StepMode = 'create' | 'edit';
