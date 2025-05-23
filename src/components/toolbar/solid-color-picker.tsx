@@ -11,6 +11,7 @@ interface SolidColorPickerProps {
 }
 
 const colors = [
+  '#000000', // Black
   '#4B5563', // Gray
   '#64748B', // Slate
   '#F43F5E', // Rose
