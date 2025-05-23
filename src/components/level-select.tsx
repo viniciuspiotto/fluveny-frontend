@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useGetLevels } from '@/features/module/hooks/use-get-levels';
+import { useGetLevels } from '@/features/module/hooks/api/queries/use-get-levels';
 import { Controller, useFormContext } from 'react-hook-form';
 
 export const LevelSelect = () => {

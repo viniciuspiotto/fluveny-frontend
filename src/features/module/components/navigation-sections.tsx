@@ -1,4 +1,4 @@
-import { useGetModule } from '../hooks/use-get-module';
+import { useGetModule } from '../hooks/api/queries/use-get-module';
 import { useModuleInfo } from '../store/use-module-info';
 import { NavigationSectionsSkeleton } from './navigation-sections-skeleton';
 import { SectionButton } from './section-button';

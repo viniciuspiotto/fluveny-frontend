@@ -2,7 +2,7 @@ import type { GrammarRule } from '@/@types/module';
 import { Back } from '@/features/module/components/back';
 import { ConfirmNavigationModal } from '@/features/module/components/confirm-navigation-modal';
 import { NavigationSections } from '@/features/module/components/navigation-sections';
-import { useGetModule } from '@/features/module/hooks/use-get-module';
+import { useGetModule } from '@/features/module/hooks/api/queries/use-get-module';
 import { useModuleInfo } from '@/features/module/store/use-module-info';
 import { useModuleWizard } from '@/features/module/store/use-module-wizard';
 import { useNavigationModal } from '@/features/module/store/use-navigation-modal';
@@ -19,7 +19,7 @@ const getTitle = (grammarRule: string | null, grammarRules: GrammarRule[]) => {
   return match ? match.title : 'Tópico Desconhecido';
 };
 
-export const ModuleLayout = () => {
+export const CreateModuleLayout = () => {
   const { openModal } = useNavigationModal();
   const { setGrammarRules, moduleId } = useModuleInfo();
 
@@ -47,8 +47,7 @@ export const ModuleLayout = () => {
   const title = getTitle(currentStep, grammarRules);
 
   const handleBack = () => {
-    const redirectTo = currentStep === 'introduction' ? '/modules' : -1;
-    openModal(redirectTo);
+    openModal('/modules');
   };
 
   return (

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
-import { useGetModules } from '../../hooks/use-get-modules';
+import { useGetModules } from '../../hooks/api/queries/use-get-modules';
 import { ModuleCard } from '../module-card';
 import { ModuleFilter } from './module-filter';
 

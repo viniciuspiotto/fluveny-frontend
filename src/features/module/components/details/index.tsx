@@ -1,7 +1,7 @@
 import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
 import { FormProvider } from 'react-hook-form';
-import { useModuleInformationForm } from '../../hooks/use-module-information-form';
+import { useModuleDetailsForm } from '../../hooks/use-module-details-form';
 import { Back } from '../back';
 import { BannerUpload } from './banner-upload';
 import { DescriptionField } from './description-field';
@@ -9,8 +9,8 @@ import { FormSectionWrapper } from './form-section-wrapper';
 import { GrammarRulesField } from './grammar-rules-field';
 import { TitleInput } from './title-input';
 
-export const CreateModule = () => {
-  const { methods, onSubmit } = useModuleInformationForm();
+export const Details = () => {
+  const { methods, onSubmit } = useModuleDetailsForm();
 
   return (
     <FormProvider {...methods}>
