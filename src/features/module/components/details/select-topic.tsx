@@ -17,7 +17,7 @@ import {
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useGetGrammarRules } from '../../hooks/use-get-grammar-rules';
+import { useGetGrammarRules } from '../../hooks/api/queries/use-get-grammar-rules';
 
 interface SelectGrammarRuleProps {
   value: GrammarRule[];

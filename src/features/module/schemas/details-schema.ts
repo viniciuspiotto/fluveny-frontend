@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const createInformationModuleSchema = z.object({
+export const detailsSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório'),
   id_grammarRules: z
     .array(z.string())
@@ -10,6 +10,4 @@ export const createInformationModuleSchema = z.object({
   description: z.string().min(1, 'Descrição é obrigatória'),
 });
 
-export type CreateInformationModuleData = z.infer<
-  typeof createInformationModuleSchema
->;
+export type DetailsData = z.infer<typeof detailsSchema>;

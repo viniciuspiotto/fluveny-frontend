@@ -1,5 +1,8 @@
+import {
+  getLevels,
+  type GetLevelsResponse,
+} from '@/features/module/services/get-levels';
 import { useQuery } from '@tanstack/react-query';
-import { getLevels, type GetLevelsResponse } from '../services/get-levels';
 
 export const useGetLevels = () => {
   return useQuery<GetLevelsResponse>({

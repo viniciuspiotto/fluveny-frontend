@@ -1,5 +1,8 @@
+import {
+  getModule,
+  type GetModuleResponse,
+} from '@/features/module/services/get-module';
 import { useQuery } from '@tanstack/react-query';
-import { getModule, type GetModuleResponse } from '../services/get-module';
 
 export const useGetModule = (id: string) => {
   return useQuery<GetModuleResponse>({

@@ -1,8 +1,8 @@
-import { ModuleLayout } from '@/components/layouts/module-layout';
+import { CreateModuleLayout } from '@/components/layouts/create-module-layout';
 import { PrivateLayout } from '@/components/layouts/private-layout';
-import { CreateModulePage } from '@/features/module/pages/create-module-page';
-import { FinalChallengePage } from '@/features/module/pages/final-challenge';
-import { IntroductionPage } from '@/features/module/pages/introduction';
+import { DetailsPage } from '@/features/module/pages/details-page';
+import { FinalChallengePage } from '@/features/module/pages/final-challenge-page';
+import { IntroductionPage } from '@/features/module/pages/introduction-page';
 import { PanelPage } from '@/features/module/pages/panel-page';
 import { GrammarRulePage } from '@/features/module/pages/topic-page';
 import { BrowserRouter, Route, Routes } from 'react-router';
@@ -14,8 +14,8 @@ export function AppRoutes() {
       <Routes>
         <Route path={ROUTES.modules} element={<PrivateLayout />}>
           <Route index element={<PanelPage />} />
-          <Route path="setup" element={<CreateModulePage />} />
-          <Route path="create/:id" element={<ModuleLayout />}>
+          <Route path="details" element={<DetailsPage />} />
+          <Route path="create/:id" element={<CreateModuleLayout />}>
             <Route path="introduction" element={<IntroductionPage />} />
             <Route path=":grammarRule" element={<GrammarRulePage />} />
             <Route path="final-challenge" element={<FinalChallengePage />} />

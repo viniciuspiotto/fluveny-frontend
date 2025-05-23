@@ -1,17 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import {
-  createInformationModuleSchema,
-  type CreateInformationModuleData,
-} from '../schemas/module-information-schema';
+
+import { detailsSchema, type DetailsData } from '../schemas/details-schema';
 import { useModuleInfo } from '../store/use-module-info';
 import { useModuleWizard } from '../store/use-module-wizard';
-import { useCreateModule } from './use-create-module';
+import { useCreateModule } from './api/mutations/use-create-details';
 
-export const useModuleInformationForm = () => {
-  const methods = useForm<CreateInformationModuleData>({
-    resolver: zodResolver(createInformationModuleSchema),
+export const useModuleDetailsForm = () => {
+  const methods = useForm<DetailsData>({
+    resolver: zodResolver(detailsSchema),
     defaultValues: {
       description: '',
       id_level: '',
@@ -26,7 +24,7 @@ export const useModuleInformationForm = () => {
 
   const { mutate, isPending } = useCreateModule();
 
-  const onSubmit = (data: CreateInformationModuleData) => {
+  const onSubmit = (data: DetailsData) => {
     mutate(data, {
       onSuccess: (response) => {
         const id = response.data.id;
