@@ -26,7 +26,7 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   const { mutate: updateIntroduction } = useUpdateIntroduction();
   const { mutate: createIntroduction } = useCreateIntroduction();
 
-  const { methods } = useModuleIntroductionForm({ textblock: '' });
+  const { methods } = useModuleIntroductionForm({ textBlock: '' });
 
   const { handleSubmit } = methods;
 
@@ -48,7 +48,9 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   return (
     <FormProvider {...methods}>
       <form className="mb-20">
-        <Editor initialContent={introductionData?.data.textblock ?? ''} />
+        <Editor
+          initialContent={introductionData?.data.textBlock.content ?? ''}
+        />
       </form>
     </FormProvider>
   );

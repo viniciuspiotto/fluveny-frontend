@@ -9,6 +9,6 @@ export interface GetIntroductionResponse {
 export const getIntroduction = async (
   id: string,
 ): Promise<GetIntroductionResponse> => {
-  const response = await api.get(`module/${id}/introduction`);
+  const response = await api.get(`modules/${id}/introduction`);
   return response.data;
 };

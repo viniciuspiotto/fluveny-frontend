@@ -1,6 +1,5 @@
 import { useModuleWizard } from '@/features/module/store/use-module-wizard';
 import Color from '@tiptap/extension-color';
-import Gapcursor from '@tiptap/extension-gapcursor';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Table from '@tiptap/extension-table';
@@ -26,7 +25,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
   const { currentStep, setStepCompletion } = useModuleWizard();
 
   useEffect(() => {
-    register('textblock');
+    register('textBlock');
   }, [register]);
 
   const editor = useEditor({
@@ -38,7 +37,6 @@ export const Editor = ({ initialContent }: EditorProps) => {
       TextStyle,
       Color,
       Image,
-      Gapcursor,
       Table.configure({
         resizable: true,
       }),
@@ -51,17 +49,14 @@ export const Editor = ({ initialContent }: EditorProps) => {
         protocols: ['http', 'https'],
         isAllowedUri: (url, ctx) => {
           try {
-            // construct URL
             const parsedUrl = url.includes(':')
               ? new URL(url)
               : new URL(`${ctx.defaultProtocol}://${url}`);
 
-            // use default validation
             if (!ctx.defaultValidate(parsedUrl.href)) {
               return false;
             }
 
-            // disallowed protocols
             const disallowedProtocols = ['ftp', 'file', 'mailto'];
             const protocol = parsedUrl.protocol.replace(':', '');
 
@@ -69,7 +64,6 @@ export const Editor = ({ initialContent }: EditorProps) => {
               return false;
             }
 
-            // only allow protocols specified in ctx.protocols
             const allowedProtocols = ctx.protocols.map((p) =>
               typeof p === 'string' ? p : p.scheme,
             );
@@ -78,7 +72,6 @@ export const Editor = ({ initialContent }: EditorProps) => {
               return false;
             }
 
-            // all checks have passed
             return true;
           } catch {
             return false;
@@ -86,12 +79,10 @@ export const Editor = ({ initialContent }: EditorProps) => {
         },
         shouldAutoLink: (url) => {
           try {
-            // construct URL
             const parsedUrl = url.includes(':')
               ? new URL(url)
               : new URL(`https://${url}`);
 
-            // only auto-link if the domain is not in the disallowed list
             const disallowedDomains = [
               'example-no-autolink.com',
               'another-no-autolink.com',
@@ -105,7 +96,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
         },
       }),
     ],
-    content: initialContent,
+    content: '',
     editorProps: {
       attributes: {
         class: 'focus:outline-none',
@@ -114,9 +105,16 @@ export const Editor = ({ initialContent }: EditorProps) => {
     onUpdate({ editor }) {
       const html = editor.getHTML();
       setIsEmpty(editor.isEmpty);
-      setValue('textblock', html, { shouldDirty: true });
+      setValue('textBlock', html, { shouldDirty: true });
     },
   });
+
+  useEffect(() => {
+    if (editor && initialContent) {
+      editor.commands.setContent(initialContent);
+      setIsEmpty(false);
+    }
+  }, [editor, initialContent]);
 
   useEffect(() => {
     if (editor && currentStep) {

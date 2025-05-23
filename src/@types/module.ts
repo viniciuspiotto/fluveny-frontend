@@ -30,8 +30,13 @@ export interface ModuleCardProps {
   grammarRules: grammarRule[];
 }
 
+type TextBlock = {
+  id: string;
+  content: string;
+};
 export interface Introduction {
-  textblock: string;
+  idModule: string;
+  textBlock: TextBlock;
 }
 
 export type StepMode = 'create' | 'edit';

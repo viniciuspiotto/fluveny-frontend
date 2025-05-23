@@ -20,7 +20,7 @@ export const useModuleDetailsForm = () => {
 
   const navigate = useNavigate();
   const { setModuleId } = useModuleInfo();
-  const { setCurrentStep } = useModuleWizard();
+  const { setCurrentStep, resetStepModes } = useModuleWizard();
 
   const { mutate, isPending } = useCreateModule();
 
@@ -29,6 +29,7 @@ export const useModuleDetailsForm = () => {
       onSuccess: (response) => {
         const id = response.data.id;
         setModuleId(id);
+        resetStepModes();
         setCurrentStep('introduction');
         navigate(`/modules/create/${id}/introduction`);
       },

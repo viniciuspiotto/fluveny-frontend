@@ -31,7 +31,9 @@ export const ConfirmNavigationModal = () => {
           >
             Cancelar
           </Button>
-          <Button onClick={handleConfirm}>Confirmar</Button>
+          <Button onClick={handleConfirm} type="submit">
+            Confirmar
+          </Button>
         </div>
       </div>
     </div>
