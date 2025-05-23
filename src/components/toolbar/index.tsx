@@ -5,6 +5,7 @@ import HistoryButtons from './history-buttons';
 import { ImageButton } from './image-button';
 import LinkButton from './link-button';
 import { SolidColorPicker } from './solid-color-picker';
+import TableManager from './table-manager';
 import { TextAlignSelect } from './text-align-select';
 
 /*
@@ -22,8 +23,7 @@ export function Toolbar() {
       <LinkButton />
       <ImageButton />
       <CitationButton />
-      {/* Tables */}
-      {/* Info(?) */}
+      <TableManager />
     </div>
   );
 }

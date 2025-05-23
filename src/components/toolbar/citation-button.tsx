@@ -17,6 +17,7 @@ export default function CitationButton() {
 
   return (
     <Button
+      title="Citação"
       onClick={handleClick}
       variant={editor.isActive('blockquote') ? 'default' : 'ghost'}
     >

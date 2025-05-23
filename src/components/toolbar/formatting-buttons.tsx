@@ -10,6 +10,7 @@ export const FormattingButtons = () => {
   return (
     <>
       <Button
+        title="Negrito"
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         variant={editor.isActive('bold') ? 'default' : 'ghost'}
@@ -17,6 +18,7 @@ export const FormattingButtons = () => {
         <Bold className="size-5" />
       </Button>
       <Button
+        title="Itálico"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         variant={editor.isActive('italic') ? 'default' : 'ghost'}
@@ -24,12 +26,14 @@ export const FormattingButtons = () => {
         <Italic className="size-5" />
       </Button>
       <Button
+        title="Lista"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         variant={editor.isActive('bulletList') ? 'default' : 'ghost'}
       >
         <List className="size-5" />
       </Button>
       <Button
+        title="Lista Ordenada"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         variant={editor.isActive('orderedList') ? 'default' : 'ghost'}
       >

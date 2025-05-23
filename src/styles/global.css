@@ -31,6 +31,16 @@
   .prose strong {
     @apply font-semibold text-inherit;
   }
+  .prose table {
+    @apply w-full border-collapse;
+  }
+  .prose th {
+    @apply bg-stone-300;
+  }
+  .prose th,
+  .prose td {
+    @apply border-border border px-4 py-2;
+  }
 }
 
 @theme inline {

@@ -7,18 +7,22 @@ import {
 } from '@/components/ui/popover';
 import { useCurrentEditor } from '@tiptap/react';
 import { Link } from 'lucide-react';
-import { useState, type FormEvent } from 'react';
+import { useRef, type FormEvent } from 'react';
 import { Button } from '../ui/button';
 
 export default function LinkButton() {
   const { editor } = useCurrentEditor();
-  const [link, setLink] = useState<string>();
+  const linkRef = useRef<HTMLInputElement>(null);
 
   if (!editor) return;
 
   const handleClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     editor.chain().focus().run();
+    if (!linkRef.current) return;
+
+    const link = linkRef.current.value;
+
     if (editor.isActive('link')) {
       // empty
       if (link === '' || !link) {
@@ -50,7 +54,10 @@ export default function LinkButton() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={editor.isActive('link') ? 'default' : 'ghost'}>
+        <Button
+          title="Inserir Link"
+          variant={editor.isActive('link') ? 'default' : 'ghost'}
+        >
           <Link className="size-5" />
         </Button>
       </PopoverTrigger>
@@ -62,17 +69,14 @@ export default function LinkButton() {
               <Input
                 id="link"
                 placeholder="www.example.com"
-                value={link}
                 autoComplete="off"
                 className="col-span-3 h-8"
-                onChange={(e) => {
-                  setLink(e.target.value ?? '');
-                }}
+                ref={linkRef}
               />
             </div>
           </div>
           <div className="flex justify-end">
-            <Button type="submit">Apply</Button>
+            <Button type="submit">Aplicar</Button>
           </div>
         </form>
       </PopoverContent>

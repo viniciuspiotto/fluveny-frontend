@@ -10,6 +10,7 @@ export default function HistoryButtons() {
   return (
     <>
       <Button
+        title="Desfazer (Ctrl + Z)"
         variant="ghost"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().undo()}
@@ -18,6 +19,7 @@ export default function HistoryButtons() {
       </Button>
 
       <Button
+        title="Refazer (Ctrl + Y)"
         variant="ghost"
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().redo()}
