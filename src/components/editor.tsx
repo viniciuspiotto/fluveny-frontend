@@ -1,13 +1,28 @@
+import { useModuleWizard } from '@/features/module/store/use-module-wizard';
 import Color from '@tiptap/extension-color';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Toolbar } from './toolbar';
 
-// TODO: ajustar o text rich para ao clicar em qualquer lugar da div pai, dar focus no editor
-export const Editor = () => {
+interface EditorProps {
+  initialContent: string;
+}
+
+export const Editor = ({ initialContent }: EditorProps) => {
+  const [isEmpty, setIsEmpty] = useState(true);
+  const { setValue, register } = useFormContext();
+
+  const { currentStep, setStepCompletion } = useModuleWizard();
+
+  useEffect(() => {
+    register('textBlock');
+  }, [register]);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -18,13 +33,24 @@ export const Editor = () => {
       Color,
       Image,
     ],
-    content: '',
+    content: initialContent,
     editorProps: {
       attributes: {
         class: 'focus:outline-none',
       },
     },
+    onUpdate({ editor }) {
+      const html = editor.getHTML();
+      setIsEmpty(editor.isEmpty);
+      setValue('textBlock', html, { shouldDirty: true });
+    },
   });
+
+  useEffect(() => {
+    if (editor && currentStep) {
+      setStepCompletion(currentStep, !isEmpty);
+    }
+  }, [editor, isEmpty, currentStep, setStepCompletion]);
 
   return (
     <EditorContext.Provider value={{ editor }}>

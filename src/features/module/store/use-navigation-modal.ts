@@ -1,19 +1,22 @@
 import { create } from 'zustand';
 
 type State = {
-  nextPath: string | number | null;
+  nextPath: string | null;
   isModalOpen: boolean;
-  openModal: (path: string | number) => void;
+  onSubmit: (() => void) | null;
+  openModal: (path: string) => void;
   closeModal: () => void;
   confirmNavigation: () => void;
+  setOnSubmit: (onSubmit: () => void) => void;
 };
 
 export const useNavigationModal = create<State>((set) => ({
   nextPath: null,
   isModalOpen: false,
+  onSubmit: null,
   openModal: (path) => set({ isModalOpen: true, nextPath: path }),
-  closeModal: () => set({ isModalOpen: false, nextPath: null }),
-  confirmNavigation: () => {
-    set({ isModalOpen: false });
-  },
+  closeModal: () => set({ isModalOpen: false, nextPath: null, onSubmit: null }),
+  confirmNavigation: () =>
+    set({ isModalOpen: false, nextPath: null, onSubmit: null }),
+  setOnSubmit: (onSubmit) => set({ onSubmit }),
 }));

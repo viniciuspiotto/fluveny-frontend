@@ -1,9 +1,7 @@
 import { z } from 'zod';
 
-export const createIntroductionModuleSchema = z.object({
+export const introductionSchema = z.object({
   textBlock: z.string().min(1),
 });
 
-export type CreateIntroductionModuleSchema = z.infer<
-  typeof createIntroductionModuleSchema
->;
+export type IntroductionData = z.infer<typeof introductionSchema>;

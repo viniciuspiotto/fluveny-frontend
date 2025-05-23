@@ -29,3 +29,9 @@ export interface ModuleCardProps {
   imgSrc: string;
   grammarRules: grammarRule[];
 }
+
+export interface Introduction {
+  textBlock: string;
+}
+
+export type StepMode = 'create' | 'edit';

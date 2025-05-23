@@ -1,9 +1,56 @@
+import type { StepMode } from '@/@types/module';
 import { Editor } from '@/components/editor';
+import { useCallback, useEffect } from 'react';
+import { FormProvider } from 'react-hook-form';
+import { useCreateIntroduction } from '../../hooks/api/mutations/use-create-introduction';
+import { useUpdateIntroduction } from '../../hooks/api/mutations/use-update-introduction';
+import { useGetIntroduction } from '../../hooks/api/queries/use-get-introduction';
+import { useModuleIntroductionForm } from '../../hooks/use-module-introduction-form';
+import type { IntroductionData } from '../../schemas/introduction-schema';
+import { useModuleInfo } from '../../store/use-module-info';
+import { useNavigationModal } from '../../store/use-navigation-modal';
 
-export const Introduction = () => {
+interface ModuleIntroductionFormProps {
+  mode: StepMode;
+}
+
+export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
+  const { moduleId } = useModuleInfo();
+  const { setOnSubmit } = useNavigationModal();
+
+  const { data: introductionData } = useGetIntroduction(
+    moduleId,
+    mode === 'edit',
+  );
+
+  const { mutate: updateIntroduction } = useUpdateIntroduction();
+  const { mutate: createIntroduction } = useCreateIntroduction();
+
+  const { methods } = useModuleIntroductionForm({ textBlock: '' });
+
+  const { handleSubmit } = methods;
+
+  const onSubmit = useCallback(
+    (data: IntroductionData) => {
+      console.log(data);
+      if (mode === 'edit') {
+        updateIntroduction({ moduleId, data });
+      } else {
+        createIntroduction({ moduleId, data });
+      }
+    },
+    [mode, moduleId, updateIntroduction, createIntroduction],
+  );
+
+  useEffect(() => {
+    setOnSubmit(handleSubmit(onSubmit));
+  }, [handleSubmit, onSubmit, setOnSubmit]);
+
   return (
-    <div className="mb-20">
-      <Editor />
-    </div>
+    <FormProvider {...methods}>
+      <form className="mb-20">
+        <Editor initialContent={introductionData?.data.textBlock ?? ''} />
+      </form>
+    </FormProvider>
   );
 };

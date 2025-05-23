@@ -1,3 +1,4 @@
+import type { StepMode } from '@/@types/module';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -6,9 +7,11 @@ type StepKey = string;
 type ModuleWizardState = {
   steps: StepKey[];
   stepCompletion: Record<StepKey, boolean>;
+  stepModes: Record<StepKey, StepMode>;
   currentStep: StepKey | null;
   setSteps: (steps: StepKey[]) => void;
   setStepCompletion: (step: StepKey, isComplete: boolean) => void;
+  setStepModes: (step: StepKey, mode: StepMode) => void;
   setCurrentStep: (step: StepKey) => void;
   nextStep: () => void;
 };
@@ -19,15 +22,19 @@ export const useModuleWizard = create<ModuleWizardState>()(
       steps: [],
       stepCompletion: {},
       currentStep: null,
+      stepModes: {},
       setSteps: (steps) =>
         set(() => {
           const initialStatus: Record<StepKey, boolean> = {};
+          const initialModes: Record<StepKey, StepMode> = {};
           for (const step of steps) {
             initialStatus[step] = false;
+            initialModes[step] = 'create';
           }
           return {
             steps,
             stepCompletion: initialStatus,
+            stepModes: initialModes,
           };
         }),
       setStepCompletion: (step, isComplete) =>
@@ -44,6 +51,13 @@ export const useModuleWizard = create<ModuleWizardState>()(
             },
           };
         }),
+      setStepModes: (step, mode: StepMode) =>
+        set((state) => ({
+          stepModes: {
+            ...state.stepModes,
+            [step]: mode,
+          },
+        })),
       setCurrentStep: (step) => set({ currentStep: step }),
       nextStep: () =>
         set((state) => {
