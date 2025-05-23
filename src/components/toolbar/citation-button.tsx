@@ -20,6 +20,7 @@ export default function CitationButton() {
       title="Citação"
       onClick={handleClick}
       variant={editor.isActive('blockquote') ? 'default' : 'ghost'}
+      type="button"
     >
       <Quote className="size-5" />
     </Button>

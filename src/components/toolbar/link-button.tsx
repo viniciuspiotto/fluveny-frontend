@@ -57,6 +57,7 @@ export default function LinkButton() {
         <Button
           title="Inserir Link"
           variant={editor.isActive('link') ? 'default' : 'ghost'}
+          type="button"
         >
           <Link className="size-5" />
         </Button>

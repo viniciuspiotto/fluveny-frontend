@@ -42,6 +42,7 @@ export default function TableManager() {
         title={editor.isActive('table') ? 'Apagar Tabela' : 'Criar Tabela'}
         variant={editor.isActive('table') ? 'default' : 'ghost'}
         onClick={handleTable}
+        type="button"
       >
         <Table />
       </Button>
@@ -52,6 +53,7 @@ export default function TableManager() {
           onClick={() => {
             editor.chain().focus().addRowAfter().run();
           }}
+          type="button"
         >
           <BetweenHorizonalStart />
         </Button>
@@ -61,6 +63,7 @@ export default function TableManager() {
           onClick={() => {
             editor.chain().focus().addColumnAfter().run();
           }}
+          type="button"
         >
           <BetweenVerticalStart />
         </Button>
@@ -72,6 +75,7 @@ export default function TableManager() {
           onClick={() => {
             editor.chain().focus().deleteRow().run();
           }}
+          type="button"
         >
           <BetweenHorizonalEnd />
         </Button>
@@ -81,6 +85,7 @@ export default function TableManager() {
           onClick={() => {
             editor.chain().focus().deleteColumn().run();
           }}
+          type="button"
         >
           <BetweenVerticalEnd />
         </Button>
@@ -92,6 +97,7 @@ export default function TableManager() {
           onClick={() => {
             editor.chain().focus().toggleHeaderRow().run();
           }}
+          type="button"
         >
           <LayoutPanelTop />
         </Button>
@@ -101,6 +107,7 @@ export default function TableManager() {
           onClick={() => {
             editor.chain().focus().toggleHeaderColumn().run();
           }}
+          type="button"
         >
           <LayoutPanelLeft />
         </Button>
@@ -110,6 +117,7 @@ export default function TableManager() {
           onClick={() => {
             editor.chain().focus().toggleHeaderCell().run();
           }}
+          type="button"
         >
           <Grid2X2 />
         </Button>
@@ -120,6 +128,7 @@ export default function TableManager() {
         onClick={() => {
           editor.chain().focus().mergeOrSplit().run();
         }}
+        type="button"
       >
         {editor.can().mergeCells() ? <TableCellsMerge /> : <TableCellsSplit />}
       </Button>

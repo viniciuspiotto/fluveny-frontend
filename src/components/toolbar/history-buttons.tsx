@@ -14,6 +14,7 @@ export default function HistoryButtons() {
         variant="ghost"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().undo()}
+        type="button"
       >
         <Undo2 />
       </Button>
@@ -23,6 +24,7 @@ export default function HistoryButtons() {
         variant="ghost"
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().redo()}
+        type="button"
       >
         <Redo2 />
       </Button>

@@ -26,7 +26,7 @@ export const ImageButton = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button title="Inserir Imagem" variant="ghost">
+        <Button title="Inserir Imagem" variant="ghost" type="button">
           <ImageIcon className="size-5" />
         </Button>
       </PopoverTrigger>

@@ -1,5 +1,4 @@
 import { useModuleWizard } from '@/features/module/store/use-module-wizard';
-import Blockquote from '@tiptap/extension-blockquote';
 import Color from '@tiptap/extension-color';
 import Gapcursor from '@tiptap/extension-gapcursor';
 import Image from '@tiptap/extension-image';
@@ -39,7 +38,6 @@ export const Editor = ({ initialContent }: EditorProps) => {
       TextStyle,
       Color,
       Image,
-      Blockquote,
       Gapcursor,
       Table.configure({
         resizable: true,

@@ -19,7 +19,9 @@ export default function PopoverToolbar({
   return (
     <Popover>
       <PopoverTrigger asChild {...props}>
-        <Button variant="ghost">{trigger}</Button>
+        <Button variant="ghost" type="button">
+          {trigger}
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-2">{children}</PopoverContent>
     </Popover>
