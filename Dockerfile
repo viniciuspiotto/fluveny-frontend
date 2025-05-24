@@ -3,9 +3,6 @@ WORKDIR /app
 
 RUN corepack enable && corepack prepare pnpm@10.11.0 --activate
 
-ARG VITE_API_URL
-ENV VITE_API_URL=${VITE_API_URL}
-
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 
