@@ -1,12 +1,16 @@
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 
 export const Draft = () => {
+  const navigate = useNavigate();
+
+  const handleCreateNewModule = () => {
+    navigate('/modules/new');
+  };
+
   return (
     <div className="flex h-screen items-center justify-center gap-4">
-      <Link to={'/modules/new'}>
-        <Button>Criar Módulo</Button>
-      </Link>
+      <Button onClick={handleCreateNewModule}>Criar Módulo</Button>
     </div>
   );
 };

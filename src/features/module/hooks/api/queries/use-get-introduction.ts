@@ -8,7 +8,6 @@ export const useGetIntroduction = (id: string, enabled = true) => {
   return useQuery<GetIntroductionResponse>({
     queryKey: ['introduction', id],
     queryFn: () => getIntroduction(id),
-    staleTime: Infinity,
     enabled: !!id && enabled,
   });
 };

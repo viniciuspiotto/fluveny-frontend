@@ -1,18 +1,29 @@
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router';
 import { useConfirmModal } from '../store/use-confirm-modal';
+import { useModuleWizard } from '../store/use-module-wizard';
 
 export const ConfirmModal = () => {
   const navigate = useNavigate();
-  const { isModalOpen, closeModal, confirmNavigation, nextPath, onSubmit } =
-    useConfirmModal();
+  const {
+    isModalOpen,
+    closeModal,
+    confirmNavigation,
+    nextPath,
+    onSubmit,
+    nextStep,
+  } = useConfirmModal();
+  const { setCurrentStep } = useModuleWizard();
 
   if (!isModalOpen) return null;
 
   const handleConfirm = () => {
     if (onSubmit) onSubmit();
-    confirmNavigation();
-    if (nextPath) navigate(nextPath);
+    if (nextPath && nextStep) {
+      setCurrentStep(nextStep);
+      navigate(nextPath);
+      confirmNavigation();
+    }
   };
 
   return (

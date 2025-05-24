@@ -7,7 +7,7 @@ import { useModuleInfo } from '../store/use-module-info';
 import { useModuleWizard } from '../store/use-module-wizard';
 import { useCreateModule } from './api/mutations/use-create-details';
 
-export const useModuleDetailsForm = () => {
+export const useModuleCreateDetailsForm = () => {
   const methods = useForm<DetailsData>({
     resolver: zodResolver(detailsSchema),
     defaultValues: {

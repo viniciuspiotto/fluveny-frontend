@@ -19,7 +19,7 @@ export const ModuleCard = ({ id, title, grammarRules }: Module) => {
         onClick={handleEnterModule}
         className="flex h-full min-h-60 w-full min-w-0 flex-initial flex-col items-start justify-between rounded-md bg-[url(/img/party.webp)] bg-cover bg-center p-4 hover:cursor-pointer lg:min-h-70 lg:p-6"
       >
-        <span className="text-2xl font-bold break-words text-zinc-50 lg:text-3xl">
+        <span className="w-full truncate text-2xl font-bold break-words whitespace-normal text-zinc-50 lg:text-3xl">
           {title}
         </span>
         <ul className="flex flex-wrap gap-2 lg:gap-4">

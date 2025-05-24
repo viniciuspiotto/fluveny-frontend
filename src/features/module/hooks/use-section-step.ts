@@ -6,17 +6,13 @@ export const useSectionStep = (slug: string) => {
 
   const { moduleId } = useModuleInfo();
 
+  const isCurrent = slug === currentStep;
   const currentIndex = steps.findIndex((step) => step === slug);
   const previousStep = steps[currentIndex - 1];
-  const isAccessible = currentIndex === 0 || !!stepCompletion[previousStep];
+  const isAccessible =
+    stepCompletion[slug] || stepCompletion[previousStep] || isCurrent;
 
-  const isCurrent = slug === currentStep;
+  const path = `/modules/create/${moduleId}/${slug}`;
 
-  const prevPath =
-    currentIndex === 0
-      ? `/modules/drafts`
-      : `/modules/create/${moduleId}/${previousStep}`;
-  const nextPath = `/modules/create/${moduleId}/${slug}`;
-
-  return { prevPath, nextPath, isAccessible, isCurrent };
+  return { path, isAccessible, isCurrent };
 };

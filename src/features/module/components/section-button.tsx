@@ -11,24 +11,25 @@ interface SectionButtonProps {
   slug: string;
 }
 
-// TODO: modificar logica aqui
 export const SectionButton = ({ variant, title, slug }: SectionButtonProps) => {
-  const { nextPath, isAccessible, isCurrent } = useSectionStep(slug);
+  const { path, isAccessible, isCurrent } = useSectionStep(slug);
   const { openModal } = useConfirmModal();
 
   const Icon = SECTIONS_CREATION_MODULE[variant].icon;
 
   const handleClick = () => {
-    if (!isCurrent) openModal(nextPath);
+    if (!isCurrent && isAccessible) {
+      openModal(path, slug);
+    }
   };
 
   return (
     <Button
       disabled={!isAccessible}
       className={clsx(
-        'items-center bg-zinc-50 py-6 hover:bg-zinc-50 focus:bg-zinc-50',
+        'cursor-pointer items-center bg-zinc-50 py-6 hover:bg-zinc-50 focus:bg-zinc-50',
         {
-          'opacity-50': !isAccessible,
+          'cursor-auto opacity-50': !isAccessible,
           'cursor-auto': isCurrent,
         },
       )}

@@ -13,7 +13,6 @@ type ModuleWizardState = {
   setStepCompletion: (step: StepKey, isComplete: boolean) => void;
   setStepModes: (step: StepKey, mode: StepMode) => void;
   setCurrentStep: (step: StepKey) => void;
-  nextStep: () => void;
   resetStepModes: () => void;
 };
 
@@ -26,8 +25,18 @@ export const useModuleWizard = create<ModuleWizardState>()(
       stepModes: {},
       setSteps: (steps) =>
         set(() => {
+          const stepCompletion: Record<StepKey, boolean> = {};
+          const stepModes: Record<StepKey, StepMode> = {};
+
+          for (const step of steps) {
+            stepCompletion[step] = false;
+            stepModes[step] = 'create';
+          }
+
           return {
             steps,
+            stepCompletion,
+            stepModes,
           };
         }),
       setStepCompletion: (step, isComplete) =>
@@ -52,20 +61,6 @@ export const useModuleWizard = create<ModuleWizardState>()(
           },
         })),
       setCurrentStep: (step) => set({ currentStep: step }),
-      nextStep: () =>
-        set((state) => {
-          const { steps, currentStep } = state;
-          if (!currentStep) return state;
-
-          const currentIndex = steps.indexOf(currentStep);
-          const nextIndex = currentIndex + 1;
-
-          if (nextIndex >= steps.length) return state;
-
-          return {
-            currentStep: steps[nextIndex],
-          };
-        }),
       resetStepModes: () =>
         set((state) => {
           const resetModes: Record<StepKey, StepMode> = {};

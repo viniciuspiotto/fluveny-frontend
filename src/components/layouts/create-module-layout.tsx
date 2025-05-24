@@ -1,58 +1,98 @@
 import type { GrammarRule } from '@/@types/module';
 import { Back } from '@/features/module/components/back';
 import { BackModal } from '@/features/module/components/back-modal';
-import { ConfirmModal } from '@/features/module/components/navigation-modal';
+import { ConfirmModal } from '@/features/module/components/confirm-modal';
 import { NavigationSections } from '@/features/module/components/navigation-sections';
+import { useGetIntroduction } from '@/features/module/hooks/api/queries/use-get-introduction';
 import { useGetModule } from '@/features/module/hooks/api/queries/use-get-module';
 import { useBackModal } from '@/features/module/store/use-back-modal';
 import { useModuleInfo } from '@/features/module/store/use-module-info';
 import { useModuleWizard } from '@/features/module/store/use-module-wizard';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Outlet } from 'react-router';
 
-const getTitle = (grammarRule: string | null, grammarRules: GrammarRule[]) => {
+const getTitle = (
+  grammarRule: string | null,
+  grammarMap: Map<string, string>,
+) => {
   if (!grammarRule) return '';
 
   if (grammarRule === 'introduction') return 'Introdução';
   if (grammarRule === 'final-challenge') return 'Desafio Final';
 
-  const match = grammarRules.find((t) => t.slug === grammarRule);
-  return match ? match.title : 'Tópico Desconhecido';
+  return grammarMap.get(grammarRule) || 'Tópico Desconhecido';
+};
+
+const areGrammarRulesEqual = (a: GrammarRule[], b: GrammarRule[]) => {
+  if (a.length !== b.length) return false;
+  return a.every(
+    (rule, i) => rule.slug === b[i].slug && rule.title === b[i].title,
+  );
 };
 
 export const CreateModuleLayout = () => {
   const { setGrammarRules, moduleId } = useModuleInfo();
-  const { setSteps, currentStep, stepModes } = useModuleWizard();
+  const { setSteps, currentStep, stepModes, setStepCompletion, setStepModes } =
+    useModuleWizard();
   const { openBackModal } = useBackModal();
+  const [stepsInitialized, setStepsInitialized] = useState(false);
+  const [lastGrammarRules, setLastGrammarRules] = useState<GrammarRule[]>([]);
 
-  const { data: response } = useGetModule(moduleId);
+  const { data: response, error: moduleError } = useGetModule(moduleId);
 
   const grammarRules = useMemo(() => {
     return response?.data.grammarRules ?? [];
   }, [response]);
 
+  const grammarTitleMap = useMemo(() => {
+    return new Map(grammarRules.map((rule) => [rule.slug, rule.title]));
+  }, [grammarRules]);
+
   useEffect(() => {
-    setSteps([
+    const steps = [
       'introduction',
       ...grammarRules.map((rule) => rule.slug),
       'final-challenge',
       'revision',
-    ]);
+    ];
+    setSteps(steps);
+    setStepsInitialized(true);
   }, [setSteps, grammarRules]);
 
-  useEffect(() => {
-    setGrammarRules(grammarRules);
-  }, [setGrammarRules, grammarRules]);
+  const { data: introductionData, error: introductionError } =
+    useGetIntroduction(moduleId, stepsInitialized);
 
-  const title = getTitle(currentStep, grammarRules);
+  useEffect(() => {
+    if (introductionData?.data) {
+      setStepCompletion('introduction', true);
+      setStepModes('introduction', 'edit');
+    }
+  }, [setStepCompletion, introductionData, setStepModes]);
+
+  useEffect(() => {
+    if (!areGrammarRulesEqual(grammarRules, lastGrammarRules)) {
+      setGrammarRules(grammarRules);
+      setLastGrammarRules(grammarRules);
+    }
+  }, [setGrammarRules, grammarRules, lastGrammarRules]);
+
+  const title = getTitle(currentStep ?? null, grammarTitleMap);
 
   const handleBack = () => {
-    if (stepModes[currentStep!] === 'edit') {
+    if (currentStep && stepModes[currentStep] === 'edit') {
       openBackModal(`/modules/${moduleId}`);
     } else {
       openBackModal('/modules/drafts');
     }
   };
+
+  if (moduleError || introductionError) {
+    return (
+      <div className="py-20 text-center font-bold text-red-600">
+        Erro ao carregar o módulo. Tente novamente mais tarde.
+      </div>
+    );
+  }
 
   return (
     <>

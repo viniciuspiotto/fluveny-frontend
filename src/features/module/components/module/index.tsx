@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useGetModule } from '../../hooks/api/queries/use-get-module';
 import { getIntroduction } from '../../services/get-introduction';
 import { useModuleInfo } from '../../store/use-module-info';
 import { useModuleWizard } from '../../store/use-module-wizard';
 
 export const Module = () => {
-  const [hasIntroduction, setHasIntroduction] = useState<boolean | null>(null);
+  const [hasIntroduction, setHasIntroduction] = useState<boolean>(false);
   const { moduleId } = useModuleInfo();
   const navigate = useNavigate();
   const { setStepModes, setStepCompletion } = useModuleWizard();
@@ -25,20 +25,23 @@ export const Module = () => {
     };
 
     checkIntroduction();
-  }, [moduleId]);
+  }, [moduleId, setStepModes]);
 
   const handleEditIntroduction = async () => {
-    try {
-      const response = await getIntroduction(moduleId);
-      if (response?.data) {
-        setStepModes('introduction', 'edit');
-        setStepCompletion('introduction', true);
-      }
-      navigate(`/modules/create/${moduleId}/introduction`);
-    } catch (error) {
-      console.error('Erro ao buscar introdução:', error);
-    }
+    setStepModes('introduction', 'edit');
+    setStepCompletion('introduction', true);
+    navigate(`/modules/create/${moduleId}/introduction`);
   };
+
+  const handleEditDetails = () => {
+    navigate(`/modules/edit/${moduleId}`);
+  };
+
+  useEffect(() => {
+    hasIntroduction
+      ? setStepModes('introduction', 'edit')
+      : setStepModes('introduction', 'create');
+  }, [hasIntroduction, setStepModes]);
 
   const { data: module, isLoading, error } = useGetModule(moduleId);
 
@@ -52,9 +55,8 @@ export const Module = () => {
       <h1 className="flex items-center gap-4">
         Módulo: <span className="text-xl font-bold">{title}</span>
       </h1>
-      <Link to={`/modules/edit/${moduleId}`}>
-        <Button>Editar detalhes do módulo</Button>
-      </Link>
+
+      <Button onClick={handleEditDetails}>Editar detalhes do módulo</Button>
 
       <Button onClick={handleEditIntroduction} disabled={!hasIntroduction}>
         Editar introdução do módulo

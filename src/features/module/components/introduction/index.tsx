@@ -9,6 +9,7 @@ import { useModuleIntroductionForm } from '../../hooks/use-module-introduction-f
 import type { IntroductionData } from '../../schemas/introduction-schema';
 import { useConfirmModal } from '../../store/use-confirm-modal';
 import { useModuleInfo } from '../../store/use-module-info';
+import { useModuleWizard } from '../../store/use-module-wizard';
 
 interface ModuleIntroductionFormProps {
   mode: StepMode;
@@ -17,6 +18,7 @@ interface ModuleIntroductionFormProps {
 export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   const { moduleId } = useModuleInfo();
   const { setOnSubmit } = useConfirmModal();
+  const { setStepModes } = useModuleWizard();
 
   const { data: introductionData } = useGetIntroduction(
     moduleId,
@@ -36,9 +38,10 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
         updateIntroduction({ moduleId, data });
       } else {
         createIntroduction({ moduleId, data });
+        setStepModes('introduction', 'edit');
       }
     },
-    [mode, moduleId, updateIntroduction, createIntroduction],
+    [mode, moduleId, updateIntroduction, createIntroduction, setStepModes],
   );
 
   useEffect(() => {
@@ -48,13 +51,17 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   return (
     <FormProvider {...methods}>
       <form className="mb-20">
-        <Editor
-          initialContent={
-            mode === 'edit'
-              ? introductionData?.data.textBlock.content
-              : undefined
-          }
-        />
+        {mode === 'edit' && !introductionData?.data?.textBlock ? (
+          <div className="py-10 text-center">Carregando introdução...</div>
+        ) : (
+          <Editor
+            initialContent={
+              mode === 'edit' && introductionData?.data?.textBlock
+                ? introductionData.data.textBlock.content
+                : undefined
+            }
+          />
+        )}
       </form>
     </FormProvider>
   );

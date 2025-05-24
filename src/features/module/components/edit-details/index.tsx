@@ -46,7 +46,7 @@ export const EditDetails = () => {
               className="mt-8 w-full py-8 text-xl font-bold"
               size="xl"
             >
-              <span>Editar</span>
+              Editar
             </Button>
           </div>
         </form>
