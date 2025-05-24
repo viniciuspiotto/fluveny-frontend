@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useGetModule } from '../../hooks/api/queries/use-get-module';
 import { getIntroduction } from '../../services/get-introduction';
@@ -7,11 +7,27 @@ import { useModuleInfo } from '../../store/use-module-info';
 import { useModuleWizard } from '../../store/use-module-wizard';
 
 export const Module = () => {
+  const [hasIntroduction, setHasIntroduction] = useState<boolean | null>(null);
   const { setModuleId, moduleId } = useModuleInfo();
   const navigate = useNavigate();
   const { setStepModes, setStepCompletion } = useModuleWizard();
 
   const { id } = useParams();
+
+  useEffect(() => {
+    const checkIntroduction = async () => {
+      if (!id) return;
+      try {
+        const response = await getIntroduction(id);
+        setHasIntroduction(!!response?.data);
+      } catch (error) {
+        console.error('Erro ao verificar introdução:', error);
+        setHasIntroduction(false);
+      }
+    };
+
+    checkIntroduction();
+  }, [id]);
 
   useEffect(() => {
     if (id && moduleId !== id) {
@@ -48,7 +64,7 @@ export const Module = () => {
         <Button>Editar detalhes do módulo</Button>
       </Link>
 
-      <Button onClick={handleEditIntroduction}>
+      <Button onClick={handleEditIntroduction} disabled={!hasIntroduction}>
         Editar introdução do módulo
       </Button>
     </div>

@@ -15,7 +15,7 @@ import { useFormContext } from 'react-hook-form';
 import { Toolbar } from './toolbar';
 
 interface EditorProps {
-  initialContent: string;
+  initialContent?: string;
 }
 
 export const Editor = ({ initialContent }: EditorProps) => {

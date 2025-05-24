@@ -17,7 +17,7 @@ export const DescriptionField = () => {
           id="description"
           className={cn(
             'resize-none text-lg',
-            errors.description && 'border-red-500',
+            errors.description && 'animate-shake border-red-500',
           )}
           minHeight={200}
           maxHeight={400}

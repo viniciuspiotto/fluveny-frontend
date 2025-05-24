@@ -34,7 +34,7 @@ export const useModuleEditDetailsForm = () => {
         title: module.title,
         description: module.description,
         id_level: module.level.id,
-        id_grammarRules: module.grammarRules.map((rule) => rule.id),
+        id_grammarRules: module.grammarRules.map((r) => r.id),
       });
     }
   }, [isSuccess, data, methods]);
@@ -49,7 +49,6 @@ export const useModuleEditDetailsForm = () => {
       {
         onSuccess: () => {
           setCurrentStep('introduction');
-          // setar todos os step completion
           navigate(`/modules/create/${moduleId}/introduction`);
         },
         onError: (error: any) => {

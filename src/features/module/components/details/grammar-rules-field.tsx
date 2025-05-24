@@ -9,7 +9,10 @@ export const GrammarRulesField = () => {
       control={control}
       name="id_grammarRules"
       render={({ field }) => (
-        <GrammarRulesSelection onChange={field.onChange} />
+        <GrammarRulesSelection
+          onChange={field.onChange}
+          initialValue={field.value}
+        />
       )}
     />
   );

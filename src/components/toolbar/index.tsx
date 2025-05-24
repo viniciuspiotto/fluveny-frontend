@@ -8,10 +8,6 @@ import { SolidColorPicker } from './solid-color-picker';
 import TableManager from './table-manager';
 import { TextAlignSelect } from './text-align-select';
 
-/*
-[ ]: Adicionar link
-[ ]: Adicionar tabela
-*/
 export function Toolbar() {
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-md border bg-white px-3 py-2">

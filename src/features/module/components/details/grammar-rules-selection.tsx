@@ -4,10 +4,12 @@ import { Tag } from '../tag';
 import { SelectGrammarRule } from './select-topic';
 
 interface GrammarRulesSelectionProps {
+  initialValue: string[];
   onChange: (value: string[]) => void;
 }
 
 export const GrammarRulesSelection = ({
+  initialValue,
   onChange,
 }: GrammarRulesSelectionProps) => {
   const [selectedGrammarRules, setSelectedGrammarRules] = useState<
@@ -23,6 +25,7 @@ export const GrammarRulesSelection = ({
     <>
       <div className="grid grid-cols-[1fr_50px] items-center gap-4 lg:grid-cols-2">
         <SelectGrammarRule
+          initialValue={initialValue}
           value={selectedGrammarRules}
           onSelectGrammarRule={handleSelectGrammarRule}
         />

@@ -15,23 +15,47 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useGetGrammarRules } from '../../hooks/api/queries/use-get-grammar-rules';
 
 interface SelectGrammarRuleProps {
+  initialValue: string[];
   value: GrammarRule[];
   onSelectGrammarRule: (grammarRules: GrammarRule[]) => void;
-  error?: string;
 }
 
 export const SelectGrammarRule = ({
+  initialValue,
   value,
   onSelectGrammarRule,
 }: SelectGrammarRuleProps) => {
   const [open, setOpen] = useState(false);
   const { data: response, isLoading, isError } = useGetGrammarRules();
   const grammarRules = response?.data ?? [];
+
+  useEffect(() => {
+    if (!response || !initialValue) return;
+
+    const grammarRules = response.data ?? [];
+
+    const selected = grammarRules.filter((rule) =>
+      initialValue.includes(rule.id),
+    );
+
+    const selectedIds = selected
+      .map((rule) => rule.id)
+      .sort()
+      .join(',');
+    const valueIds = value
+      .map((rule) => rule.id)
+      .sort()
+      .join(',');
+
+    if (selectedIds !== valueIds) {
+      onSelectGrammarRule(selected);
+    }
+  }, [response, initialValue]);
 
   const {
     formState: { errors },
