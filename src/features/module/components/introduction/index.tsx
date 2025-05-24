@@ -7,8 +7,8 @@ import { useUpdateIntroduction } from '../../hooks/api/mutations/use-update-intr
 import { useGetIntroduction } from '../../hooks/api/queries/use-get-introduction';
 import { useModuleIntroductionForm } from '../../hooks/use-module-introduction-form';
 import type { IntroductionData } from '../../schemas/introduction-schema';
+import { useConfirmModal } from '../../store/use-confirm-modal';
 import { useModuleInfo } from '../../store/use-module-info';
-import { useNavigationModal } from '../../store/use-navigation-modal';
 
 interface ModuleIntroductionFormProps {
   mode: StepMode;
@@ -16,7 +16,7 @@ interface ModuleIntroductionFormProps {
 
 export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   const { moduleId } = useModuleInfo();
-  const { setOnSubmit } = useNavigationModal();
+  const { setOnSubmit } = useConfirmModal();
 
   const { data: introductionData } = useGetIntroduction(
     moduleId,
@@ -49,7 +49,11 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
     <FormProvider {...methods}>
       <form className="mb-20">
         <Editor
-          initialContent={introductionData?.data.textBlock.content ?? ''}
+          initialContent={
+            mode === 'edit'
+              ? introductionData?.data.textBlock.content
+              : undefined
+          }
         />
       </form>
     </FormProvider>

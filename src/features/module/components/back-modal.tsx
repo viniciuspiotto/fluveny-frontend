@@ -1,27 +1,26 @@
 import { Button } from '@/components/ui/button';
-import { useNavigationModal } from '@/features/module/store/use-navigation-modal';
 import { useNavigate } from 'react-router';
+import { useBackModal } from '../store/use-back-modal';
 
-export const ConfirmNavigationModal = () => {
+export const BackModal = () => {
   const navigate = useNavigate();
-  const { isModalOpen, closeModal, confirmNavigation, nextPath, onSubmit } =
-    useNavigationModal();
+  const { isBackModalOpen, closeModal, confirmBackNavigation, nextPath } =
+    useBackModal();
 
-  if (!isModalOpen) return null;
+  if (!isBackModalOpen) return null;
 
   const handleConfirm = () => {
-    if (onSubmit) onSubmit();
-    confirmNavigation();
-    if (nextPath) navigate(nextPath);
+    confirmBackNavigation();
+    navigate(nextPath!);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
       <div className="max-w-140 space-y-5 rounded bg-white p-6 shadow-xl lg:space-y-6">
-        <h2 className="text-xl font-bold lg:text-2xl">Confirmar navegação</h2>
+        <h2 className="text-xl font-bold lg:text-2xl">Voltar para o menu</h2>
         <p className="text-lg">
-          Tem certeza que deseja prosseguir? Isso irá enviar os dados
-          preenchidos.
+          Tem certeza que deseja voltar para o menu? os dados serão salvos
+          temporariamente
         </p>
         <div className="flex justify-end gap-4 rounded">
           <Button
@@ -31,7 +30,7 @@ export const ConfirmNavigationModal = () => {
           >
             Cancelar
           </Button>
-          <Button onClick={handleConfirm} type="submit">
+          <Button onClick={handleConfirm} type="button">
             Confirmar
           </Button>
         </div>

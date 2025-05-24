@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useGetModule } from '../../hooks/api/queries/use-get-module';
 import { getIntroduction } from '../../services/get-introduction';
 import { useModuleInfo } from '../../store/use-module-info';
@@ -8,17 +8,15 @@ import { useModuleWizard } from '../../store/use-module-wizard';
 
 export const Module = () => {
   const [hasIntroduction, setHasIntroduction] = useState<boolean | null>(null);
-  const { setModuleId, moduleId } = useModuleInfo();
+  const { moduleId } = useModuleInfo();
   const navigate = useNavigate();
   const { setStepModes, setStepCompletion } = useModuleWizard();
 
-  const { id } = useParams();
-
   useEffect(() => {
     const checkIntroduction = async () => {
-      if (!id) return;
+      if (!moduleId) return;
       try {
-        const response = await getIntroduction(id);
+        const response = await getIntroduction(moduleId);
         setHasIntroduction(!!response?.data);
       } catch (error) {
         console.error('Erro ao verificar introdução:', error);
@@ -27,28 +25,22 @@ export const Module = () => {
     };
 
     checkIntroduction();
-  }, [id]);
-
-  useEffect(() => {
-    if (id && moduleId !== id) {
-      setModuleId(id);
-    }
-  }, [id, moduleId, setModuleId]);
+  }, [moduleId]);
 
   const handleEditIntroduction = async () => {
     try {
-      const response = await getIntroduction(id);
+      const response = await getIntroduction(moduleId);
       if (response?.data) {
         setStepModes('introduction', 'edit');
         setStepCompletion('introduction', true);
       }
-      navigate(`/modules/create/${id}/introduction`);
+      navigate(`/modules/create/${moduleId}/introduction`);
     } catch (error) {
       console.error('Erro ao buscar introdução:', error);
     }
   };
 
-  const { data: module, isLoading, error } = useGetModule(id);
+  const { data: module, isLoading, error } = useGetModule(moduleId);
 
   if (isLoading) return <p>Loading...</p>;
   if (error || !module?.data) return <p>Erro ao carregar módulo</p>;
@@ -60,7 +52,7 @@ export const Module = () => {
       <h1 className="flex items-center gap-4">
         Módulo: <span className="text-xl font-bold">{title}</span>
       </h1>
-      <Link to={`/modules/edit/${id}`}>
+      <Link to={`/modules/edit/${moduleId}`}>
         <Button>Editar detalhes do módulo</Button>
       </Link>
 

@@ -1,11 +1,12 @@
 import type { GrammarRule } from '@/@types/module';
 import { Back } from '@/features/module/components/back';
-import { ConfirmNavigationModal } from '@/features/module/components/confirm-navigation-modal';
+import { BackModal } from '@/features/module/components/back-modal';
+import { ConfirmModal } from '@/features/module/components/navigation-modal';
 import { NavigationSections } from '@/features/module/components/navigation-sections';
 import { useGetModule } from '@/features/module/hooks/api/queries/use-get-module';
+import { useBackModal } from '@/features/module/store/use-back-modal';
 import { useModuleInfo } from '@/features/module/store/use-module-info';
 import { useModuleWizard } from '@/features/module/store/use-module-wizard';
-import { useNavigationModal } from '@/features/module/store/use-navigation-modal';
 import { useEffect, useMemo } from 'react';
 import { Outlet } from 'react-router';
 
@@ -20,10 +21,9 @@ const getTitle = (grammarRule: string | null, grammarRules: GrammarRule[]) => {
 };
 
 export const CreateModuleLayout = () => {
-  const { openModal } = useNavigationModal();
   const { setGrammarRules, moduleId } = useModuleInfo();
-
-  const { setSteps, currentStep } = useModuleWizard();
+  const { setSteps, currentStep, stepModes } = useModuleWizard();
+  const { openBackModal } = useBackModal();
 
   const { data: response } = useGetModule(moduleId);
 
@@ -47,7 +47,11 @@ export const CreateModuleLayout = () => {
   const title = getTitle(currentStep, grammarRules);
 
   const handleBack = () => {
-    openModal('/modules');
+    if (stepModes[currentStep!] === 'edit') {
+      openBackModal(`/modules/${moduleId}`);
+    } else {
+      openBackModal('/modules/drafts');
+    }
   };
 
   return (
@@ -67,7 +71,8 @@ export const CreateModuleLayout = () => {
         </main>
       </div>
       <NavigationSections />
-      <ConfirmNavigationModal />
+      <ConfirmModal />
+      <BackModal />
     </>
   );
 };

@@ -1,6 +1,7 @@
 import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
 import { FormProvider } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { useModuleDetailsForm } from '../../hooks/use-module-details-form';
 import { Back } from '../back';
 import { BannerUpload } from './banner-upload';
@@ -11,13 +12,17 @@ import { TitleInput } from './title-input';
 
 export const Details = () => {
   const { methods, onSubmit } = useModuleDetailsForm();
+  const navigate = useNavigate();
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <div className="relative">
           <BannerUpload />
-          <Back className="absolute -bottom-6 left-4 z-10" />
+          <Back
+            className="absolute -bottom-6 left-4 z-10"
+            onClick={() => navigate('/modules/drafts')}
+          />
         </div>
         <div className="mx-auto mt-10 w-full max-w-300 px-4 pb-8">
           <TitleInput />

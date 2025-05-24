@@ -12,7 +12,11 @@ export const useSectionStep = (slug: string) => {
 
   const isCurrent = slug === currentStep;
 
-  const path = `/modules/create/${moduleId}/${slug}`;
+  const prevPath =
+    currentIndex === 0
+      ? `/modules/drafts`
+      : `/modules/create/${moduleId}/${previousStep}`;
+  const nextPath = `/modules/create/${moduleId}/${slug}`;
 
-  return { path, isAccessible, isCurrent };
+  return { prevPath, nextPath, isAccessible, isCurrent };
 };

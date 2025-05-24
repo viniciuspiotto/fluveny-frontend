@@ -10,7 +10,7 @@ type State = {
   setOnSubmit: (onSubmit: () => void) => void;
 };
 
-export const useNavigationModal = create<State>((set) => ({
+export const useConfirmModal = create<State>((set) => ({
   nextPath: null,
   isModalOpen: false,
   onSubmit: null,

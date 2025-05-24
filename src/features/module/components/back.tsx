@@ -13,6 +13,7 @@ export const Back = ({ className, onClick }: BackProps) => {
       size={'icon'}
       onClick={onClick}
       className={clsx('cursor-pointer rounded-full p-6', className)}
+      type="button"
     >
       <ArrowLeft className="size-7" />
     </Button>
