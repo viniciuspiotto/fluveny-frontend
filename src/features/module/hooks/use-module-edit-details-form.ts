@@ -39,7 +39,7 @@ export const useModuleEditDetailsForm = () => {
     }
   }, [isSuccess, data, methods]);
 
-  const { mutate, isPending } = useUpdateDetails();
+  const { mutate } = useUpdateDetails();
 
   const onSubmit = (formData: DetailsData) => {
     if (!moduleId) return;
@@ -66,6 +66,5 @@ export const useModuleEditDetailsForm = () => {
   return {
     methods,
     onSubmit,
-    isLoading: isPending,
   };
 };
