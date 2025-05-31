@@ -39,6 +39,16 @@ export default [
       'react/prop-types': 'off',
       ...reactHooks.configs.recommended.rules,
       'prettier/prettier': 'error',
+      'no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'none',
+          caughtErrors: 'all',
+          ignoreRestSiblings: false,
+          reportUsedIgnorePattern: false,
+        },
+      ],
     },
   },
   eslintConfigPrettier,

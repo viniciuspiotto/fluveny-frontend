@@ -2,11 +2,45 @@
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-montserrat: 'Montserrat', sans-serif;
+
+  --animate-shake: shake 0.3s ease-in-out;
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    25% {
+      transform: translateX(-4px);
+    }
+
+    75% {
+      transform: translateX(4px);
+    }
+  }
+}
+
+@layer utilities {
+  .prose strong {
+    @apply font-semibold text-inherit;
+  }
+  .prose table {
+    @apply w-full border-collapse;
+  }
+  .prose th {
+    @apply bg-stone-300;
+  }
+  .prose th,
+  .prose td {
+    @apply border-border border px-4 py-2;
+  }
 }
 
 @theme inline {

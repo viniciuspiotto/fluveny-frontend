@@ -7,7 +7,7 @@ import { AppRoutes } from './app/routes/app-routes';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="fluveny-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="fluveny-ui-theme">
       <ReactQueryProvider>
         <AppRoutes />
       </ReactQueryProvider>
