@@ -7,7 +7,9 @@ export const detailsSchema = z.object({
     .min(1, 'Selecione ao menos um tópico')
     .max(5, 'Máximo de 5 tópicos'),
   id_level: z.string().min(1, 'Nível de dificuldade é obrigatório'),
-  description: z.string().min(1, 'Descrição é obrigatória'),
+  description: z
+    .string()
+    .min(10, 'Descrição é deve ter no mínimo 10 caracteres'),
 });
 
 export type DetailsData = z.infer<typeof detailsSchema>;

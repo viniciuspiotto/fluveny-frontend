@@ -2,7 +2,7 @@ import { Label } from '@/components/ui/label';
 import type { ReactNode } from 'react';
 
 type Props = {
-  label: string;
+  label: ReactNode;
   htmlFor?: string;
   children: ReactNode;
 };

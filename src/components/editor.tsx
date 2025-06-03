@@ -1,4 +1,4 @@
-import { useModuleWizard } from '@/features/module/store/use-module-wizard';
+import { useFieldCompletion } from '@/features/module/store/use-field-completion';
 import Color from '@tiptap/extension-color';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
@@ -10,23 +10,23 @@ import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Toolbar } from './toolbar';
 
 interface EditorProps {
   initialContent?: string;
+  registerCamp: string;
+  step: string;
 }
 
-export const Editor = ({ initialContent }: EditorProps) => {
-  const [isEmpty, setIsEmpty] = useState(true);
+export const Editor = ({ initialContent, registerCamp, step }: EditorProps) => {
   const { setValue, register } = useFormContext();
-
-  const { currentStep, setStepCompletion } = useModuleWizard();
+  const { setFieldCompletion } = useFieldCompletion();
 
   useEffect(() => {
-    register('textBlock');
-  }, [register]);
+    register(registerCamp);
+  }, [register, registerCamp]);
 
   const editor = useEditor({
     extensions: [
@@ -104,23 +104,16 @@ export const Editor = ({ initialContent }: EditorProps) => {
     },
     onUpdate({ editor }) {
       const html = editor.getHTML();
-      setIsEmpty(editor.isEmpty);
-      setValue('textBlock', html, { shouldDirty: true });
+      setFieldCompletion(step, registerCamp, !editor.isEmpty);
+      setValue(registerCamp, html, { shouldDirty: true });
     },
   });
 
   useEffect(() => {
     if (editor && initialContent) {
       editor.commands.setContent(initialContent);
-      setIsEmpty(false);
     }
   }, [editor, initialContent]);
-
-  useEffect(() => {
-    if (editor && currentStep) {
-      setStepCompletion(currentStep, !isEmpty);
-    }
-  }, [editor, isEmpty, currentStep, setStepCompletion]);
 
   return (
     <EditorContext.Provider value={{ editor }}>
