@@ -19,7 +19,8 @@ interface ModuleIntroductionFormProps {
 export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
   const { moduleId } = useModuleInfo();
   const { setOnSubmit } = useConfirmModal();
-  const { setStepModes, setStepCompletion, currentStep } = useModuleWizard();
+  const { setStepModes, setStepCompletion, currentStep, stepCompletion } =
+    useModuleWizard();
 
   const { data: introductionData } = useGetIntroduction(
     moduleId,
@@ -33,6 +34,8 @@ export const Introduction = ({ mode }: ModuleIntroductionFormProps) => {
 
   const { initializeStepFields, getIsStepFullyCompleted, fieldStatus } =
     useFieldCompletion();
+
+  console.log(stepCompletion);
 
   useEffect(() => {
     if (currentStep) {

@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
 export const detailsSchema = z.object({
-  title: z.string().min(1, 'Título é obrigatório'),
+  title: z
+    .string()
+    .min(2, 'Título é obrigatório e deve ter pelo menos 2 caracteres'),
   id_grammarRules: z
     .array(z.string())
     .min(1, 'Selecione ao menos um tópico')

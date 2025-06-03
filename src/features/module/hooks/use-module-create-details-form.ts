@@ -34,6 +34,7 @@ export const useModuleCreateDetailsForm = () => {
         navigate(`/modules/create/${id}/introduction`);
       },
       onError: (error: any) => {
+        console.error(error);
         if (error?.response?.status === 409) {
           methods.setError('title', {
             type: 'manual',
