@@ -9,7 +9,7 @@ export const Draft = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center gap-4">
+    <div className="flex h-full items-center justify-center gap-4">
       <Button onClick={handleCreateNewModule}>Criar Módulo</Button>
     </div>
   );

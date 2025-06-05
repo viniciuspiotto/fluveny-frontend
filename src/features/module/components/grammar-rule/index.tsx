@@ -9,6 +9,7 @@ import { useConfirmModal } from '../../store/use-confirm-modal';
 import { useFieldCompletion } from '../../store/use-field-completion';
 import { useModuleWizard } from '../../store/use-module-wizard';
 import { FormSectionWrapper } from '../details/form-section-wrapper';
+import { ContentWindow } from './content-window';
 
 export const GrammarRule = () => {
   const { setOnSubmit } = useConfirmModal();
@@ -60,7 +61,7 @@ export const GrammarRule = () => {
 
   return (
     <FormProvider {...methods}>
-      <form className="mb-20">
+      <form className="mb-40">
         <FormSectionWrapper label="Cabeçalho">
           <Input
             {...methods.register('sentence')}
@@ -69,6 +70,7 @@ export const GrammarRule = () => {
           />
         </FormSectionWrapper>
         <FormSectionWrapper
+          className="mb-6 lg:mb-8"
           label={
             <div className="flex items-center gap-2">
               Descrição
@@ -85,6 +87,7 @@ export const GrammarRule = () => {
           />
         </FormSectionWrapper>
       </form>
+      <ContentWindow />
     </FormProvider>
   );
 };

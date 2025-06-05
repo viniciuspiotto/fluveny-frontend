@@ -96,7 +96,7 @@ export const CreateModuleLayout = () => {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex h-full flex-col">
         <div className="relative flex w-full items-center justify-center py-10">
           <Back
             className="mdd:left-90 absolute top-4 left-4 md:top-auto md:left-40"
@@ -106,7 +106,7 @@ export const CreateModuleLayout = () => {
             {title}
           </h2>
         </div>
-        <main className="mx-auto mt-10 w-full max-w-300 px-4 pb-8">
+        <main className="mx-auto mt-10 flex h-full w-full max-w-300 flex-col px-4 pb-8">
           <Outlet />
         </main>
       </div>

@@ -121,7 +121,7 @@ export const Editor = ({ initialContent, registerCamp, step }: EditorProps) => {
         <Toolbar />
         <EditorContent
           editor={editor}
-          className="prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg max-w-none rounded-md border p-4"
+          className="prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg min-h-50 max-w-none rounded-md border p-4"
         />
       </div>
     </EditorContext.Provider>

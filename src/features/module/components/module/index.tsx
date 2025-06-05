@@ -51,7 +51,7 @@ export const Module = () => {
   const { title } = module.data;
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center gap-2">
+    <div className="flex h-full flex-col items-center justify-center gap-2">
       <h1 className="flex items-center gap-4">
         Módulo: <span className="text-xl font-bold">{title}</span>
       </h1>
