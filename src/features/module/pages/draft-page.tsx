@@ -1,5 +1,5 @@
-import { Draft } from '../components/draft';
+import { Drafts } from '../components/drafts';
 
-export const DraftPage = () => {
-  return <Draft />;
+export const DraftsPage = () => {
+  return <Drafts />;
 };

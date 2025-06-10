@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const detailsSchema = z.object({
+export const moduleSchema = z.object({
   title: z
     .string()
     .min(2, 'Título é obrigatório e deve ter pelo menos 2 caracteres'),
@@ -14,4 +14,4 @@ export const detailsSchema = z.object({
     .min(10, 'Descrição é deve ter no mínimo 10 caracteres'),
 });
 
-export type DetailsData = z.infer<typeof detailsSchema>;
+export type ModuleData = z.infer<typeof moduleSchema>;

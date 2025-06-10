@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { useEffect } from 'react';
-import { detailsSchema, type DetailsData } from '../schemas/details-schema';
+import { moduleSchema, type ModuleData } from '../schemas/module-schema';
 import { useModuleInfo } from '../store/use-module-info';
 import { useModuleWizard } from '../store/use-module-wizard';
 import { useUpdateDetails } from './api/mutations/use-update-details';
@@ -14,8 +14,8 @@ export const useModuleEditDetailsForm = () => {
   const { setCurrentStep } = useModuleWizard();
   const navigate = useNavigate();
 
-  const methods = useForm<DetailsData>({
-    resolver: zodResolver(detailsSchema),
+  const methods = useForm<ModuleData>({
+    resolver: zodResolver(moduleSchema),
     defaultValues: {
       description: '',
       id_level: '',
@@ -41,13 +41,15 @@ export const useModuleEditDetailsForm = () => {
 
   const { mutate } = useUpdateDetails();
 
-  const onSubmit = (formData: DetailsData) => {
+  const onSubmit = (formData: ModuleData) => {
     if (!moduleId) return;
 
+    // TODO: novo put com as informações de grammarRules alteradas
     mutate(
       { moduleId, data: formData },
       {
-        onSuccess: () => {
+        onSuccess: (response) => {
+          console.log(response);
           setCurrentStep('introduction');
           navigate(`/modules/create/${moduleId}/introduction`);
         },

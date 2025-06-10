@@ -1,4 +1,4 @@
-import { Module } from '../components/module';
+import { Module } from '../components/show';
 
 export const ModulePage = () => {
   return <Module />;

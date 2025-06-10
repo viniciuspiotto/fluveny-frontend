@@ -4,11 +4,11 @@ import { Info } from 'lucide-react';
 import { useCallback, useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useCreateGrammarRuleApresentation } from '../../hooks/use-create-grammar-rule-apresentation';
-import type { GrammarRuleApresentationData } from '../../schemas/grammar-rule-apresentation';
+import type { GrammarRuleApresentationData } from '../../schemas/grammar-rule-apresentation-schema';
 import { useConfirmModal } from '../../store/use-confirm-modal';
 import { useFieldCompletion } from '../../store/use-field-completion';
 import { useModuleWizard } from '../../store/use-module-wizard';
-import { FormSectionWrapper } from '../details/form-section-wrapper';
+import { FormSectionWrapper } from '../create/form-section-wrapper';
 import { ContentWindow } from './content-window';
 
 export const GrammarRule = () => {

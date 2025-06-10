@@ -1,4 +1,4 @@
-import type { DetailsData } from '@/features/module/schemas/details-schema';
+import type { ModuleData } from '@/features/module/schemas/module-schema';
 import { updateDetails } from '@/features/module/services/update-details';
 import { useMutation } from '@tanstack/react-query';
 
@@ -9,7 +9,7 @@ export const useUpdateDetails = () => {
       data,
     }: {
       moduleId: string;
-      data: DetailsData;
+      data: ModuleData;
     }) => {
       return await updateDetails(data, moduleId);
     },

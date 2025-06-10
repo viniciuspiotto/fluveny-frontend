@@ -1,9 +1,5 @@
-import { Details } from '../components/details';
+import { Details } from '../components/create';
 
 export const DetailsPage = () => {
-  return (
-    <>
-      <Details />
-    </>
-  );
+  return <Details />;
 };

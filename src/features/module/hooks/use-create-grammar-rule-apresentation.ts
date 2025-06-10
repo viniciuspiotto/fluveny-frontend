@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import {
   grammarRuleApresentationSchema,
   type GrammarRuleApresentationData,
-} from '../schemas/grammar-rule-apresentation';
+} from '../schemas/grammar-rule-apresentation-schema';
 
 export const useCreateGrammarRuleApresentation = () => {
   const methods = useForm<GrammarRuleApresentationData>({

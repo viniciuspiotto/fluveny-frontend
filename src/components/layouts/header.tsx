@@ -1,23 +1,31 @@
 import { UserProfile } from '@/components/user-profile';
 import { UserProfileSkeleton } from '@/components/user-profile-skeleton';
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { Button } from '../ui/button';
 
 export function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const isLoading = false;
 
+  const menuVariants = {
+    closed: { height: 0, opacity: 0, transition: { duration: 0.2 } },
+    open: { height: 'auto', opacity: 1, transition: { duration: 0.3 } },
+  };
+
   return (
-    <header className="flex h-16 w-full items-center justify-between border-b-1 px-4 py-4 lg:px-8 lg:py-10">
+    <header className="relative flex h-16 w-full items-center justify-between border-b px-4 py-4 lg:px-8 lg:py-10">
       <div className="flex items-center lg:gap-16">
-        <Link to={'/'}>
+        <Link to="/" onClick={() => setMenuOpen(false)}>
           <img
             src="/assets/logo.svg"
-            alt="Letra F com dois pedaços de pergaminhos atrás, um azul e outro vermelho, com a palavra fluveny com um degrade de azul e vermelho ao lado direito"
+            alt="Logo Fluveny"
             className="h-10 lg:h-12"
           />
         </Link>
-        <nav className="hidden space-x-12 lg:block">
+        <nav className="hidden space-x-12 lg:flex">
           <Link to="/modules" className="text-lg">
             Módulos
           </Link>
@@ -32,10 +40,68 @@ export function Header() {
           </Link>
         </nav>
       </div>
+
       {isLoading ? <UserProfileSkeleton /> : <UserProfile />}
-      <Button variant={'ghost'} className="p-6 lg:hidden">
-        <Menu className="size-7 lg:size-8" />
+
+      <Button
+        onClick={() => setMenuOpen((open) => !open)}
+        aria-label={menuOpen ? 'Fechar Menu' : 'Abrir Menu'}
+        variant="ghost"
+        className="p-2 lg:hidden"
+      >
+        {menuOpen ? <X className="size-8" /> : <Menu className="size-8" />}
       </Button>
+
+      <AnimatePresence initial={false}>
+        {menuOpen && (
+          <motion.nav
+            className="absolute top-16 left-0 z-10 w-full overflow-hidden bg-white shadow-md lg:hidden"
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+          >
+            <ul className="flex flex-col divide-y">
+              <li>
+                <Link
+                  to="/modules"
+                  className="block px-4 py-3 text-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Módulos
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/exercises"
+                  className="block px-4 py-3 text-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Exercícios
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/roadmap"
+                  className="block px-4 py-3 text-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Roadmap
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/conversation"
+                  className="block px-4 py-3 text-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Conversação
+                </Link>
+              </li>
+            </ul>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

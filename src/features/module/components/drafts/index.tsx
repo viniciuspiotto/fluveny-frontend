@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router';
 
-export const Draft = () => {
+export const Drafts = () => {
   const navigate = useNavigate();
 
   const handleCreateNewModule = () => {

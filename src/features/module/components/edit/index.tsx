@@ -6,11 +6,11 @@ import { useBackModal } from '../../store/use-back-modal';
 import { useModuleInfo } from '../../store/use-module-info';
 import { Back } from '../back';
 import { BackModal } from '../back-modal';
-import { BannerUpload } from '../details/banner-upload';
-import { DescriptionField } from '../details/description-field';
-import { FormSectionWrapper } from '../details/form-section-wrapper';
-import { GrammarRulesField } from '../details/grammar-rules-field';
-import { TitleInput } from '../details/title-input';
+import { BannerUpload } from '../create/banner-upload';
+import { DescriptionField } from '../create/description-field';
+import { FormSectionWrapper } from '../create/form-section-wrapper';
+import { GrammarRulesField } from '../create/grammar-rules-field';
+import { TitleInput } from '../create/title-input';
 
 export const EditDetails = () => {
   const { methods, onSubmit } = useModuleEditDetailsForm();
