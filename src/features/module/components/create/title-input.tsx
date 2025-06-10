@@ -1,7 +1,6 @@
 import { cn } from '@/app/utils/cn';
 import { useFormContext } from 'react-hook-form';
 
-// TODO: ajustar tratamento de erros com comparação
 export const TitleInput = () => {
   const {
     register,

@@ -17,7 +17,7 @@ export const LevelSelect = () => {
         id="id_level"
         {...register('id_level')}
         className={cn(
-          'peer w-[110px] min-w-[100px] appearance-none rounded-md border border-gray-300 bg-white px-4 py-2 text-lg leading-tight focus:border-blue-500 focus:outline-none lg:w-[120px] lg:py-3 lg:text-lg',
+          'peer w-[110px] min-w-[100px] appearance-none rounded-md border border-gray-300 bg-white px-4 py-3 text-lg leading-tight focus:border-blue-500 focus:outline-none lg:w-[120px] lg:py-3 lg:text-lg',
           errors.id_level &&
             'animate-shake border-red-500 text-red-500 placeholder:text-red-500',
           'pr-8',

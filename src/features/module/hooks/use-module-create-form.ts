@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { useNavigate } from 'react-router';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
+import { useModuleInfo } from '../store/use-module-info';
 import { useCreateModule } from './api/mutations/use-create-module';
 
-export const useModuleCreateDetailsForm = () => {
+export const useModuleCreateForm = () => {
   const methods = useForm<ModuleData>({
     resolver: zodResolver(moduleSchema),
     defaultValues: {
@@ -15,17 +17,19 @@ export const useModuleCreateDetailsForm = () => {
     },
   });
 
+  const navigate = useNavigate();
   const { mutate, isPending } = useCreateModule();
+  const { setModuleId, setGrammarRulesModules } = useModuleInfo();
 
-  // TODO: pegar os grammarRules modules
   const onSubmit = (data: ModuleData) => {
     mutate(data, {
       onSuccess: (response) => {
-        console.log(response.data);
-        // setModuleId(id);
-        // resetStepModes();
+        const grammarRulesModule = [...response.data.grammarRulesModule];
+        const moduleId = response.data.id;
+        setModuleId(moduleId);
+        setGrammarRulesModules(grammarRulesModule);
+        navigate(`/modules/create/${moduleId}/introduction`);
         // setCurrentStep('introduction');
-        // navigate(`/modules/create/${id}/introduction`);
       },
       onError: (error: any) => {
         console.error(error);

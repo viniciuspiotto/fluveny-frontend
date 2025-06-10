@@ -30,6 +30,14 @@ export interface ModuleCardProps {
   grammarRules: grammarRule[];
 }
 
+// TODO: ajustar a tipagem
+export interface GrammarRuleModule {
+  id: string;
+  moduleId: string;
+  grammarRuleId: string;
+  contentList: unknown[];
+}
+
 type TextBlock = {
   id: string;
   content: string;

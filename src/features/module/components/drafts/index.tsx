@@ -1,6 +1,7 @@
 import { type Module } from '@/@types/module';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { Back } from '../back';
 import { ModuleCard } from '../module-card';
 import { ModuleFilter } from '../panel/module-filter';
 
@@ -9,11 +10,17 @@ interface DraftsProps {
 }
 
 export const Drafts = ({ modules = [] }: DraftsProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col space-y-4 p-4 lg:space-y-5">
+    <div className="relative flex flex-col space-y-4 p-4 lg:space-y-5">
       <h1 className="mt-2 text-center text-3xl font-bold tracking-widest lg:mt-8 lg:text-4xl">
         Rascunhos
       </h1>
+      <Back
+        className="absolute top-4 z-10 lg:top-10"
+        onClick={() => navigate('/modules')}
+      />
       <Button
         className="text-md ml-auto h-10 rounded-md px-6 font-normal lg:py-6 lg:text-lg"
         asChild
