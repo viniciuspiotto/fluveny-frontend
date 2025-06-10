@@ -55,7 +55,7 @@ export const SelectGrammarRule = ({
     if (selectedIds !== valueIds) {
       onSelectGrammarRule(selected);
     }
-  }, [response, initialValue]);
+  }, [response, initialValue, onSelectGrammarRule, value]);
 
   const {
     formState: { errors },
@@ -105,7 +105,7 @@ export const SelectGrammarRule = ({
               {grammarRules.map((grammarRule) => (
                 <CommandItem
                   key={grammarRule.id}
-                  value={grammarRule.id}
+                  value={grammarRule.title}
                   onSelect={() => toggleGrammarRule(grammarRule)}
                 >
                   <Check

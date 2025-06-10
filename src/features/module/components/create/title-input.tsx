@@ -20,9 +20,9 @@ export const TitleInput = () => {
         )}
         placeholder="Título"
       />
-      {errors.title?.message === 'Um módulo com esse título já existe' && (
+      {errors.title && (
         <p className="mb-8 text-center text-sm text-red-500">
-          {errors.title.message}
+          {errors.title.message as string}
         </p>
       )}
     </div>
