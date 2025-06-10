@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { SECTIONS_CREATION_MODULE } from '@/constants/module';
 import clsx from 'clsx';
 import { useSectionStep } from '../hooks/use-section-step';
-import { useConfirmModal } from '../store/use-confirm-modal';
 
 interface SectionButtonProps {
   variant: 'introduction' | 'grammarRule' | 'finalChallenge' | 'revision';
@@ -12,14 +11,13 @@ interface SectionButtonProps {
 }
 
 export const SectionButton = ({ variant, title, slug }: SectionButtonProps) => {
-  const { path, isAccessible, isCurrent } = useSectionStep(slug);
-  const { openModal } = useConfirmModal();
+  const { isAccessible, isCurrent } = useSectionStep(slug);
 
   const Icon = SECTIONS_CREATION_MODULE[variant].icon;
 
   const handleClick = () => {
     if (!isCurrent && isAccessible) {
-      openModal(path, slug);
+      // openModal(path, slug);
     }
   };
 

@@ -2,9 +2,9 @@ import { CreateModuleLayout } from '@/components/layouts/create-module-layout';
 import { PrivateLayout } from '@/components/layouts/private-layout';
 import { NotFound } from '@/components/not-found';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
-import { DetailsPage } from '@/features/module/pages/details-page';
+import { CreateModulePage } from '@/features/module/pages/create-module-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
-import { EditDetailsPage } from '@/features/module/pages/edit-details-page';
+import { EditModulePage } from '@/features/module/pages/edit-module-page';
 import { FinalChallengePage } from '@/features/module/pages/final-challenge-page';
 import { IntroductionPage } from '@/features/module/pages/introduction-page';
 import { ModulePage } from '@/features/module/pages/module-page';
@@ -22,14 +22,14 @@ export function AppRoutes() {
           <Route path={ROUTES.modules}>
             <Route index element={<PanelPage />} />
             <Route path="drafts" element={<DraftsPage />} />
-            <Route path="new" element={<DetailsPage />} />
+            <Route path="new" element={<CreateModulePage />} />
             <Route path=":id" element={<ModulePage />} />
             <Route path="create/:id" element={<CreateModuleLayout />}>
               <Route path="introduction" element={<IntroductionPage />} />
               <Route path=":grammar-rule" element={<GrammarRulePage />} />
               <Route path="final-challenge" element={<FinalChallengePage />} />
             </Route>
-            <Route path="edit/:id" element={<EditDetailsPage />} />
+            <Route path="edit/:id" element={<EditModulePage />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />

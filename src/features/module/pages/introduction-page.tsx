@@ -1,5 +1,5 @@
-import { Introduction } from '../components/introduction';
+import { CreateIntroduction } from '../components/create-introduction';
 
 export const IntroductionPage = () => {
-  return <Introduction />;
+  return <CreateIntroduction />;
 };

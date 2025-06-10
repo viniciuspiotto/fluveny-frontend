@@ -10,7 +10,6 @@ export const UserProfile = () => {
           <span className="font-light text-zinc-400">O escritor</span>
         </div>
         <div className="flex flex-col">
-          {/* Barra de progresso */}
           <span className="text-zinc-400">12830 / 18000 xp</span>
         </div>
       </div>

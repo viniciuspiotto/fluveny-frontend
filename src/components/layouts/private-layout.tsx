@@ -3,9 +3,9 @@ import { Header } from './header';
 
 export function PrivateLayout() {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col">
       <Header />
-      <main className="h-full">
+      <main>
         <Outlet />
       </main>
     </div>

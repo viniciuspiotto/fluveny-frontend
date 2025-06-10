@@ -5,14 +5,12 @@ import { useCallback, useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useCreateGrammarRuleApresentation } from '../../hooks/use-create-grammar-rule-apresentation';
 import type { GrammarRuleApresentationData } from '../../schemas/grammar-rule-apresentation-schema';
-import { useConfirmModal } from '../../store/use-confirm-modal';
 import { useFieldCompletion } from '../../store/use-field-completion';
 import { useModuleWizard } from '../../store/use-module-wizard';
 import { FormSectionWrapper } from '../create/form-section-wrapper';
 import { ContentWindow } from './content-window';
 
 export const GrammarRule = () => {
-  const { setOnSubmit } = useConfirmModal();
   const { methods } = useCreateGrammarRuleApresentation();
   const { currentStep, setStepCompletion } = useModuleWizard();
   const {
@@ -33,12 +31,10 @@ export const GrammarRule = () => {
 
   useEffect(() => {
     if (currentStep) {
-      setOnSubmit(handleSubmit(onSubmit));
       resetStepFields(currentStep);
       initializeStepFields(currentStep, ['sentence', 'description']);
     }
   }, [
-    setOnSubmit,
     currentStep,
     initializeStepFields,
     resetStepFields,

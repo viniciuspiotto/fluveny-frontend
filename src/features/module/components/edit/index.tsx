@@ -1,25 +1,18 @@
 import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
 import { FormProvider } from 'react-hook-form';
-import { useModuleEditDetailsForm } from '../../hooks/use-module-edit-details-form';
-import { useBackModal } from '../../store/use-back-modal';
-import { useModuleInfo } from '../../store/use-module-info';
+import { useNavigate } from 'react-router';
+import { useEditModuleForm } from '../../hooks/use-edit-module-form';
 import { Back } from '../back';
-import { BackModal } from '../back-modal';
 import { BannerUpload } from '../create/banner-upload';
 import { DescriptionField } from '../create/description-field';
 import { FormSectionWrapper } from '../create/form-section-wrapper';
 import { GrammarRulesField } from '../create/grammar-rules-field';
 import { TitleInput } from '../create/title-input';
 
-export const EditDetails = () => {
-  const { methods, onSubmit } = useModuleEditDetailsForm();
-  const { moduleId } = useModuleInfo();
-  const { openBackModal } = useBackModal();
-
-  const handleBack = () => {
-    openBackModal(`/modules/${moduleId}`);
-  };
+export const EditModule = () => {
+  const { methods, onSubmit } = useEditModuleForm();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -29,7 +22,7 @@ export const EditDetails = () => {
             <BannerUpload />
             <Back
               className="absolute -bottom-6 left-4 z-10"
-              onClick={handleBack}
+              onClick={() => navigate(-1)}
             />
           </div>
           <div className="mx-auto mt-10 w-full max-w-300 px-4 pb-8">
@@ -51,7 +44,6 @@ export const EditDetails = () => {
           </div>
         </form>
       </FormProvider>
-      <BackModal />
     </>
   );
 };

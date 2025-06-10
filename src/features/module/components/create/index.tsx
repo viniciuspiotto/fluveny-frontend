@@ -2,7 +2,7 @@ import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { useModuleCreateForm } from '../../hooks/use-module-create-form';
+import { useCreateModuleForm } from '../../hooks/use-create-module-form';
 import { Back } from '../back';
 import { BannerUpload } from './banner-upload';
 import { DescriptionField } from './description-field';
@@ -10,8 +10,8 @@ import { FormSectionWrapper } from './form-section-wrapper';
 import { GrammarRulesField } from './grammar-rules-field';
 import { TitleInput } from './title-input';
 
-export const Details = () => {
-  const { methods, onSubmit } = useModuleCreateForm();
+export const CreateModule = () => {
+  const { methods, onSubmit } = useCreateModuleForm();
   const navigate = useNavigate();
 
   return (

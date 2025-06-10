@@ -9,7 +9,7 @@ import { useModuleWizard } from '../store/use-module-wizard';
 import { useUpdateDetails } from './api/mutations/use-update-details';
 import { useGetModule } from './api/queries/use-get-module';
 
-export const useModuleEditDetailsForm = () => {
+export const useEditModuleForm = () => {
   const { moduleId } = useModuleInfo();
   const { setCurrentStep } = useModuleWizard();
   const navigate = useNavigate();
