@@ -18,8 +18,6 @@ export const NavigationSections = () => {
     );
   }
 
-  const grammarRules = response?.data.grammarRules ?? [];
-
   return (
     <footer className="bg-primary fixed bottom-0 left-0 w-full overflow-x-auto">
       <div className="flex w-max items-center justify-center gap-4 px-8 py-4 xl:w-full">
@@ -28,7 +26,7 @@ export const NavigationSections = () => {
           title="Introdução"
           slug="introduction"
         />
-        {grammarRules.map((grammarRule) => {
+        {response?.data.grammarRules.map((grammarRule) => {
           return (
             <SectionButton
               key={grammarRule.id}

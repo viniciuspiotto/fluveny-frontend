@@ -1,8 +1,9 @@
 import { capitalizeWords } from '@/app/utils/capitalize-words';
 import { Button } from '@/components/ui/button';
 import { SECTIONS_CREATION_MODULE } from '@/constants/module';
-import clsx from 'clsx';
-import { useSectionStep } from '../hooks/use-section-step';
+import { useNavigate } from 'react-router';
+import { useModuleInfo } from '../store/use-module-info';
+import { useModuleWizard } from '../store/use-module-wizard';
 
 interface SectionButtonProps {
   variant: 'introduction' | 'grammarRule' | 'finalChallenge' | 'revision';
@@ -11,26 +12,20 @@ interface SectionButtonProps {
 }
 
 export const SectionButton = ({ variant, title, slug }: SectionButtonProps) => {
-  const { isAccessible, isCurrent } = useSectionStep(slug);
+  const { moduleId } = useModuleInfo();
+  const navigate = useNavigate();
+  const { setCurrentStep } = useModuleWizard();
+
+  const handleClick = () => {
+    setCurrentStep(slug);
+    navigate(`/modules/create/${moduleId}/${slug}`);
+  };
 
   const Icon = SECTIONS_CREATION_MODULE[variant].icon;
 
-  const handleClick = () => {
-    if (!isCurrent && isAccessible) {
-      // openModal(path, slug);
-    }
-  };
-
   return (
     <Button
-      disabled={!isAccessible}
-      className={clsx(
-        'cursor-pointer items-center bg-zinc-50 py-6 hover:bg-zinc-50 focus:bg-zinc-50',
-        {
-          'cursor-auto opacity-50': !isAccessible,
-          'cursor-auto': isCurrent,
-        },
-      )}
+      className="cursor-pointer items-center bg-zinc-50 py-6 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:bg-zinc-50"
       onClick={handleClick}
     >
       <Icon className="text-primary size-8" />

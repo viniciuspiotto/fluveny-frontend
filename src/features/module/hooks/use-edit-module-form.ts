@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
 import { useModuleInfo } from '../store/use-module-info';
@@ -13,6 +14,7 @@ export const useEditModuleForm = () => {
   const { moduleId } = useModuleInfo();
   const { setCurrentStep } = useModuleWizard();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const methods = useForm<ModuleData>({
     resolver: zodResolver(moduleSchema),
@@ -44,13 +46,14 @@ export const useEditModuleForm = () => {
   const onSubmit = (formData: ModuleData) => {
     if (!moduleId) return;
 
-    // TODO: novo put com as informações de grammarRules alteradas
     mutate(
       { moduleId, data: formData },
       {
-        onSuccess: (response) => {
-          console.log(response);
+        onSuccess: () => {
           setCurrentStep('introduction');
+          queryClient.invalidateQueries({
+            queryKey: ['module', moduleId],
+          });
           navigate(`/modules/create/${moduleId}/introduction`);
         },
         onError: (error: any) => {

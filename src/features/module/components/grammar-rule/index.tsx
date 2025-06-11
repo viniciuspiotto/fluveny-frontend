@@ -1,63 +1,21 @@
 import { Editor } from '@/components/editor';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Info } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useCreateGrammarRuleApresentation } from '../../hooks/use-create-grammar-rule-apresentation';
-import type { GrammarRuleApresentationData } from '../../schemas/grammar-rule-apresentation-schema';
-import { useFieldCompletion } from '../../store/use-field-completion';
-import { useModuleWizard } from '../../store/use-module-wizard';
 import { FormSectionWrapper } from '../create/form-section-wrapper';
 import { ContentWindow } from './content-window';
 
 export const GrammarRule = () => {
-  const { methods } = useCreateGrammarRuleApresentation();
-  const { currentStep, setStepCompletion } = useModuleWizard();
-  const {
-    initializeStepFields,
-    setFieldCompletion,
-    getIsStepFullyCompleted,
-    fieldStatus,
-    resetStepFields,
-  } = useFieldCompletion();
-
-  const { handleSubmit } = methods;
-
-  const onSubmit = useCallback((data: GrammarRuleApresentationData) => {
-    console.log(data);
-  }, []);
-
-  const sentenceValue = methods.watch('sentence');
-
-  useEffect(() => {
-    if (currentStep) {
-      resetStepFields(currentStep);
-      initializeStepFields(currentStep, ['sentence', 'description']);
-    }
-  }, [
-    currentStep,
-    initializeStepFields,
-    resetStepFields,
-    handleSubmit,
-    onSubmit,
-  ]);
-
-  useEffect(() => {
-    if (currentStep) {
-      const isFilled = !!sentenceValue && sentenceValue.trim().length > 0;
-      setFieldCompletion(currentStep, 'sentence', isFilled);
-    }
-  }, [sentenceValue, currentStep, setFieldCompletion]);
-
-  useEffect(() => {
-    if (currentStep) {
-      setStepCompletion(currentStep, getIsStepFullyCompleted(currentStep));
-    }
-  }, [getIsStepFullyCompleted, setStepCompletion, currentStep, fieldStatus]);
+  const { methods, onSubmit } = useCreateGrammarRuleApresentation();
 
   return (
     <FormProvider {...methods}>
-      <form className="mb-40">
+      <form
+        className="mb-20 lg:mb-24"
+        onSubmit={methods.handleSubmit(onSubmit)}
+      >
         <FormSectionWrapper label="Cabeçalho">
           <Input
             {...methods.register('sentence')}
@@ -77,11 +35,15 @@ export const GrammarRule = () => {
             </div>
           }
         >
-          <Editor
-            step={currentStep || 'desconhecido'}
-            registerCamp="description"
-          />
+          <Editor registerCamp="description" />
         </FormSectionWrapper>
+        <Button
+          type="submit"
+          className="mt-8 mb-20 w-full cursor-pointer py-8 text-xl font-bold"
+          size="xl"
+        >
+          <span>Salvar</span>
+        </Button>
       </form>
       <ContentWindow />
     </FormProvider>

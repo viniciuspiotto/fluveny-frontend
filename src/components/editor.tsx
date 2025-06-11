@@ -17,9 +17,14 @@ import { Toolbar } from './toolbar';
 interface EditorProps {
   registerCamp: string;
   error?: string;
+  initialContent?: string;
 }
 
-export const Editor = ({ registerCamp, error }: EditorProps) => {
+export const Editor = ({
+  registerCamp,
+  error,
+  initialContent,
+}: EditorProps) => {
   const { register, setValue } = useFormContext();
 
   useEffect(() => {
@@ -94,7 +99,7 @@ export const Editor = ({ registerCamp, error }: EditorProps) => {
         },
       }),
     ],
-    content: '',
+    content: initialContent || '',
     editorProps: {
       attributes: {
         class: 'focus:outline-none',
@@ -116,7 +121,7 @@ export const Editor = ({ registerCamp, error }: EditorProps) => {
         <EditorContent
           editor={editor}
           className={cn(
-            'prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg min-h-50 max-w-none rounded-md border p-4 lg:min-h-100',
+            'prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg min-h-50 max-w-none rounded-md border px-4 lg:min-h-100',
             error && 'animate-shake border-red-500 text-red-500',
           )}
         />
