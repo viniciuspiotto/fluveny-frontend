@@ -1,17 +1,19 @@
-import { capitalizeWords } from '@/app/utils/capitalize-words';
 import { Back } from '@/features/module/components/back';
 import { NavigationSections } from '@/features/module/components/navigation-sections';
+import { useModuleInfo } from '@/features/module/store/use-module-info';
 import { useModuleWizard } from '@/features/module/store/use-module-wizard';
 import { Link, Outlet, useNavigate } from 'react-router';
 
 export const CreateModuleLayout = () => {
   const { currentStep } = useModuleWizard();
+  const { grammarRulesModules } = useModuleInfo();
   const navigate = useNavigate();
 
   const getTitle = (currentStep: string) => {
     if (currentStep === 'introduction') return 'Introdução';
     if (currentStep === 'final-challenge') return 'Desafio Final';
-    return capitalizeWords(currentStep.split('-').join(' '));
+    return grammarRulesModules.find((grm) => grm.id === currentStep)
+      ?.grammarRule.title;
   };
 
   if (!currentStep) {

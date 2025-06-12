@@ -11,7 +11,7 @@ import { useUpdateModule } from './api/mutations/use-update-details';
 import { useGetModule } from './api/queries/use-get-module';
 
 export const useEditModuleForm = () => {
-  const { moduleId } = useModuleInfo();
+  const { moduleId, setGrammarRulesModules } = useModuleInfo();
   const { setCurrentStep } = useModuleWizard();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -49,8 +49,10 @@ export const useEditModuleForm = () => {
     mutate(
       { moduleId, data: formData },
       {
-        onSuccess: () => {
+        onSuccess: (response) => {
+          const grammarRulesModule = [...response.data.grammarRulesModule];
           setCurrentStep('introduction');
+          setGrammarRulesModules(grammarRulesModule);
           queryClient.invalidateQueries({
             queryKey: ['module', moduleId],
           });

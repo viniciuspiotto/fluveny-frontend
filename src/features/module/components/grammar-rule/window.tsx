@@ -1,3 +1,4 @@
+import type { WindowType } from '@/@types/module';
 import { cn } from '@/app/utils/cn';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +12,7 @@ import { useState } from 'react';
 interface WindowProps {
   isCurrent?: boolean;
   position: number;
-  onAddWindow: (position: number, type: 'exercise' | 'apresentation') => void;
+  onAddWindow: (position: number, type: WindowType) => void;
   onSetCurrent: (id: number) => void;
 }
 
@@ -23,11 +24,11 @@ export const Window = ({
 }: WindowProps) => {
   const [isPopoverOpen, setPopoverOpen] = useState(false);
 
-  const handleAddNewWindow = (type: 'exercise' | 'apresentation') => {
+  const handleAddNewWindow = (type: WindowType) => {
     setPopoverOpen(false);
     setTimeout(() => {
       onAddWindow(position, type);
-    }, 0);
+    }, 50);
   };
 
   return (
@@ -49,7 +50,7 @@ export const Window = ({
           <PopoverContent side="top" asChild className="w-40 p-0 lg:w-50">
             <div className="border-primary flex flex-col rounded-md border-1">
               <Button
-                onClick={() => handleAddNewWindow('apresentation')}
+                onClick={() => handleAddNewWindow('presentation')}
                 variant={'ghost'}
                 className="border-primary cursor-pointer rounded-t-md rounded-b-none border-b-1 lg:py-5 lg:text-base"
               >

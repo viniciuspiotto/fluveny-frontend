@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-export const grammarRuleApresentationSchema = z.object({
-  sentence: z.string().min(1, { message: 'Cabeçalho é obrigatório' }),
-  description: z.string().min(1, { message: 'Descrição é obrigatório' }),
+export const grammarRulePresentationSchema = z.object({
+  title: z.string().trim().min(1, { message: 'Título é obrigatório' }),
+  textBlock: z.string().trim().min(1, { message: 'Descrição é obrigatório' }),
 });
 
-export type GrammarRuleApresentationData = z.infer<
-  typeof grammarRuleApresentationSchema
+export type GrammarRulePresentationData = z.infer<
+  typeof grammarRulePresentationSchema
 >;

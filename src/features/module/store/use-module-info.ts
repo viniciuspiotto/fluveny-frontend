@@ -22,10 +22,6 @@ export const useModuleInfo = create<ModuleInfoState>()(
     {
       name: 'module-info-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        moduleId: state.moduleId,
-        grammarRules: state.grammarRulesModules,
-      }),
     },
   ),
 );

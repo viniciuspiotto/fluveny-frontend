@@ -34,12 +34,14 @@ export interface ModuleCardProps {
 export interface GrammarRuleModule {
   id: string;
   moduleId: string;
-  grammarRuleId: string;
+  grammarRule: GrammarRule;
   contentList: ContentList[];
 }
 
+export type WindowType = 'exercise' | 'presentation';
+
 type ContentList = {
-  type: 'EXERCISE' | 'APRESENTATION';
+  type: WindowType;
   id: string;
 };
 

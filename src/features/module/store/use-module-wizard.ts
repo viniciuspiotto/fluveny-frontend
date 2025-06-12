@@ -7,7 +7,7 @@ type StepKey = string;
 type ModuleWizardState = {
   steps: StepKey[];
   stepModes: Record<StepKey, StepMode>;
-  currentStep: StepKey | null;
+  currentStep: StepKey;
   setSteps: (steps: StepKey[]) => void;
   setStepModes: (step: StepKey, mode: StepMode) => void;
   setCurrentStep: (step: StepKey) => void;
@@ -18,21 +18,18 @@ export const useModuleWizard = create<ModuleWizardState>()(
   persist(
     (set) => ({
       steps: [],
-      currentStep: null,
+      currentStep: '',
       stepModes: {},
       setSteps: (steps) =>
         set(() => {
-          const stepCompletion: Record<StepKey, boolean> = {};
           const stepModes: Record<StepKey, StepMode> = {};
 
           for (const step of steps) {
-            stepCompletion[step] = false;
             stepModes[step] = 'create';
           }
 
           return {
             steps,
-            stepCompletion,
             stepModes,
           };
         }),

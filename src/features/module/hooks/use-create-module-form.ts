@@ -32,7 +32,7 @@ export const useCreateModuleForm = () => {
         setGrammarRulesModules(grammarRulesModule);
         setSteps([
           'introduction',
-          ...response.data.grammarRules.map((gr) => gr.slug),
+          ...response.data.grammarRulesModule.map((grm) => grm.id),
           'final-challenge',
         ]);
         setCurrentStep('introduction');
