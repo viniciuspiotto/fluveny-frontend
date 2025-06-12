@@ -4,10 +4,9 @@ import {
 } from '@/features/module/services/get-introduction';
 import { useQuery } from '@tanstack/react-query';
 
-export const useGetIntroduction = (id: string, enabled = true) => {
+export const useGetIntroduction = (id: string) => {
   return useQuery<GetIntroductionResponse>({
     queryKey: ['introduction', id],
     queryFn: () => getIntroduction(id),
-    enabled: !!id && enabled,
   });
 };
