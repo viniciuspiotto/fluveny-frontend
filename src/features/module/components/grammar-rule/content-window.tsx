@@ -9,6 +9,7 @@ export const ContentWindow = () => {
       {windows.map((window) => (
         <Window
           key={window.id}
+          type={window.type}
           position={window.position}
           isCurrent={window.isCurrent}
           onAddWindow={addWindow}

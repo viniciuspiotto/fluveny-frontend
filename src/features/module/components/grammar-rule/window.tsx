@@ -6,12 +6,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Plus } from 'lucide-react';
+import { BowArrow, Plus, Presentation } from 'lucide-react';
 import { useState } from 'react';
 
 interface WindowProps {
   isCurrent?: boolean;
   position: number;
+  type: WindowType;
   onAddWindow: (position: number, type: WindowType) => void;
   onSetCurrent: (id: number) => void;
 }
@@ -19,6 +20,7 @@ interface WindowProps {
 export const Window = ({
   isCurrent = false,
   position,
+  type,
   onAddWindow,
   onSetCurrent,
 }: WindowProps) => {
@@ -36,10 +38,12 @@ export const Window = ({
       <li
         onClick={() => onSetCurrent(position)}
         className={cn(
-          'group relative h-18 w-30 flex-shrink-0 cursor-pointer rounded-md border-1 px-1 py-2 lg:h-24 lg:w-50',
+          'group relative h-18 w-30 flex-shrink-0 cursor-pointer rounded-md border-1 p-2 lg:h-24 lg:w-50',
           isCurrent && 'border-primary',
         )}
       >
+        {type === 'presentation' && <Presentation className="text-primary" />}
+        {type === 'exercise' && <BowArrow className="text-primary" />}
         <span className="absolute bottom-0 left-2 lg:text-lg">{position}</span>
         <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>

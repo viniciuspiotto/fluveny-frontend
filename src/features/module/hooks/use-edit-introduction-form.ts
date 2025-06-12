@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import type { GrammarRuleModule } from '@/@types/module';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
@@ -22,7 +23,7 @@ export const useEditIntroductionForm = () => {
   const queryClient = useQueryClient();
   const { mutate } = useUpdateIntroduction();
   const { moduleId } = useModuleInfo();
-  const { setCurrentStep } = useModuleWizard();
+  const { setCurrentStep, setSteps } = useModuleWizard();
   const navigate = useNavigate();
   const { nextStep } = useSectionStep();
   const { data: initialData, isLoading } = useGetIntroduction(moduleId);
@@ -37,11 +38,18 @@ export const useEditIntroductionForm = () => {
     mutate(
       { data, moduleId },
       {
-        onSuccess: () => {
+        onSuccess: (response) => {
           setCurrentStep(nextStep);
           queryClient.invalidateQueries({
             queryKey: ['introduction', moduleId],
           });
+          setSteps([
+            'introduction',
+            ...response.data.grammarRulesModule.map(
+              (grm: GrammarRuleModule) => grm.id,
+            ),
+            'final-challenge',
+          ]);
           navigate(`/modules/create/${moduleId}/${nextStep}`);
         },
         onError: (error: any) => {
