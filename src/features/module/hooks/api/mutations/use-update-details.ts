@@ -1,8 +1,8 @@
 import type { ModuleData } from '@/features/module/schemas/module-schema';
-import { updateDetails } from '@/features/module/services/update-details';
+import { updateModule } from '@/features/module/services/update-module';
 import { useMutation } from '@tanstack/react-query';
 
-export const useUpdateDetails = () => {
+export const useUpdateModule = () => {
   return useMutation({
     mutationFn: async ({
       moduleId,
@@ -11,7 +11,7 @@ export const useUpdateDetails = () => {
       moduleId: string;
       data: ModuleData;
     }) => {
-      return await updateDetails(data, moduleId);
+      return await updateModule(data, moduleId);
     },
   });
 };

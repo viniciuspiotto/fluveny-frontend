@@ -21,6 +21,7 @@ export type Module = {
   description: string;
   level: Level;
   grammarRules: GrammarRule[];
+  grammarRulesModule: GrammarRuleModule[];
 };
 
 export interface ModuleCardProps {
@@ -30,18 +31,23 @@ export interface ModuleCardProps {
   grammarRules: grammarRule[];
 }
 
-// TODO: ajustar a tipagem
 export interface GrammarRuleModule {
   id: string;
   moduleId: string;
   grammarRuleId: string;
-  contentList: unknown[];
+  contentList: ContentList[];
 }
+
+type ContentList = {
+  type: 'EXERCISE' | 'APRESENTATION';
+  id: string;
+};
 
 type TextBlock = {
   id: string;
   content: string;
 };
+
 export interface Introduction {
   idModule: string;
   textBlock: TextBlock;

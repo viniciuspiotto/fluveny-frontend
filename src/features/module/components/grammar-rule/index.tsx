@@ -39,7 +39,7 @@ export const GrammarRule = () => {
         </FormSectionWrapper>
         <Button
           type="submit"
-          className="mt-8 mb-20 w-full cursor-pointer py-8 text-xl font-bold"
+          className="mt-8 mb-24 w-full cursor-pointer py-8 text-xl font-bold"
           size="xl"
         >
           <span>Salvar</span>

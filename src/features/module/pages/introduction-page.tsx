@@ -9,6 +9,8 @@ export const IntroductionPage = () => {
   const { setStepModes, stepModes } = useModuleWizard();
   const { moduleId } = useModuleInfo();
 
+  console.log(stepModes);
+
   useEffect(() => {
     const checkIntroduction = async () => {
       if (!moduleId) {

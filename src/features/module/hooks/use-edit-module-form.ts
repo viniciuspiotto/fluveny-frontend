@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
 import { useModuleInfo } from '../store/use-module-info';
 import { useModuleWizard } from '../store/use-module-wizard';
-import { useUpdateDetails } from './api/mutations/use-update-details';
+import { useUpdateModule } from './api/mutations/use-update-details';
 import { useGetModule } from './api/queries/use-get-module';
 
 export const useEditModuleForm = () => {
@@ -41,7 +41,7 @@ export const useEditModuleForm = () => {
     }
   }, [isSuccess, data, methods]);
 
-  const { mutate } = useUpdateDetails();
+  const { mutate } = useUpdateModule();
 
   const onSubmit = (formData: ModuleData) => {
     if (!moduleId) return;

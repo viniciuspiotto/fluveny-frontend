@@ -31,7 +31,7 @@ export const CreateModuleLayout = () => {
         <div className="relative flex w-full items-center justify-center py-10">
           <Back
             className="mdd:left-90 absolute top-4 left-4 md:top-auto md:left-40"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/modules/drafts')}
           />
           <h2 className="px-15 text-center text-3xl font-bold tracking-widest">
             {getTitle(currentStep)}
