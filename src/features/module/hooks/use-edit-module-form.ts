@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import type { GrammarRuleModule } from '@/@types/module';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
@@ -12,7 +13,7 @@ import { useGetModule } from './api/queries/use-get-module';
 
 export const useEditModuleForm = () => {
   const { moduleId, setGrammarRulesModules } = useModuleInfo();
-  const { setCurrentStep } = useModuleWizard();
+  const { setCurrentStep, setSteps } = useModuleWizard();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -53,6 +54,13 @@ export const useEditModuleForm = () => {
           const grammarRulesModule = [...response.data.grammarRulesModule];
           setCurrentStep('introduction');
           setGrammarRulesModules(grammarRulesModule);
+          setSteps([
+            'introduction',
+            ...response.data.grammarRulesModule.map(
+              (grm: GrammarRuleModule) => grm.id,
+            ),
+            'final-challenge',
+          ]);
           queryClient.invalidateQueries({
             queryKey: ['module', moduleId],
           });

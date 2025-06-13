@@ -121,7 +121,7 @@ export const Editor = ({
         <EditorContent
           editor={editor}
           className={cn(
-            'prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg min-h-50 max-w-none rounded-md border px-4 lg:min-h-100',
+            'prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg min-h-50 max-w-none rounded-md border p-4 lg:min-h-100',
             error && 'animate-shake border-red-500 text-red-500',
           )}
         />

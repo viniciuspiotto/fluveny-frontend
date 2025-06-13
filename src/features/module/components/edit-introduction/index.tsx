@@ -9,7 +9,7 @@ export const EditIntroduction = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-50 max-w-none animate-pulse rounded-md border bg-zinc-200 px-4 lg:h-14 lg:min-h-100 lg:w-80" />
+      <div className="min-h-80 max-w-none animate-pulse rounded-md border bg-zinc-200 px-4 lg:h-14 lg:min-h-100 lg:w-full" />
     );
   }
 
