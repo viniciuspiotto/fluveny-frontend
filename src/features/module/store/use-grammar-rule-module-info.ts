@@ -77,7 +77,7 @@ export const useGrammarRuleModuleInfo =
               }
 
               const newWindow: WindowState = {
-                id: null,
+                id: crypto.randomUUID(),
                 position: 0,
                 mode: 'CREATE',
                 isCurrent: true,

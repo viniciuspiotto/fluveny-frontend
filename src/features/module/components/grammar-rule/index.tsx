@@ -17,11 +17,11 @@ export const GrammarRule = ({ currentWindow }: GrammarRuleProps) => {
     <div className="mb-18">
       <div className="transition-all duration-300">
         {currentWindow.type === 'PRESENTATION' &&
-        currentWindow.mode === 'CREATE' ? (
-          <CreatePresentation />
-        ) : (
-          <EditPresentation />
-        )}
+          (currentWindow.mode === 'CREATE' ? (
+            <CreatePresentation />
+          ) : (
+            <EditPresentation />
+          ))}
         {currentWindow.type === 'EXERCISE' && <Exercise />}
       </div>
       <ContentWindow />

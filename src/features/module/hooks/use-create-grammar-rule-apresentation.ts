@@ -24,7 +24,6 @@ export const useCreateGrammarRulePresentation = () => {
       { data, moduleId, grammarRuleModuleId },
       {
         onSuccess: (response) => {
-          console.log(response);
           queryClient.invalidateQueries({
             queryKey: ['module', moduleId],
           });

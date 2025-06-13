@@ -1,16 +1,62 @@
-import { Label } from '@/components/ui/label';
+import { cn } from '@/app/utils/cn';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { FormProvider } from 'react-hook-form';
+import { useCreateGrammarRuleTranslateExercise } from '../../hooks/use-create-grammar-rule-translate-exercise';
+import { FormSectionWrapper } from '../create/form-section-wrapper';
 
 export const Exercise = () => {
-  // Sei que esse mt-[-2rem] é um crime, mas não vi outra escolha
+  const { methods, onSubmit } = useCreateGrammarRuleTranslateExercise();
+
   return (
-    <div className="mt-[-2rem] mb-18">
-      <Label className="my-4 text-xl">Cabeçalho</Label>
-      <Textarea className="p-8" />
-      <Label className="my-4 text-xl">Frase</Label>
-      <Textarea className="p-8" />
-      <Label className="my-4 text-xl">Gabarito</Label>
-      <Textarea className="p-8" />
-    </div>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <FormSectionWrapper label="Cabeçalho">
+          <Input
+            {...methods.register('header')}
+            className={cn(
+              'py-6 lg:text-lg',
+              methods.formState.errors.header &&
+                'animate-shake border-red-500 text-red-500',
+            )}
+            placeholder="Escreva aqui..."
+          />
+          {methods.formState.errors.header && (
+            <p className="mt-1 text-sm text-red-500">
+              {methods.formState.errors.header.message as string}
+            </p>
+          )}
+        </FormSectionWrapper>
+        <FormSectionWrapper className="mb-6 lg:mb-8" label="Frase">
+          <Input
+            {...methods.register('phrase')}
+            className="py-6 lg:text-lg"
+            placeholder="Escreva aqui..."
+          />
+        </FormSectionWrapper>
+        <FormSectionWrapper className="mb-6 lg:mb-8" label="Gabarito">
+          <Input
+            {...methods.register('template')}
+            className="py-6 lg:text-lg"
+            placeholder="Escreva aqui..."
+          />
+        </FormSectionWrapper>
+        <FormSectionWrapper className="mb-6 lg:mb-8" label="Justificativa">
+          <Textarea
+            {...methods.register('justification')}
+            className="min-h-40 py-4 lg:text-lg"
+            placeholder="Escreva aqui..."
+          />
+        </FormSectionWrapper>
+        <Button
+          type="submit"
+          className="mt-8 mb-24 w-full cursor-pointer py-8 text-xl font-bold"
+          size="xl"
+        >
+          <span>Salvar</span>
+        </Button>
+      </form>
+    </FormProvider>
   );
 };

@@ -31,7 +31,10 @@ export const CreatePresentation = () => {
             </div>
           }
         >
-          <Editor registerCamp="textBlock" />
+          <Editor
+            registerCamp="textBlock"
+            error={methods.formState.errors.textBlock?.message}
+          />
         </FormSectionWrapper>
         <Button
           type="submit"
