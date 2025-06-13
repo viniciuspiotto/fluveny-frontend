@@ -98,10 +98,11 @@ export default function ExerciseSelector({
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>Escolha o seu exercício: </DialogTitle>
-        <div className="m-2 flex flex-col items-center rounded-md border py-8">
+        <div className="flex flex-col items-center rounded-md border py-8 lg:m-2">
           <section className="flex w-full flex-col items-center">
-            <h2 className="text-l font-bold">Habilidade Linguística</h2>
+            <DialogTitle>
+              <h2 className="text-l font-bold">Habilidade Linguística</h2>
+            </DialogTitle>
             <div className="flex h-full w-full justify-between">
               <div className="m-2 flex flex-1 flex-col items-center">
                 <Toggle
@@ -136,7 +137,9 @@ export default function ExerciseSelector({
             </div>
           </section>
           <section className="flex w-full flex-col items-center">
-            <h2 className="text-l font-bold">Estilo de exercício</h2>
+            <DialogTitle>
+              <h2 className="text-l font-bold">Estilo de exercício</h2>
+            </DialogTitle>
             <div className="flex h-full w-full justify-between">
               {exercisesStyles[languageSkill].map((exercise, i) => (
                 <div
