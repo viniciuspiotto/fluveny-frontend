@@ -9,6 +9,7 @@ import {
 import { BowArrow, Plus, Presentation } from 'lucide-react';
 import { useState } from 'react';
 import { useModuleWizard } from '../../store/use-module-wizard';
+import ExerciseSelector from './exercise-selection';
 
 interface WindowProps {
   isCurrent?: boolean;
@@ -73,13 +74,14 @@ export const Window = ({
               >
                 Apresentação
               </Button>
-              <Button
-                onClick={() => handleAddNewWindow('EXERCISE')}
-                variant={'ghost'}
-                className="cursor-pointer rounded-b-md bg-white text-zinc-900 lg:py-5 lg:text-base"
-              >
-                Exercício
-              </Button>
+              <ExerciseSelector handleAddNewWindow={handleAddNewWindow}>
+                <Button
+                  variant={'ghost'}
+                  className="cursor-pointer rounded-b-md bg-white text-zinc-900 lg:py-5 lg:text-base"
+                >
+                  Exercício
+                </Button>
+              </ExerciseSelector>
             </div>
           </PopoverContent>
         </Popover>
