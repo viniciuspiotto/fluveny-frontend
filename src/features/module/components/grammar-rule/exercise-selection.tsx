@@ -74,7 +74,7 @@ export default function ExerciseSelector({
   children,
 }: ExerciseSelectorProps) {
   const [languageSkill, setLanguageSkill] = useState(0);
-  const [exerciseStyle, setExerciseStyle] = useState(-1);
+  const [exerciseStyle, setExerciseStyle] = useState(1);
 
   function handleSkillToggle(pressed: boolean, i: number) {
     if (pressed) {
@@ -119,6 +119,7 @@ export default function ExerciseSelector({
               <div className="m-2 flex flex-1 flex-col items-center">
                 <Toggle
                   className="data-[state=on]:border-primary border-2 px-4 py-8 text-2xl"
+                  disabled // Not Implemented
                   onPressedChange={(pressed) => handleSkillToggle(pressed, 1)}
                   pressed={languageSkill === 1}
                 >
@@ -129,6 +130,7 @@ export default function ExerciseSelector({
               <div className="m-2 flex flex-1 flex-col items-center">
                 <Toggle
                   className="data-[state=on]:border-primary border-2 px-4 py-8 text-2xl"
+                  disabled // Not Implemented
                   onPressedChange={(pressed) => handleSkillToggle(pressed, 2)}
                   pressed={languageSkill === 2}
                 >
@@ -150,6 +152,7 @@ export default function ExerciseSelector({
                 >
                   <Toggle
                     className="data-[state=on]:border-primary border-2 px-4 py-8 text-2xl"
+                    disabled={languageSkill !== 0 || i !== 1} // Not Implemented
                     onPressedChange={(pressed) =>
                       handleExerciseToggle(pressed, i)
                     }
