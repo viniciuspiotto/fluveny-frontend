@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Info } from 'lucide-react';
 import { FormProvider } from 'react-hook-form';
-import { useCreateGrammarRulePresentation } from '../../hooks/use-create-grammar-rule-apresentation';
-import { FormSectionWrapper } from '../create/form-section-wrapper';
+import { useCreateGrammarRulePresentation } from '../../../hooks/use-create-grammar-rule-apresentation';
+import { FormSectionWrapper } from '../../create/form-section-wrapper';
 
-export const Presentation = () => {
+export const CreatePresentation = () => {
   const { methods, onSubmit } = useCreateGrammarRulePresentation();
 
   return (

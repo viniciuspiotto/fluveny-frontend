@@ -38,9 +38,9 @@ export interface GrammarRuleModule {
   contentList: ContentList[];
 }
 
-export type WindowType = 'exercise' | 'presentation';
+export type WindowType = 'EXERCISE' | 'PRESENTATION';
 
-type ContentList = {
+export type ContentList = {
   type: WindowType;
   id: string;
 };
@@ -56,3 +56,13 @@ export interface Introduction {
 }
 
 export type StepMode = 'create' | 'edit';
+
+export type Mode = 'CREATE' | 'EDIT';
+
+export type WindowState = {
+  id: string | null;
+  position: number;
+  mode: Mode;
+  isCurrent: boolean;
+  type: WindowType;
+};

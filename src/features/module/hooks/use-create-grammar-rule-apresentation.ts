@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import {
   grammarRulePresentationSchema,
@@ -16,12 +17,18 @@ export const useCreateGrammarRulePresentation = () => {
   const { mutate } = useCreatePresentation();
   const { moduleId } = useModuleInfo();
   const { currentStep: grammarRuleModuleId } = useModuleWizard();
+  const queryClient = useQueryClient();
 
   const onSubmit = (data: GrammarRulePresentationData) => {
     mutate(
       { data, moduleId, grammarRuleModuleId },
       {
-        onSuccess: () => {},
+        onSuccess: (response) => {
+          console.log(response);
+          queryClient.invalidateQueries({
+            queryKey: ['module', moduleId],
+          });
+        },
         onError: (error: any) => {
           console.error(error);
           if (error?.response?.status === 400) {

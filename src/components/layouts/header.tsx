@@ -55,13 +55,13 @@ export function Header() {
       <AnimatePresence initial={false}>
         {menuOpen && (
           <motion.nav
-            className="absolute top-16 left-0 z-10 w-full overflow-hidden bg-white shadow-md lg:hidden"
+            className="absolute top-16 left-0 z-99 w-full overflow-hidden bg-white shadow-md lg:hidden"
             initial="closed"
             animate="open"
             exit="closed"
             variants={menuVariants}
           >
-            <ul className="flex flex-col divide-y">
+            <ul className="z-50 flex flex-col divide-y">
               <li>
                 <Link
                   to="/modules"

@@ -1,18 +1,28 @@
-import { useWindowInfo } from '../../store/use-window-info';
+import type { WindowState } from '@/@types/module';
 import { ContentWindow } from './content-window';
 import { Exercise } from './exercise';
-import { Presentation } from './presentation';
+import { CreatePresentation } from './presentation/create-presentation';
+import { EditPresentation } from './presentation/edit-presentation';
 
-export const GrammarRule = () => {
-  const { windows } = useWindowInfo();
+interface GrammarRuleProps {
+  currentWindow: WindowState | undefined;
+}
 
-  const currentWindow = windows.find((w) => w.isCurrent);
+export const GrammarRule = ({ currentWindow }: GrammarRuleProps) => {
+  if (!currentWindow) {
+    return <div>Falha ao buscar a janela</div>;
+  }
 
   return (
     <div className="mb-18">
       <div className="transition-all duration-300">
-        {currentWindow?.type === 'presentation' && <Presentation />}
-        {currentWindow?.type === 'exercise' && <Exercise />}
+        {currentWindow.type === 'PRESENTATION' &&
+        currentWindow.mode === 'CREATE' ? (
+          <CreatePresentation />
+        ) : (
+          <EditPresentation />
+        )}
+        {currentWindow.type === 'EXERCISE' && <Exercise />}
       </div>
       <ContentWindow />
     </div>

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { useNavigate } from 'react-router';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
+import { useGrammarRuleModuleInfo } from '../store/use-grammar-rule-module-info';
 import { useModuleInfo } from '../store/use-module-info';
 import { useModuleWizard } from '../store/use-module-wizard';
 import { useCreateModule } from './api/mutations/use-create-module';
@@ -20,6 +21,7 @@ export const useCreateModuleForm = () => {
 
   const navigate = useNavigate();
   const { mutate, isPending } = useCreateModule();
+  const { setGrammarRuleModuleInfos } = useGrammarRuleModuleInfo();
   const { setModuleId, setGrammarRulesModules } = useModuleInfo();
   const { setCurrentStep, setSteps } = useModuleWizard();
 
@@ -30,6 +32,19 @@ export const useCreateModuleForm = () => {
         const moduleId = response.data.id;
         setModuleId(moduleId);
         setGrammarRulesModules(grammarRulesModule);
+        const grammarRulesModuleWithWindows = grammarRulesModule.map((grm) => ({
+          grammarRuleModuleId: grm.id,
+          windows: [
+            {
+              id: null,
+              type: 'PRESENTATION',
+              mode: 'CREATE',
+              isCurrent: true,
+              position: 1,
+            },
+          ],
+        }));
+        setGrammarRuleModuleInfos(grammarRulesModuleWithWindows);
         setSteps([
           'introduction',
           ...response.data.grammarRulesModule.map((grm) => grm.id),

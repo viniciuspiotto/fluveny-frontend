@@ -2,10 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
-import type { GrammarRuleModule } from '@/@types/module';
+import type { ContentList, GrammarRuleModule } from '@/@types/module';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
+import { useGrammarRuleModuleInfo } from '../store/use-grammar-rule-module-info';
 import { useModuleInfo } from '../store/use-module-info';
 import { useModuleWizard } from '../store/use-module-wizard';
 import { useUpdateModule } from './api/mutations/use-update-details';
@@ -14,6 +15,7 @@ import { useGetModule } from './api/queries/use-get-module';
 export const useEditModuleForm = () => {
   const { moduleId, setGrammarRulesModules } = useModuleInfo();
   const { setCurrentStep, setSteps } = useModuleWizard();
+  const { setGrammarRuleModuleInfos } = useGrammarRuleModuleInfo();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -56,11 +58,35 @@ export const useEditModuleForm = () => {
           setGrammarRulesModules(grammarRulesModule);
           setSteps([
             'introduction',
-            ...response.data.grammarRulesModule.map(
-              (grm: GrammarRuleModule) => grm.id,
-            ),
+            ...grammarRulesModule.map((grm: GrammarRuleModule) => grm.id),
             'final-challenge',
           ]);
+          const grammarRulesModuleWithWindows = grammarRulesModule.map(
+            (grm) => ({
+              grammarRuleModuleId: grm.id,
+              windows:
+                grm.contentList.length > 0
+                  ? grm.contentList.map(
+                      (content: ContentList, index: number) => ({
+                        id: content.id,
+                        type: content.type,
+                        mode: 'EDIT',
+                        isCurrent: index === 0,
+                        position: index + 1,
+                      }),
+                    )
+                  : [
+                      {
+                        id: null,
+                        type: 'PRESENTATION',
+                        mode: 'CREATE',
+                        isCurrent: true,
+                        position: 1,
+                      },
+                    ],
+            }),
+          );
+          setGrammarRuleModuleInfos(grammarRulesModuleWithWindows);
           queryClient.invalidateQueries({
             queryKey: ['module', moduleId],
           });

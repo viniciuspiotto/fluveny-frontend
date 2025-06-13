@@ -35,11 +35,11 @@ export const CreateModuleLayout = () => {
             className="mdd:left-90 absolute top-4 left-4 md:top-auto md:left-40"
             onClick={() => navigate('/modules/drafts')}
           />
-          <h2 className="px-15 text-center text-3xl font-bold tracking-widest">
+          <h2 className="mt-10 px-15 text-center text-3xl font-bold tracking-widest">
             {getTitle(currentStep)}
           </h2>
         </div>
-        <div className="mx-auto mt-10 flex w-full max-w-300 flex-col px-4 pb-8">
+        <div className="mx-auto flex w-full max-w-300 flex-col px-4 pb-8">
           <Outlet />
         </div>
       </div>
