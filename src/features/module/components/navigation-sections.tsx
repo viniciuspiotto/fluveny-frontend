@@ -18,8 +18,6 @@ export const NavigationSections = () => {
     );
   }
 
-  const grammarRules = response?.data.grammarRules ?? [];
-
   return (
     <footer className="bg-primary fixed bottom-0 left-0 w-full overflow-x-auto">
       <div className="flex w-max items-center justify-center gap-4 px-8 py-4 xl:w-full">
@@ -28,22 +26,28 @@ export const NavigationSections = () => {
           title="Introdução"
           slug="introduction"
         />
-        {grammarRules.map((grammarRule) => {
+        {response?.data.grammarRulesModule.map((grm) => {
           return (
             <SectionButton
-              key={grammarRule.id}
+              key={grm.id}
               variant="grammarRule"
-              title={grammarRule.title}
-              slug={grammarRule.slug}
+              title={grm.grammarRule.title}
+              slug={grm.id}
             />
           );
         })}
         <SectionButton
+          disabled
           variant="finalChallenge"
           title="Desafio Final"
           slug="final-challenge"
         />
-        <SectionButton variant="revision" title="Revisão" slug="revision" />
+        <SectionButton
+          variant="revision"
+          disabled
+          title="Revisão"
+          slug="revision"
+        />
       </div>
     </footer>
   );

@@ -1,17 +1,17 @@
-import type { DetailsData } from '@/features/module/schemas/details-schema';
-import { updateDetails } from '@/features/module/services/update-details';
+import type { ModuleData } from '@/features/module/schemas/module-schema';
+import { updateModule } from '@/features/module/services/update-module';
 import { useMutation } from '@tanstack/react-query';
 
-export const useUpdateDetails = () => {
+export const useUpdateModule = () => {
   return useMutation({
     mutationFn: async ({
       moduleId,
       data,
     }: {
       moduleId: string;
-      data: DetailsData;
+      data: ModuleData;
     }) => {
-      return await updateDetails(data, moduleId);
+      return await updateModule(data, moduleId);
     },
   });
 };

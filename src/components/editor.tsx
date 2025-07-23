@@ -1,4 +1,4 @@
-import { useFieldCompletion } from '@/features/module/store/use-field-completion';
+import { cn } from '@/app/utils/cn';
 import Color from '@tiptap/extension-color';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
@@ -15,14 +15,17 @@ import { useFormContext } from 'react-hook-form';
 import { Toolbar } from './toolbar';
 
 interface EditorProps {
-  initialContent?: string;
   registerCamp: string;
-  step: string;
+  error?: string;
+  initialContent?: string;
 }
 
-export const Editor = ({ initialContent, registerCamp, step }: EditorProps) => {
-  const { setValue, register } = useFormContext();
-  const { setFieldCompletion } = useFieldCompletion();
+export const Editor = ({
+  registerCamp,
+  error,
+  initialContent,
+}: EditorProps) => {
+  const { register, setValue } = useFormContext();
 
   useEffect(() => {
     register(registerCamp);
@@ -96,24 +99,20 @@ export const Editor = ({ initialContent, registerCamp, step }: EditorProps) => {
         },
       }),
     ],
-    content: '',
+    content: initialContent || '',
     editorProps: {
       attributes: {
         class: 'focus:outline-none',
       },
     },
-    onUpdate({ editor }) {
+    onBlur({ editor }) {
       const html = editor.getHTML();
-      setFieldCompletion(step, registerCamp, !editor.isEmpty);
-      setValue(registerCamp, html, { shouldDirty: true });
+      setValue(registerCamp, html, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
   });
-
-  useEffect(() => {
-    if (editor && initialContent) {
-      editor.commands.setContent(initialContent);
-    }
-  }, [editor, initialContent]);
 
   return (
     <EditorContext.Provider value={{ editor }}>
@@ -121,8 +120,14 @@ export const Editor = ({ initialContent, registerCamp, step }: EditorProps) => {
         <Toolbar />
         <EditorContent
           editor={editor}
-          className="prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg max-w-none rounded-md border p-4"
+          className={cn(
+            'prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg min-h-50 max-w-none rounded-md border p-4 lg:min-h-100',
+            error && 'animate-shake border-red-500 text-red-500',
+          )}
         />
+        {error && (
+          <p className="flex text-center text-sm text-red-500">{error}</p>
+        )}
       </div>
     </EditorContext.Provider>
   );

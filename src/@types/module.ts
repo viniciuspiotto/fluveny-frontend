@@ -21,6 +21,7 @@ export type Module = {
   description: string;
   level: Level;
   grammarRules: GrammarRule[];
+  grammarRulesModule: GrammarRuleModule[];
 };
 
 export interface ModuleCardProps {
@@ -30,13 +31,38 @@ export interface ModuleCardProps {
   grammarRules: grammarRule[];
 }
 
+export interface GrammarRuleModule {
+  id: string;
+  moduleId: string;
+  grammarRule: GrammarRule;
+  contentList: ContentList[];
+}
+
+export type WindowType = 'EXERCISE' | 'PRESENTATION';
+
+export type ContentList = {
+  type: WindowType;
+  id: string;
+};
+
 type TextBlock = {
   id: string;
   content: string;
 };
+
 export interface Introduction {
   idModule: string;
   textBlock: TextBlock;
 }
 
 export type StepMode = 'create' | 'edit';
+
+export type Mode = 'CREATE' | 'EDIT';
+
+export type WindowState = {
+  id: string | null;
+  position: number;
+  mode: Mode;
+  isCurrent: boolean;
+  type: WindowType;
+};
