@@ -4,7 +4,8 @@ export const moduleSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(2, 'Título é obrigatório e deve ter pelo menos 2 caracteres'),
+    .min(2, 'Título é obrigatório e deve ter pelo menos 2 caracteres')
+    .max(100, 'Título é obrigatório e deve ter no máximo 100 caracteres'),
   id_grammarRules: z
     .array(z.string())
     .min(1, 'Selecione ao menos um tópico')
@@ -13,7 +14,8 @@ export const moduleSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(10, 'Descrição é deve ter no mínimo 10 caracteres'),
+    .min(10, 'Descrição deve ter no mínimo 10 caracteres')
+    .max(500, 'Descrição deve ter no máximo 500 caracteres'),
 });
 
 export type ModuleData = z.infer<typeof moduleSchema>;

@@ -58,7 +58,7 @@ export const useCreateModuleForm = () => {
         if (error?.response?.status === 400) {
           methods.setError('title', {
             type: 'manual',
-            message: 'Um módulo com esse título já existe',
+            message: 'Deu problema no título',
           });
         }
       },

@@ -93,7 +93,7 @@ export const useEditModuleForm = () => {
           navigate(`/modules/create/${moduleId}/introduction`);
         },
         onError: (error: any) => {
-          if (error?.response?.status === 409) {
+          if (error?.response?.status === 400) {
             methods.setError('title', {
               type: 'manual',
               message: 'Um módulo com esse título já existe',
