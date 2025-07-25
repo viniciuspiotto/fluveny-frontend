@@ -14,7 +14,7 @@ export const GrammarRule = ({ currentWindow }: GrammarRuleProps) => {
   }
 
   return (
-    <div className="mb-18">
+    <div className="mb-30">
       <div className="transition-all duration-300">
         {currentWindow.type === 'PRESENTATION' &&
           (currentWindow.mode === 'CREATE' ? (
