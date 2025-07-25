@@ -25,6 +25,11 @@ type GrammarRuleModuleInfoStoreState = {
     grammarRuleModuleId: string,
     positionId: number,
   ) => void;
+  moveWindowInGrammarRuleModuleInfo: (
+    grammarRuleModuleId: string,
+    dragIndex: number,
+    hoverIndex: number,
+  ) => void;
 };
 
 export const useGrammarRuleModuleInfo =
@@ -95,6 +100,30 @@ export const useGrammarRuleModuleInfo =
               }));
 
               return { ...info, windows: updatedWindows };
+            }),
+          })),
+
+        moveWindowInGrammarRuleModuleInfo: (
+          grammarRuleModuleId,
+          dragIndex,
+          hoverIndex,
+        ) =>
+          set((state) => ({
+            grammarRuleModuleInfos: state.grammarRuleModuleInfos.map((info) => {
+              if (info.grammarRuleModuleId !== grammarRuleModuleId) {
+                return info;
+              }
+
+              const reorderedWindows = [...info.windows];
+              const [draggedItem] = reorderedWindows.splice(dragIndex, 1);
+              reorderedWindows.splice(hoverIndex, 0, draggedItem);
+
+              const finalWindows = reorderedWindows.map((window, index) => ({
+                ...window,
+                position: index + 1,
+              }));
+
+              return { ...info, windows: finalWindows };
             }),
           })),
 

@@ -10,6 +10,8 @@ import { IntroductionPage } from '@/features/module/pages/introduction-page';
 import { ModulePage } from '@/features/module/pages/module-page';
 import { PanelPage } from '@/features/module/pages/panel-page';
 import { GrammarRulePage } from '@/features/module/pages/topic-page';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
@@ -26,7 +28,14 @@ export function AppRoutes() {
             <Route path=":id" element={<ModulePage />} />
             <Route path="create/:id" element={<CreateModuleLayout />}>
               <Route path="introduction" element={<IntroductionPage />} />
-              <Route path=":grammar-rule" element={<GrammarRulePage />} />
+              <Route
+                path=":grammar-rule"
+                element={
+                  <DndProvider backend={HTML5Backend}>
+                    <GrammarRulePage />
+                  </DndProvider>
+                }
+              />
               <Route path="final-challenge" element={<FinalChallengePage />} />
             </Route>
             <Route path="edit/:id" element={<EditModulePage />} />
