@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import type { ContentList, GrammarRuleModule } from '@/@types/module';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { toast } from 'sonner';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
 import { useGrammarRuleModuleInfo } from '../store/use-grammar-rule-module-info';
 import { useModuleInfo } from '../store/use-module-info';
@@ -91,6 +92,7 @@ export const useEditModuleForm = () => {
             queryKey: ['module', moduleId],
           });
           navigate(`/modules/create/${moduleId}/introduction`);
+          toast.success('Módulo editado com sucesso');
         },
         onError: (error: any) => {
           if (error?.response?.status === 400) {

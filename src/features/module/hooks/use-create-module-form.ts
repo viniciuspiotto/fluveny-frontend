@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { moduleSchema, type ModuleData } from '../schemas/module-schema';
 import { useGrammarRuleModuleInfo } from '../store/use-grammar-rule-module-info';
 import { useModuleInfo } from '../store/use-module-info';
@@ -25,6 +26,7 @@ export const useCreateModuleForm = () => {
   const { setModuleId, setGrammarRulesModules } = useModuleInfo();
   const { setCurrentStep, setSteps } = useModuleWizard();
 
+  // TODO: FIX SET GRAMMAR RULE MODULE INFOS
   const onSubmit = (data: ModuleData) => {
     mutate(data, {
       onSuccess: (response) => {
@@ -52,6 +54,7 @@ export const useCreateModuleForm = () => {
         ]);
         setCurrentStep('introduction');
         navigate(`/modules/create/${moduleId}/introduction`);
+        toast.success('Módulo criado com sucesso');
       },
       onError: (error: any) => {
         console.error(error);

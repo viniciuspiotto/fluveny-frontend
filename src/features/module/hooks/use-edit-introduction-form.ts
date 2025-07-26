@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import {
   introductionSchema,
   type IntroductionData,
@@ -43,6 +44,7 @@ export const useEditIntroductionForm = () => {
             queryKey: ['introduction', moduleId],
           });
           navigate(`/modules/create/${moduleId}/${nextStep}`);
+          toast.success('Introdução editada com sucesso');
         },
         onError: (error: any) => {
           console.error(error);

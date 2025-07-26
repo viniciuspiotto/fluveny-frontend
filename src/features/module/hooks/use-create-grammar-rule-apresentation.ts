@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import {
   grammarRulePresentationSchema,
   type GrammarRulePresentationData,
@@ -27,6 +28,7 @@ export const useCreateGrammarRulePresentation = () => {
           queryClient.invalidateQueries({
             queryKey: ['module', moduleId],
           });
+          toast.success('Apresentação criada com sucesso!');
         },
         onError: (error: any) => {
           console.error(error);

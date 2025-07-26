@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import {
   introductionSchema,
   type IntroductionData,
@@ -30,6 +31,7 @@ export const useCreateIntroductionForm = () => {
           setStepModes('introduction', 'edit');
           setCurrentStep(nextStep);
           navigate(`/modules/create/${moduleId}/${nextStep}`);
+          toast.success('Introdução criada com sucesso');
         },
         onError: (error: any) => {
           console.error(error);
