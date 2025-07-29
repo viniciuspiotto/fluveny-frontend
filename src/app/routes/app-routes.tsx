@@ -7,10 +7,10 @@ import { CreateModulePage } from '@/features/module/pages/create-module-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
 import { EditModulePage } from '@/features/module/pages/edit-module-page';
 import { FinalChallengePage } from '@/features/module/pages/final-challenge-page';
+import { GrammarRulePage } from '@/features/module/pages/grammar-rule-page';
 import { IntroductionPage } from '@/features/module/pages/introduction-page';
 import { ModulePage } from '@/features/module/pages/module-page';
 import { PanelPage } from '@/features/module/pages/panel-page';
-import { GrammarRulePage } from '@/features/module/pages/topic-page';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
