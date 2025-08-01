@@ -30,8 +30,8 @@ export const router = createBrowserRouter([
             element: <CreateModuleLayout />,
             children: [
               { path: 'introduction', element: <IntroductionPage /> },
-              { path: ':grammar-rule', element: <GrammarRulePage /> },
-              { path: 'final-challenge', element: <FinalChallengePage /> },
+              { path: ':grammarRuleId', element: <GrammarRulePage /> },
+              { path: 'finalChallenge', element: <FinalChallengePage /> },
             ],
           },
           { path: 'edit/:id', element: <EditModulePage /> },

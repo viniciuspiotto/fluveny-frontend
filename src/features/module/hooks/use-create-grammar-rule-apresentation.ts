@@ -28,16 +28,12 @@ export const useCreateGrammarRulePresentation = () => {
           queryClient.invalidateQueries({
             queryKey: ['module', moduleId],
           });
+          // passar o id e modificar a janela para edit
+          // auto verificar se existe mais alguma com modo criação, se existir, continuar com o modo edit
           toast.success('Apresentação criada com sucesso!');
         },
         onError: (error: any) => {
           console.error(error);
-          if (error?.response?.status === 400) {
-            methods.setError('textBlock', {
-              type: 'manual',
-              message: 'A Descrição é obrigatória',
-            });
-          }
         },
       },
     );

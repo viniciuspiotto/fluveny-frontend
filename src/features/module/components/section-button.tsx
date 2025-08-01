@@ -1,7 +1,8 @@
 import { capitalizeWords } from '@/app/utils/capitalize-words';
 import { Button } from '@/components/ui/button';
 import { SECTIONS_CREATION_MODULE } from '@/constants/module';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { useConfirmModalStore } from '../store/use-confirm-modal-store';
 import { useModuleInfo } from '../store/use-module-info';
 import { useModuleWizard } from '../store/use-module-wizard';
 
@@ -19,12 +20,31 @@ export const SectionButton = ({
   disabled = false,
 }: SectionButtonProps) => {
   const { moduleId } = useModuleInfo();
+  const { openModal } = useConfirmModalStore();
   const navigate = useNavigate();
   const { setCurrentStep } = useModuleWizard();
+  const { stepModes } = useModuleWizard();
+  const { grammarRule } = useParams();
+  let hasUnsavedWindows = false;
+
+  if (grammarRule) {
+    hasUnsavedWindows = stepModes[grammarRule] === 'create';
+  }
 
   const handleClick = () => {
-    setCurrentStep(slug);
-    navigate(`/modules/create/${moduleId}/${slug}`);
+    if (hasUnsavedWindows) {
+      openModal(
+        'Você tem alterações não salvas. Deseja realmente sair?',
+        () => {
+          navigate(`/modules/create/${moduleId}/${slug}`);
+          setCurrentStep(slug);
+        },
+        () => {},
+      );
+    } else {
+      navigate(`/modules/create/${moduleId}/${slug}`);
+      setCurrentStep(slug);
+    }
   };
 
   const Icon = SECTIONS_CREATION_MODULE[variant].icon;

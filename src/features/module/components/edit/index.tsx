@@ -41,8 +41,13 @@ export const EditModule = () => {
             >
               Editar
             </Button>
-            <div className='flex justify-center mt-4'>
-              <span className='select-none text-zinc-500  hover:text-red-600 cursor-pointer' onClick={() => console.log('cliquei')}>Excluir</span>
+            <div className="mt-4 flex justify-center">
+              <span
+                className="cursor-pointer text-zinc-500 select-none hover:text-red-600"
+                onClick={() => console.log('cliquei')}
+              >
+                Excluir
+              </span>
             </div>
           </div>
         </form>

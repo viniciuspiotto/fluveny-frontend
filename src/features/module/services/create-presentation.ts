@@ -1,17 +1,10 @@
-import type { GrammarRule, GrammarRuleModule, Level } from '@/@types/module';
+import type { GrammarRuleModuleWindow } from '@/@types/module';
 import { api } from '@/app/libs/api';
 import type { GrammarRulePresentationData } from '../schemas/grammar-rule-apresentation-schema';
 
-interface ModuleCreateResponse {
+interface CreateApresentationResponse {
   message: string;
-  data: {
-    id: string;
-    title: string;
-    description: string;
-    level: Level;
-    grammarRules: GrammarRule[];
-    grammarRulesModule: GrammarRuleModule[];
-  };
+  data: GrammarRuleModuleWindow;
 }
 
 interface createPresentationRequest {
@@ -25,8 +18,8 @@ export const createPresentation = async ({
   grammarRuleModuleId,
   moduleId,
 }: createPresentationRequest) => {
-  const response = await api.post<ModuleCreateResponse>(
-    `/modules/${moduleId}/grammar-rules-module/${grammarRuleModuleId}/presentation`,
+  const response = await api.post<CreateApresentationResponse>(
+    `/modules/${moduleId}/grammar-rule-modules/${grammarRuleModuleId}/presentation`,
     data,
   );
   return response.data;

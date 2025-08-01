@@ -1,16 +1,17 @@
 import type { WindowState } from '@/@types/module';
+import { NotFound } from '@/components/not-found';
 import { ContentWindow } from './content-window';
 import { Exercise } from './exercise';
 import { CreatePresentation } from './presentation/create-presentation';
 import { EditPresentation } from './presentation/edit-presentation';
 
 interface GrammarRuleProps {
-  currentWindow: WindowState | undefined;
+  currentWindow: WindowState | null;
 }
 
 export const GrammarRule = ({ currentWindow }: GrammarRuleProps) => {
   if (!currentWindow) {
-    return <div>Falha ao buscar a janela</div>;
+    return <NotFound />;
   }
 
   return (

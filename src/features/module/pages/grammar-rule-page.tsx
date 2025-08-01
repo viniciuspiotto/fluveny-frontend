@@ -1,39 +1,52 @@
-import { NavigationBlocker } from '@/components/navigation-blocker';
-import { useEffect, useState } from 'react';
+import { NotFound } from '@/components/not-found';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { GrammarRule } from '../components/grammar-rule';
+import { useParams } from 'react-router';
+import { GrammarRule } from '../components/grammar-rule/grammar-rule';
+import { useGetGrammarRuleContent } from '../hooks/api/queries/use-get-grammar-rule-content';
 import { useGrammarRuleModuleInfo } from '../store/use-grammar-rule-module-info';
-import { useModuleWizard } from '../store/use-module-wizard';
+import { useModuleInfo } from '../store/use-module-info';
 
 export const GrammarRulePage = () => {
-  const [hasUnsavedWindows, setHasUnsavedWindows] = useState(false);
-  const { grammarRuleModuleInfos } = useGrammarRuleModuleInfo();
-  const { currentStep } = useModuleWizard();
+  const { grammarRuleId } = useParams();
+  const { moduleId } = useModuleInfo();
 
-  const currentGrammarRuleModule = grammarRuleModuleInfos.find(
-    (m) => m.grammarRuleModuleId === currentStep,
+  const { isLoading, isError } = useGetGrammarRuleContent(
+    moduleId,
+    grammarRuleId,
+    {
+      enabled: !!moduleId && !!grammarRuleId,
+    },
   );
 
-  const windows = currentGrammarRuleModule?.windows;
-  const currentWindow = windows?.find((w) => w.isCurrent);
+  const { windows, currentWindow } = useGrammarRuleModuleInfo((state) => {
+    const moduleInfo = state.grammarRuleModuleInfos.find(
+      (info) => info.grammarRuleModuleId === grammarRuleId,
+    );
 
-  useEffect(() => {
-    const unsaved =
-      (windows ?? []).filter((w) => {
-        return w != null && w.mode === 'CREATE';
-      }).length > 0;
-    setHasUnsavedWindows(unsaved);
-  }, [windows]);
+    if (!moduleInfo) {
+      return { windows: [], currentWindow: null };
+    }
 
-  console.log(windows, hasUnsavedWindows);
+    const current = moduleInfo.windows.find((w) => w.isCurrent) || null;
+    return { windows: moduleInfo.windows, currentWindow: current };
+  });
+
+  if (!grammarRuleId || !moduleId) {
+    return <NotFound />;
+  }
+
+  if (isLoading || (windows.length === 0 && !isError)) {
+    return <div>Carregando...</div>;
+  }
+
+  if (isError) {
+    return <div>Ocorreu um erro ao buscar os dados.</div>;
+  }
 
   return (
-    <>
-      <DndProvider backend={HTML5Backend}>
-        <GrammarRule currentWindow={currentWindow} />
-      </DndProvider>
-      <NavigationBlocker isBlock={hasUnsavedWindows} />
-    </>
+    <DndProvider backend={HTML5Backend}>
+      <GrammarRule currentWindow={currentWindow} />
+    </DndProvider>
   );
 };

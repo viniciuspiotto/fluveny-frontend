@@ -24,7 +24,7 @@ export const createTranslateExercise = async ({
   moduleId,
 }: createTranslateExerciseRequest) => {
   const response = await api.post<ModuleTranslateExerciseResponse>(
-    `/modules/${moduleId}/grammar-rules-module/${grammarRuleModuleId}/exercises`,
+    `/modules/${moduleId}/grammar-rule-modules/${grammarRuleModuleId}/exercises`,
     data,
   );
   return response.data;

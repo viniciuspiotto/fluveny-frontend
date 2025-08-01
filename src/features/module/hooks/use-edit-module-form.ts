@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
-import type { ContentList, GrammarRuleModule } from '@/@types/module';
+import type { ContentList } from '@/@types/module';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -15,7 +15,7 @@ import { useGetModule } from './api/queries/use-get-module';
 
 export const useEditModuleForm = () => {
   const { moduleId, setGrammarRulesModules } = useModuleInfo();
-  const { setCurrentStep, setSteps } = useModuleWizard();
+  const { setCurrentStep, setSteps, setStepModes } = useModuleWizard();
   const { setGrammarRuleModuleInfos } = useGrammarRuleModuleInfo();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -59,14 +59,20 @@ export const useEditModuleForm = () => {
           setGrammarRulesModules(grammarRulesModule);
           setSteps([
             'introduction',
-            ...grammarRulesModule.map((grm: GrammarRuleModule) => grm.id),
+            ...grammarRulesModule.map((grm) => grm.id),
             'final-challenge',
           ]);
           const grammarRulesModuleWithWindows = grammarRulesModule.map(
-            (grm) => ({
-              grammarRuleModuleId: grm.id,
-              windows:
-                grm.contentList.length > 0
+            (grm) => {
+              const hasContent = grm.contentList.length > 0;
+
+              if (hasContent) {
+                setStepModes(grm.id, 'edit');
+              }
+
+              return {
+                grammarRuleModuleId: grm.id,
+                windows: hasContent
                   ? grm.contentList.map(
                       (content: ContentList, index: number) => ({
                         id: content.id,
@@ -85,7 +91,8 @@ export const useEditModuleForm = () => {
                         position: 1,
                       },
                     ],
-            }),
+              };
+            },
           );
           setGrammarRuleModuleInfos(grammarRulesModuleWithWindows);
           queryClient.invalidateQueries({

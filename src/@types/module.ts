@@ -38,6 +38,17 @@ export interface GrammarRuleModule {
   contentList: ContentList[];
 }
 
+export interface GrammarRuleModuleWindow {
+  type: WindowType;
+  id: string;
+  grammarRuleModuleId: string;
+  title: string;
+  textBlock: {
+    id: string;
+    content: string;
+  };
+}
+
 export type WindowType = 'EXERCISE' | 'PRESENTATION';
 
 export type ContentList = {
