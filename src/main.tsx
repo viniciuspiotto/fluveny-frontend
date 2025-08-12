@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 import { ReactQueryProvider } from './app/providers/react-query-provider';
 import { router } from './app/routes/app-routes';
-import { ConfirmNavigationModal } from './components/confirm-navigation-modal';
 import { Toaster } from './components/ui/toaster';
 
 createRoot(document.getElementById('root')!).render(
@@ -12,7 +11,6 @@ createRoot(document.getElementById('root')!).render(
     <ReactQueryProvider>
       <RouterProvider router={router} />
       <Toaster />
-      <ConfirmNavigationModal />
     </ReactQueryProvider>
   </StrictMode>,
 );
