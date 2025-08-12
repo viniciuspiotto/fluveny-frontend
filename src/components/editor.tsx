@@ -11,25 +11,25 @@ import TextStyle from '@tiptap/extension-text-style';
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, type FieldError } from 'react-hook-form';
 import { Toolbar } from './toolbar';
 
 interface EditorProps {
   registerCamp: string;
-  error?: string;
   initialContent?: string;
+  error: FieldError | undefined;
 }
 
 export const Editor = ({
   registerCamp,
-  error,
   initialContent,
+  error,
 }: EditorProps) => {
-  const { register, setValue } = useFormContext();
+  const methods = useFormContext();
 
   useEffect(() => {
-    register(registerCamp);
-  }, [register, registerCamp]);
+    methods.register(registerCamp);
+  }, [methods, registerCamp]);
 
   const editor = useEditor({
     extensions: [
@@ -107,7 +107,7 @@ export const Editor = ({
     },
     onBlur({ editor }) {
       const html = editor.getHTML();
-      setValue(registerCamp, html, {
+      methods.setValue(registerCamp, html, {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -126,7 +126,9 @@ export const Editor = ({
           )}
         />
         {error && (
-          <p className="flex text-center text-sm text-red-500">{error}</p>
+          <p className="flex text-center text-sm text-red-500">
+            {error.message}
+          </p>
         )}
       </div>
     </EditorContext.Provider>

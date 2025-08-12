@@ -9,7 +9,7 @@ export const LevelSelect = () => {
     formState: { errors },
   } = useFormContext();
 
-  const levels = response?.data ?? [];
+  const levels = response ?? [];
 
   return (
     <div className="relative">
