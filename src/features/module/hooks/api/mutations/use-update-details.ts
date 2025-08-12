@@ -1,5 +1,5 @@
-import type { ModuleData } from '@/features/module/schemas/module-schema';
-import { updateModule } from '@/features/module/services/update-module';
+import type { ModuleForm } from '@/features/module/schemas/module-form-schema';
+import { updateModule } from '@/features/module/services/mutation/update-module';
 import { useMutation } from '@tanstack/react-query';
 
 export const useUpdateModule = () => {
@@ -9,9 +9,10 @@ export const useUpdateModule = () => {
       data,
     }: {
       moduleId: string;
-      data: ModuleData;
+      data: ModuleForm;
     }) => {
-      return await updateModule(data, moduleId);
+      const response = await updateModule(data, moduleId);
+      return response.data;
     },
   });
 };

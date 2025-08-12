@@ -1,11 +1,11 @@
-import type { GrammarRuleTranslateExerciseData } from '@/features/module/schemas/grammar-rule-translate-exercise-schema';
-import { createTranslateExercise } from '@/features/module/services/create-translate-exercise';
+import type { TranslateExerciseForm } from '@/features/module/schemas/translate-exercise-schema';
+import { createTranslateExercise } from '@/features/module/services/mutation/create-translate-exercise';
 import { useMutation } from '@tanstack/react-query';
 
 interface createTranslateExerciseRequest {
-  data: GrammarRuleTranslateExerciseData;
+  data: TranslateExerciseForm;
   moduleId: string;
-  grammarRuleModuleId: string;
+  grammarRuleId: string;
 }
 
 export function useCreateTranslateExercise() {
@@ -13,13 +13,15 @@ export function useCreateTranslateExercise() {
     mutationFn: async ({
       data,
       moduleId,
-      grammarRuleModuleId,
+      grammarRuleId,
     }: createTranslateExerciseRequest) => {
-      return await createTranslateExercise({
+      const response = await createTranslateExercise({
         data,
         moduleId,
-        grammarRuleModuleId,
+        grammarRuleId,
       });
+
+      return response.data;
     },
   });
 }

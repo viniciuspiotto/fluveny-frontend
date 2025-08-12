@@ -1,16 +1,14 @@
 import type { Module } from '@/@types/module';
+import { ROUTES } from '@/app/configs/routes';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router';
-import { useModuleInfo } from '../store/use-module-info';
 import { Tag } from './tag';
 
 export const ModuleCard = ({ id, title, grammarRules }: Module) => {
   const navigate = useNavigate();
-  const { setModuleId } = useModuleInfo();
 
   const handleEnterModule = () => {
-    setModuleId(id);
-    navigate(`/modules/${id}`);
+    navigate(`${ROUTES.modules}/${ROUTES.create}/${id}`);
   };
 
   return (

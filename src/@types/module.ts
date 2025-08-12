@@ -1,6 +1,9 @@
-export type grammarRule = {
+export type Module = {
   id: string;
-  name: string;
+  title: string;
+  description: string;
+  level: Level;
+  grammarRules: GrammarRule[];
 };
 
 export type Level = {
@@ -15,54 +18,50 @@ export type GrammarRule = {
   slug: string;
 };
 
-export type Module = {
-  id: string;
-  title: string;
-  description: string;
-  level: Level;
-  grammarRules: GrammarRule[];
-  grammarRulesModule: GrammarRuleModule[];
-};
-
-export interface ModuleCardProps {
-  id: string;
-  title: string;
-  imgSrc: string;
-  grammarRules: grammarRule[];
-}
-
-export interface GrammarRuleModule {
-  id: string;
-  moduleId: string;
-  grammarRule: GrammarRule;
-  contentList: ContentList[];
-}
-
-export type WindowType = 'EXERCISE' | 'PRESENTATION';
-
-export type ContentList = {
+export interface GrammarRuleModuleWindow {
   type: WindowType;
   id: string;
+  grammarRuleModuleId: string;
+  title: string;
+  textBlock: {
+    id: string;
+    content: string;
+  };
+}
+
+export type WindowList = {
+  type: WindowType;
+  id?: string;
 };
 
-type TextBlock = {
-  id: string;
-  content: string;
-};
+export type WindowType = 'EXERCISE' | 'PRESENTATION';
 
 export interface Introduction {
   idModule: string;
   textBlock: TextBlock;
 }
 
-export type StepMode = 'create' | 'edit';
+type TextBlock = {
+  id: string;
+  content: string;
+};
 
-export type Mode = 'CREATE' | 'EDIT';
+export type GrammarRuleModuleIdAndTitle = {
+  id: string;
+  title: string;
+};
 
-export type WindowState = {
-  id: string | null;
-  position: number;
-  mode: Mode;
-  isCurrent: boolean;
-  type: WindowType;
+export type Exercise = {
+  grammarRuleModuleId: string;
+  header: string;
+  phrase: string;
+  template: string;
+  justification: string;
+};
+
+export type Presentation = {
+  title: string;
+  textBlock: {
+    content: string;
+  };
 };
