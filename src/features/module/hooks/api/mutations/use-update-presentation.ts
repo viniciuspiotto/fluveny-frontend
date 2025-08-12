@@ -1,26 +1,29 @@
 import type { PresentationForm } from '@/features/module/schemas/presentation-schema';
-import { createPresentation } from '@/features/module/services/mutation/create-presentation';
+import { updatePresentation } from '@/features/module/services/mutation/update-presentation';
 import { useMutation } from '@tanstack/react-query';
 
-interface createPresentationRequest {
+interface updatePresentationRequest {
   data: PresentationForm;
   moduleId: string;
   grammarRuleId: string;
+  windowId: string;
 }
 
-export const useCreatePresentation = () => {
+export function useUpdatePresentation() {
   return useMutation({
     mutationFn: async ({
       data,
       moduleId,
       grammarRuleId,
-    }: createPresentationRequest) => {
-      const response = await createPresentation({
+      windowId,
+    }: updatePresentationRequest) => {
+      const response = await updatePresentation({
         data,
         moduleId,
         grammarRuleId,
+        windowId,
       });
       return response.data;
     },
   });
-};
+}

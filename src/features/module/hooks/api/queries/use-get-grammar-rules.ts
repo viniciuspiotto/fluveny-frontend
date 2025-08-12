@@ -1,13 +1,15 @@
 import {
   getGrammarRules,
   type GetGrammarRulesResponse,
-} from '@/features/module/services/get-grammar-rules';
+} from '@/features/module/services/queries/get-grammar-rules';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetGrammarRules = () => {
-  return useQuery<GetGrammarRulesResponse>({
+  const { data, ...rest } = useQuery<GetGrammarRulesResponse>({
     queryKey: ['grammar-rule'],
     queryFn: getGrammarRules,
     staleTime: Infinity,
   });
+
+  return { data: data?.data, ...rest };
 };

@@ -1,13 +1,15 @@
 import {
   getLevels,
   type GetLevelsResponse,
-} from '@/features/module/services/get-levels';
+} from '@/features/module/services/queries/get-levels';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetLevels = () => {
-  return useQuery<GetLevelsResponse>({
+  const { data, ...rest } = useQuery<GetLevelsResponse>({
     queryKey: ['levels'],
     queryFn: getLevels,
     staleTime: Infinity,
   });
+
+  return { data: data?.data, ...rest };
 };

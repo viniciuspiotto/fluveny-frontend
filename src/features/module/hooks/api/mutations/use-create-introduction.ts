@@ -1,6 +1,6 @@
-import type { IntroductionData } from '@/features/module/schemas/introduction-schema';
+import type { IntroductionForm } from '@/features/module/schemas/introduction-schema';
 import { useMutation } from '@tanstack/react-query';
-import { createIntroduction } from '../../../services/create-introduction';
+import { createIntroduction } from '../../../services/mutation/create-introduction';
 
 export const useCreateIntroduction = () => {
   return useMutation({
@@ -9,9 +9,10 @@ export const useCreateIntroduction = () => {
       data,
     }: {
       moduleId: string;
-      data: IntroductionData;
+      data: IntroductionForm;
     }) => {
-      return await createIntroduction(data, moduleId);
+      const response = await createIntroduction(data, moduleId);
+      return response.data;
     },
   });
 };

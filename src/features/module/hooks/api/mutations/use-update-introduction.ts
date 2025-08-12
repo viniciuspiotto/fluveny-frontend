@@ -1,5 +1,5 @@
-import type { IntroductionData } from '@/features/module/schemas/introduction-schema';
-import { updateIntroduction } from '@/features/module/services/update-introduction';
+import type { IntroductionForm } from '@/features/module/schemas/introduction-schema';
+import { updateIntroduction } from '@/features/module/services/mutation/update-introduction';
 import { useMutation } from '@tanstack/react-query';
 
 export const useUpdateIntroduction = () => {
@@ -9,9 +9,10 @@ export const useUpdateIntroduction = () => {
       data,
     }: {
       moduleId: string;
-      data: IntroductionData;
+      data: IntroductionForm;
     }) => {
-      return await updateIntroduction(data, moduleId);
+      const response = await updateIntroduction(data, moduleId);
+      return response.data;
     },
   });
 };
