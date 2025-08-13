@@ -1,11 +1,12 @@
+import type { WindowType } from '@/@types/module';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { PresentationForm } from '../schemas/presentation-schema';
 import type { TranslateExerciseForm } from '../schemas/translate-exercise-schema';
 
 type PresentationWindow = {
-  id?: string; // ID do backend
-  clientId: string; // ID único do cliente
+  id?: string;
+  clientId: string;
   type: 'PRESENTATION';
   draftData?: Partial<PresentationForm>;
 };
@@ -24,7 +25,7 @@ type GrammarRuleModuleWindowsStoreState = {
   currentPosition: null | number;
   setWindowsList: (list: WindowList[]) => void;
   setCurrentPosition: (position: number) => void;
-  addWindow: (window: WindowList, index: number) => void;
+  addWindow: (window: WindowType, index: number) => void;
   updateDraftData: (index: number, data: WindowList['draftData']) => void;
 };
 
@@ -35,7 +36,6 @@ export const useGrammarRuleModuleWindows =
         windowsList: [],
         currentPosition: null,
         setWindowsList: (list) => {
-          // Garante que janelas antigas também tenham um clientId
           const listWithClientIds = list.map((w) => ({
             ...w,
             clientId: w.id || crypto.randomUUID(),
@@ -43,11 +43,11 @@ export const useGrammarRuleModuleWindows =
           set({ windowsList: listWithClientIds });
         },
         setCurrentPosition: (position) => set({ currentPosition: position }),
-        addWindow: (window, index) =>
+        addWindow: (type, index) =>
           set((state) => {
             const newList = [...state.windowsList];
             const newWindowWithIds = {
-              ...window,
+              type,
               clientId: crypto.randomUUID(),
               draftData: {},
             };

@@ -117,8 +117,6 @@ export const FormExercisePage = () => {
             if (currentPosition === null) return;
             const newList = [...windowsList];
 
-            console.log(newlyCreatedWindow);
-
             newList[currentPosition] = {
               id: newlyCreatedWindow.id,
               type: 'EXERCISE',

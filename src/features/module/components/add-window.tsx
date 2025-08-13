@@ -1,4 +1,4 @@
-import type { WindowList, WindowType } from '@/@types/module';
+import type { WindowType } from '@/@types/module';
 import { cn } from '@/app/utils/cn';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,8 +21,7 @@ export const AddWindow = ({ side, insertionIndex }: AddWindowProps) => {
   const addWindow = useGrammarRuleModuleWindows((state) => state.addWindow);
 
   const handleSelectWindowType = (type: WindowType) => {
-    const newWindow: WindowList = { type, id: undefined };
-    addWindow(newWindow, insertionIndex);
+    addWindow(type, insertionIndex);
     setIsOpen(false);
   };
 

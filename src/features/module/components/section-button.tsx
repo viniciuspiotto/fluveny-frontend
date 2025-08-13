@@ -1,14 +1,42 @@
+import { ROUTES } from '@/app/configs/routes';
+import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
 import { Home, PencilRuler } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router';
 
 interface SectionButtonProps {
   variant: 'introduction' | 'grammarRule' | 'finalChallenge' | 'revision';
   title: string;
+  grammarRuleId?: string;
 }
 
-export const SectionButton = ({ variant, title }: SectionButtonProps) => {
+export const SectionButton = ({
+  variant,
+  title,
+  grammarRuleId,
+}: SectionButtonProps) => {
+  const { moduleId } = useParams();
+  const navigate = useNavigate();
+
+  if (!moduleId) {
+    return <NotFound />;
+  }
+
   const handleClick = () => {
-    // TODO: ir para a proxima grammarRuleModule
+    switch (variant) {
+      case 'introduction': {
+        navigate(
+          `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
+        );
+        break;
+      }
+      case 'grammarRule': {
+        navigate(
+          `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.grammarRule}/${grammarRuleId}`,
+        );
+        break;
+      }
+    }
   };
 
   return (

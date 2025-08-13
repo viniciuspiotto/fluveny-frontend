@@ -18,7 +18,7 @@ import {
 
 export const FormIntroductionPage = () => {
   const { moduleId } = useParams();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const { data: grammarRuleModuleInfo } = useGetAllGrammarRule(moduleId);
   const { data: introductionData, isLoading } = useGetIntroduction(moduleId);
@@ -54,7 +54,7 @@ export const FormIntroductionPage = () => {
 
     const firstGrammarRule = grammarRuleModuleInfo[0];
     if (firstGrammarRule) {
-      navigator(
+      navigate(
         `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.grammarRule}/${firstGrammarRule.id}`,
       );
     }

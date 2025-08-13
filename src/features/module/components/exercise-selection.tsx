@@ -89,7 +89,6 @@ export default function ExerciseSelector({
     } else {
       setExerciseStyle(-1);
     }
-    console.log(exerciseStyle);
   }
 
   function handleConfirm() {
