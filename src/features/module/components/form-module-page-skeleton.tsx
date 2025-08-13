@@ -5,7 +5,7 @@ export default function FormModulePageSkeleton() {
       <div className="p-2 lg:px-80">
         <div className="mx-16 mt-12 h-12 animate-pulse rounded-xl bg-zinc-200 lg:mx-64" />
 
-        <div className="m-2 mt-14 h-12 w-80 animate-pulse rounded-md bg-zinc-200 lg:w-145" />
+        <div className="m-2 mt-14 h-12 w-80 animate-pulse rounded-md bg-zinc-200 md:w-180 lg:w-145" />
         <div className="flex">
           {[...Array(Math.floor(Math.random() * 3) + 1)].map((_, i) => (
             <div

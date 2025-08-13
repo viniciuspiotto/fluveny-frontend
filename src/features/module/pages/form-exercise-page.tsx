@@ -130,6 +130,7 @@ export const FormExercisePage = () => {
     }
   };
 
+  //TODO: Fazer componente de loading
   if (isLoading) {
     return <div>carregando</div>;
   }

@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
+import FormIntroductionPageSkeleton from '../components/form-introduction-page-skeleton';
 import { ModuleHeader } from '../components/module-header';
 import { useCreateIntroduction } from '../hooks/api/mutations/use-create-introduction';
 import { useUpdateIntroduction } from '../hooks/api/mutations/use-update-introduction';
@@ -61,7 +62,7 @@ export const FormIntroductionPage = () => {
   };
 
   if (isLoading) {
-    return <div>carregando</div>;
+    return <FormIntroductionPageSkeleton />;
   }
 
   return (
