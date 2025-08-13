@@ -8,6 +8,7 @@ import { Info } from 'lucide-react';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
+import FormPresentationPageSkeleton from '../components/form-presentation-page-skeleton';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
 import { useCreatePresentation } from '../hooks/api/mutations/use-create-presentation';
@@ -50,8 +51,7 @@ export const FormPresentationPage = () => {
   const createPresentation = useCreatePresentation();
   const updatePresentation = useUpdatePresentation();
 
-  //TODO: Fazer componente de loading
-  if (isLoading) return <div>Carregando...</div>;
+  if (isLoading) return <FormPresentationPageSkeleton />;
 
   if (!moduleId || !grammarRuleId) return <NotFound />;
 
