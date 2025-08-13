@@ -24,7 +24,12 @@ export const NavigationSections = () => {
         <SectionButton variant="introduction" title="Introdução" />
         {data.map((gr, index) => {
           return (
-            <SectionButton title={gr.title} variant="grammarRule" key={index} />
+            <SectionButton
+              title={gr.title}
+              grammarRuleId={gr.id}
+              variant="grammarRule"
+              key={index}
+            />
           );
         })}
       </div>

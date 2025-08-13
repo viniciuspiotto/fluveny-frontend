@@ -10,7 +10,7 @@ import { useGetModules } from '../hooks/api/queries/use-get-modules';
 
 export const DraftsPage = () => {
   const { modules, isLoading, isError } = useGetModules();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <DraftsSkeleton />;
@@ -27,7 +27,7 @@ export const DraftsPage = () => {
       </h1>
       <Back
         className="absolute top-4 z-10 lg:top-10"
-        onClick={() => navigator(ROUTES.modules)}
+        onClick={() => navigate(ROUTES.modules)}
       />
       <Button
         className="text-md ml-auto h-10 rounded-md px-6 font-normal lg:py-6 lg:text-lg"

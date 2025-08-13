@@ -22,10 +22,8 @@ import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-w
 export const FormPresentationPage = () => {
   const { windowId, moduleId, grammarRuleId } = useParams();
 
-  const { windowsList, currentPosition, updateDraftData, setWindowsList } =
+  const { windowsList, currentPosition, setWindowsList } =
     useGrammarRuleModuleWindows();
-
-  const isDraftMode = !windowId;
 
   const methods = useForm<PresentationForm>({
     resolver: zodResolver(presentationSchema),
@@ -38,51 +36,26 @@ export const FormPresentationPage = () => {
     grammarRuleId,
   });
 
-  const isEditMode = !!windowId && !!presentationData;
-
-  const createPresentation = useCreatePresentation();
-  const updatePresentation = useUpdatePresentation();
+  const isEditMode = !!windowId;
 
   useEffect(() => {
     if (isEditMode && presentationData) {
       methods.reset({
         title: presentationData.title,
-        textBlock: { content: presentationData.textBlock.content },
+        textBlock: presentationData.textBlock,
       });
-    } else if (isDraftMode && currentPosition !== null) {
-      const currentWindow = windowsList[currentPosition];
-      if (
-        currentWindow &&
-        currentWindow.type === 'PRESENTATION' &&
-        currentWindow.draftData
-      ) {
-        methods.reset(currentWindow.draftData);
-      }
     }
-  }, [
-    presentationData,
-    isEditMode,
-    isDraftMode,
-    methods,
-    currentPosition,
-    windowsList,
-  ]);
+  }, [presentationData, methods, isEditMode]);
 
-  const watchedValues = methods.watch();
-  useEffect(() => {
-    if (!isDraftMode || currentPosition === null) return;
+  const createPresentation = useCreatePresentation();
+  const updatePresentation = useUpdatePresentation();
 
-    const handler = setTimeout(() => {
-      updateDraftData(currentPosition, watchedValues);
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [watchedValues, updateDraftData, currentPosition, isDraftMode]);
+  if (isLoading) return <div>Carregando...</div>;
 
   if (!moduleId || !grammarRuleId) return <NotFound />;
 
   const onSubmit = (formData: PresentationForm) => {
-    if (isEditMode) {
+    if (isEditMode && presentationData) {
       updatePresentation.mutate({
         moduleId,
         grammarRuleId,
@@ -98,9 +71,9 @@ export const FormPresentationPage = () => {
             const newList = [...windowsList];
 
             newList[currentPosition] = {
-              id: newlyCreatedWindow.data.id,
+              id: newlyCreatedWindow.id,
               type: 'PRESENTATION',
-              clientId: newlyCreatedWindow.data.id,
+              clientId: newlyCreatedWindow.id,
             };
 
             setWindowsList(newList);
@@ -110,15 +83,16 @@ export const FormPresentationPage = () => {
     }
   };
 
-  if (isLoading) return <div>Carregando...</div>;
-
   return (
     <>
       <ModuleHeader step={'Apresentação'} />
       <div className="mx-auto mb-30 flex w-full max-w-300 flex-col px-4 pb-8">
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <FormSectionWrapper label="Cabeçalho">
+            <FormSectionWrapper
+              className="mb-6 lg:mb-8"
+              label={<div className="flex items-center gap-2">Título</div>}
+            >
               <Input
                 {...methods.register('title')}
                 className={cn(
@@ -145,9 +119,11 @@ export const FormPresentationPage = () => {
             >
               <Editor
                 error={methods.formState.errors.textBlock?.content}
-                registerCamp="textBlock"
+                registerCamp="textBlock.content"
                 initialContent={
-                  isEditMode ? presentationData.textBlock.content : undefined
+                  isEditMode && presentationData
+                    ? presentationData.textBlock.content
+                    : ''
                 }
               />
             </FormSectionWrapper>

@@ -3,8 +3,6 @@ import { cn } from '@/app/utils/cn';
 import { BowArrow, Presentation } from 'lucide-react';
 import { AddWindow } from './add-window';
 
-// ... (cole o componente AddWindowPopover aqui se for no mesmo arquivo)
-
 interface WindowProps {
   isCurrent?: boolean;
   position: number;

@@ -11,7 +11,7 @@ export const useGetPresentation = ({
   windowId,
 }: GetPresentationRequest) => {
   const { data, ...rest } = useQuery<GetPresentationResponse>({
-    queryKey: ['exercise', windowId],
+    queryKey: ['presentation', windowId],
     queryFn: () => getPresentation({ moduleId, grammarRuleId, windowId }),
     enabled: !!moduleId && !!grammarRuleId && !!windowId,
   });

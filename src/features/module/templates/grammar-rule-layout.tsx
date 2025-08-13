@@ -24,6 +24,13 @@ export const GrammarRuleLayout = () => {
   const currentPosition = useGrammarRuleModuleWindows(
     (state) => state.currentPosition,
   );
+  const setCurrentPosition = useGrammarRuleModuleWindows(
+    (state) => state.setCurrentPosition,
+  );
+
+  useEffect(() => {
+    setCurrentPosition(0);
+  }, [setCurrentPosition]);
 
   const currentWindow =
     currentPosition !== null ? windowsList[currentPosition] : null;
