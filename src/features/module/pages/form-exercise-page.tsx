@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
+import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
 import { useCreateTranslateExercise } from '../hooks/api/mutations/use-create-translate-exercise';
@@ -131,7 +132,7 @@ export const FormExercisePage = () => {
   };
 
   if (isLoading) {
-    return <div>carregando</div>;
+    return <FormExercisePageSkeleton />;
   }
 
   return (

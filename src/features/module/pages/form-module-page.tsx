@@ -11,6 +11,7 @@ import { DescriptionField } from '../components/description-field';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { GrammarRulesField } from '../components/grammar-rules-field';
 import DeleteModal from '../components/module-delete-modal';
+import FormModulePageSkeleton from '../components/module-page-skeleton';
 import { TitleInput } from '../components/title-input';
 import { useCreateModule } from '../hooks/api/mutations/use-create-module';
 import { useUpdateModule } from '../hooks/api/mutations/use-update-details';
@@ -63,7 +64,7 @@ export const FormModulePage = () => {
   };
 
   if (isLoading) {
-    return <div>carregando</div>;
+    return <FormModulePageSkeleton />;
   }
 
   return (
@@ -71,7 +72,10 @@ export const FormModulePage = () => {
       <form className="mb-20" onSubmit={methods.handleSubmit(onSubmit)}>
         <div className="relative">
           <BannerUpload />
-          <Back className="absolute -bottom-6 left-4 z-10" />
+          <Back
+            className="absolute -bottom-6 left-4 z-10"
+            onClick={() => navigate(-1)}
+          />
         </div>
         <div className="mx-auto mt-10 w-full max-w-300 px-4 pb-8">
           <TitleInput />
