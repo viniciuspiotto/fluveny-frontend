@@ -10,6 +10,7 @@ import { BannerUpload } from '../components/banner-upload';
 import { DescriptionField } from '../components/description-field';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { GrammarRulesField } from '../components/grammar-rules-field';
+import DeleteModal from '../components/module-delete-modal';
 import FormModulePageSkeleton from '../components/module-page-skeleton';
 import { TitleInput } from '../components/title-input';
 import { useCreateModule } from '../hooks/api/mutations/use-create-module';
@@ -92,6 +93,15 @@ export const FormModulePage = () => {
           >
             <span>{isEditMode ? 'Editar' : 'Criar'}</span>
           </Button>
+          {isEditMode && (
+            <div className="mt-4 flex justify-center">
+              <DeleteModal>
+                <span className="cursor-pointer text-zinc-500 select-none hover:text-red-600">
+                  Excluir
+                </span>
+              </DeleteModal>
+            </div>
+          )}
         </div>
       </form>
     </FormProvider>
