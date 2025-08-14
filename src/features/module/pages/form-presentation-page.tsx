@@ -10,6 +10,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
+import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';
 import { useCreatePresentation } from '../hooks/api/mutations/use-create-presentation';
 import { useUpdatePresentation } from '../hooks/api/mutations/use-update-presentation';
 import { useGetPresentation } from '../hooks/api/queries/use-get-presentation';
@@ -50,7 +51,7 @@ export const FormPresentationPage = () => {
   const createPresentation = useCreatePresentation();
   const updatePresentation = useUpdatePresentation();
 
-  if (isLoading) return <div>Carregando...</div>;
+  if (isLoading) return <FormPresentationPageSkeleton />;
 
   if (!moduleId || !grammarRuleId) return <NotFound />;
 
