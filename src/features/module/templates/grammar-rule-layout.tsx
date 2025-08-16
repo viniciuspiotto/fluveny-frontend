@@ -5,6 +5,7 @@ import { ContentWindow } from '@/features/module/components/content-window';
 import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/use-get-grammar-rule-content';
 import { useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router';
+import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';
 import {
   useGrammarRuleModuleWindows,
   type WindowList,
@@ -62,7 +63,7 @@ export const GrammarRuleLayout = () => {
   }
 
   if (isLoadingWindows) {
-    return <div>Carregando...</div>;
+    return <FormPresentationPageSkeleton />;
   }
 
   return (

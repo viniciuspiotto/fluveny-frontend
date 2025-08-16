@@ -23,7 +23,7 @@ import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-w
 export const FormPresentationPage = () => {
   const { windowId, moduleId, grammarRuleId } = useParams();
 
-  const { windowsList, currentPosition, setWindowsList } =
+  const { windowsList, currentPosition, setWindowsList, updateDraftData } =
     useGrammarRuleModuleWindows();
 
   const methods = useForm<PresentationForm>({
@@ -39,14 +39,32 @@ export const FormPresentationPage = () => {
 
   const isEditMode = !!windowId;
 
+  const currentWindow =
+    currentPosition !== null ? windowsList[currentPosition] : undefined;
+  const draftData =
+    currentWindow?.type === 'PRESENTATION'
+      ? (currentWindow.draftData as Partial<PresentationForm>)
+      : undefined;
+
   useEffect(() => {
     if (isEditMode && presentationData) {
       methods.reset({
         title: presentationData.title,
-        textBlock: presentationData.textBlock,
+      });
+    } else if (!isEditMode && draftData) {
+      methods.reset({
+        title: draftData.title || '',
       });
     }
-  }, [presentationData, methods, isEditMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [presentationData, isEditMode, methods]);
+
+  const handleSaveDraftOnBlur = () => {
+    if (!isEditMode && currentPosition !== null) {
+      const currentValues = methods.getValues();
+      updateDraftData(currentPosition, currentValues);
+    }
+  };
 
   const createPresentation = useCreatePresentation();
   const updatePresentation = useUpdatePresentation();
@@ -67,14 +85,17 @@ export const FormPresentationPage = () => {
       createPresentation.mutate(
         { moduleId, grammarRuleId, data: formData },
         {
-          onSuccess: (newlyCreatedWindow) => {
+          onSuccess: (newCreatedWindow) => {
             if (currentPosition === null) return;
             const newList = [...windowsList];
 
+            const clientId = newList[currentPosition]?.clientId;
+
             newList[currentPosition] = {
-              id: newlyCreatedWindow.id,
+              id: newCreatedWindow.id,
               type: 'PRESENTATION',
-              clientId: newlyCreatedWindow.id,
+              clientId,
+              draftData: {},
             };
 
             setWindowsList(newList);
@@ -96,6 +117,7 @@ export const FormPresentationPage = () => {
             >
               <Input
                 {...methods.register('title')}
+                onBlur={handleSaveDraftOnBlur}
                 className={cn(
                   'py-6 lg:text-lg',
                   methods.formState.errors.title &&
@@ -122,9 +144,9 @@ export const FormPresentationPage = () => {
                 error={methods.formState.errors.textBlock?.content}
                 registerCamp="textBlock.content"
                 initialContent={
-                  isEditMode && presentationData
-                    ? presentationData.textBlock.content
-                    : ''
+                  (isEditMode && presentationData?.textBlock.content) ||
+                  draftData?.textBlock?.content ||
+                  ''
                 }
               />
             </FormSectionWrapper>

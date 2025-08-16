@@ -20,7 +20,6 @@ interface EditorProps {
   error: FieldError | undefined;
 }
 
-// todo: resolve render problem
 export const Editor = ({
   registerCamp,
   initialContent,
@@ -73,6 +72,18 @@ export const Editor = ({
       }
     },
   });
+
+  useEffect(() => {
+    if (!editor || initialContent === undefined) {
+      return;
+    }
+
+    const currentContent = editor.getHTML();
+
+    if (currentContent !== initialContent) {
+      editor.commands.setContent(initialContent, false);
+    }
+  }, [initialContent, editor]);
 
   return (
     <EditorContext.Provider value={{ editor }}>

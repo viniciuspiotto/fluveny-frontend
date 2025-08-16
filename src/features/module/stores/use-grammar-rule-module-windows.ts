@@ -6,7 +6,7 @@ import type { TranslateExerciseForm } from '../schemas/translate-exercise-schema
 
 type PresentationWindow = {
   id?: string;
-  clientId: string;
+  clientId?: string;
   type: 'PRESENTATION';
   draftData?: Partial<PresentationForm>;
 };
@@ -14,7 +14,7 @@ type PresentationWindow = {
 type ExerciseWindow = {
   id?: string;
   type: 'EXERCISE';
-  clientId: string;
+  clientId?: string;
   draftData?: Partial<TranslateExerciseForm>;
 };
 
