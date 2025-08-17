@@ -1,4 +1,5 @@
 import { cn } from '@/app/utils/cn';
+import { useGrammarRuleModuleWindows } from '@/features/module/stores/use-grammar-rule-module-windows';
 import Color from '@tiptap/extension-color';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
@@ -25,7 +26,13 @@ export const Editor = ({
   initialContent,
   error,
 }: EditorProps) => {
-  const { register, setValue } = useFormContext();
+  const { register, setValue, getValues } = useFormContext();
+  const updateDraftData = useGrammarRuleModuleWindows(
+    (state) => state.updateDraftData,
+  );
+  const currentPosition = useGrammarRuleModuleWindows(
+    (state) => state.currentPosition,
+  );
 
   useEffect(() => {
     register(registerCamp);
@@ -57,18 +64,18 @@ export const Editor = ({
         class: 'focus:outline-none',
       },
     },
-    onBlur({ editor }) {
+    onUpdate({ editor }) {
       const html = editor.getHTML();
-      if (html === '<p></p>') {
-        setValue(registerCamp, '', {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
-      } else {
-        setValue(registerCamp, html, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
+      const value = html === '<p></p>' ? '' : html;
+      setValue(registerCamp, value, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    onBlur() {
+      if (currentPosition !== null) {
+        const values = getValues();
+        updateDraftData(currentPosition, values);
       }
     },
   });

@@ -50,10 +50,12 @@ export const FormPresentationPage = () => {
     if (isEditMode && presentationData) {
       methods.reset({
         title: presentationData.title,
+        textBlock: presentationData.textBlock,
       });
     } else if (!isEditMode && draftData) {
       methods.reset({
         title: draftData.title || '',
+        textBlock: draftData.textBlock || { content: '' },
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
