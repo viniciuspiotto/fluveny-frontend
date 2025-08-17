@@ -8,7 +8,6 @@ export const useGetIntroduction = (id: string | undefined) => {
   const { data, ...rest } = useQuery<GetIntroductionResponse>({
     queryKey: ['introduction', id],
     queryFn: () => getIntroduction(id!),
-    staleTime: 5 * 60 * 1000,
     enabled: !!id,
   });
 
