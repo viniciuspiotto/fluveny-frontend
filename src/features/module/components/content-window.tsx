@@ -27,6 +27,7 @@ export const ContentWindow = () => {
     <ol className="custom-scrollbar fixed bottom-0 left-0 mb-20 flex w-full items-center gap-4 overflow-x-auto bg-white px-4 py-8 lg:px-10">
       {windowsList.map((w, i) => (
         <Window
+          id={w.id ?? 'do not have an id'}
           position={i + 1}
           key={w.id || `draft-${i}`}
           isCurrent={(currentPosition ?? 0) === i}
