@@ -28,7 +28,7 @@ export const FormIntroductionPage = () => {
 
   const methods = useForm<IntroductionForm>({
     resolver: zodResolver(introductionFormSchema),
-    defaultValues: { textBlock: '' },
+    defaultValues: { textBlock: { content: '' } },
   });
 
   const updateIntroduction = useUpdateIntroduction();
@@ -37,7 +37,7 @@ export const FormIntroductionPage = () => {
   useEffect(() => {
     if (isEditMode && introductionData) {
       methods.reset({
-        textBlock: introductionData.textBlock.content,
+        textBlock: introductionData.textBlock,
       });
     }
   }, [introductionData, isEditMode, methods]);
@@ -48,15 +48,32 @@ export const FormIntroductionPage = () => {
 
   const onSubmit = (formData: IntroductionForm) => {
     if (isEditMode) {
-      updateIntroduction.mutate({ moduleId, data: formData });
+      updateIntroduction.mutate(
+        { moduleId, data: formData },
+        {
+          onSuccess: () => {
+            const firstGrammarRule = grammarRuleModuleInfo[0];
+            if (firstGrammarRule) {
+              navigate(
+                `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.grammarRule}/${firstGrammarRule.id}`,
+              );
+            }
+          },
+        },
+      );
     } else {
-      createIntroduction.mutate({ moduleId, data: formData });
-    }
-
-    const firstGrammarRule = grammarRuleModuleInfo[0];
-    if (firstGrammarRule) {
-      navigate(
-        `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.grammarRule}/${firstGrammarRule.id}`,
+      createIntroduction.mutate(
+        { moduleId, data: formData },
+        {
+          onSuccess: () => {
+            const firstGrammarRule = grammarRuleModuleInfo[0];
+            if (firstGrammarRule) {
+              navigate(
+                `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.grammarRule}/${firstGrammarRule.id}`,
+              );
+            }
+          },
+        },
       );
     }
   };
@@ -72,10 +89,10 @@ export const FormIntroductionPage = () => {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Editor
-              error={methods.formState.errors.textBlock}
-              registerCamp="textBlock"
+              error={methods.formState.errors.textBlock?.content}
+              registerCamp="textBlock.content"
               initialContent={
-                isEditMode ? introductionData.textBlock.content : undefined
+                (isEditMode && introductionData?.textBlock.content) || ''
               }
             />
             <Button

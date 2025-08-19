@@ -22,24 +22,8 @@ import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-w
 export const FormExercisePage = () => {
   const { moduleId, grammarRuleId, windowId } = useParams();
 
-  const windowsList = useGrammarRuleModuleWindows((state) => state.windowsList);
-  const currentPosition = useGrammarRuleModuleWindows(
-    (state) => state.currentPosition,
-  );
-  const updateDraftData = useGrammarRuleModuleWindows(
-    (state) => state.updateDraftData,
-  );
-  const setWindowsList = useGrammarRuleModuleWindows(
-    (state) => state.setWindowsList,
-  );
-
-  const isDraftMode = !windowId;
-
-  const { data: TranslateExerciseContent, isLoading } = useGetExercise({
-    moduleId,
-    grammarRuleId,
-    windowId,
-  });
+  const { windowsList, currentPosition, setWindowsList, updateDraftData } =
+    useGrammarRuleModuleWindows();
 
   const methods = useForm<TranslateExerciseForm>({
     resolver: zodResolver(TranslateExerciseSchema),
@@ -51,48 +35,48 @@ export const FormExercisePage = () => {
     },
   });
 
-  const isEditMode = !!windowId && !!TranslateExerciseContent;
+  const { data: translateExerciseContent, isLoading } = useGetExercise({
+    moduleId,
+    grammarRuleId,
+    windowId,
+  });
+
+  const isEditMode = !!windowId;
+
+  const currentWindow =
+    currentPosition !== null ? windowsList[currentPosition] : undefined;
+  const draftData =
+    currentWindow?.type === 'EXERCISE'
+      ? (currentWindow.draftData as Partial<TranslateExerciseForm>)
+      : undefined;
+
+  useEffect(() => {
+    if (isEditMode && translateExerciseContent) {
+      methods.reset(translateExerciseContent);
+    } else if (!isEditMode && draftData) {
+      methods.reset({
+        header: draftData.header || '',
+        phrase: draftData.phrase || '',
+        template: draftData.template || '',
+        justification: draftData.justification || '',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [translateExerciseContent, isEditMode, methods]);
+
+  const handleSaveDraftOnBlur = () => {
+    if (!isEditMode && currentPosition !== null) {
+      const currentValues = methods.getValues();
+      updateDraftData(currentPosition, currentValues);
+    }
+  };
 
   const updateTranslateExercise = useUpdateTranslateExercise();
   const createTranslateExercise = useCreateTranslateExercise();
 
-  useEffect(() => {
-    if (isEditMode) {
-      methods.reset({
-        header: TranslateExerciseContent.header,
-        justification: TranslateExerciseContent.justification,
-        phrase: TranslateExerciseContent.phrase,
-        template: TranslateExerciseContent.template,
-      });
-    } else if (isDraftMode && currentPosition !== null) {
-      const currentWindow = windowsList[currentPosition];
-      if (
-        currentWindow &&
-        currentWindow.type === 'EXERCISE' &&
-        currentWindow.draftData
-      ) {
-        methods.reset(currentWindow.draftData);
-      }
-    }
-  }, [
-    TranslateExerciseContent,
-    isEditMode,
-    isDraftMode,
-    methods,
-    currentPosition,
-    windowsList,
-  ]);
-
-  const watchedValues = methods.watch();
-  useEffect(() => {
-    if (!isDraftMode || currentPosition === null) return;
-
-    const handler = setTimeout(() => {
-      updateDraftData(currentPosition, watchedValues);
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [watchedValues, updateDraftData, currentPosition, isDraftMode]);
+  if (isLoading) {
+    return <FormExercisePageSkeleton />;
+  }
 
   if (!moduleId || !grammarRuleId) {
     return <NotFound />;
@@ -118,10 +102,13 @@ export const FormExercisePage = () => {
             if (currentPosition === null) return;
             const newList = [...windowsList];
 
+            const clientId = newList[currentPosition]?.clientId;
+
             newList[currentPosition] = {
               id: newlyCreatedWindow.id,
               type: 'EXERCISE',
-              clientId: newlyCreatedWindow.id,
+              clientId,
+              draftData: {},
             };
 
             setWindowsList(newList);
@@ -130,10 +117,6 @@ export const FormExercisePage = () => {
       );
     }
   };
-
-  if (isLoading) {
-    return <FormExercisePageSkeleton />;
-  }
 
   return (
     <>
@@ -144,6 +127,7 @@ export const FormExercisePage = () => {
             <FormSectionWrapper label="Cabeçalho">
               <Input
                 {...methods.register('header')}
+                onBlur={handleSaveDraftOnBlur}
                 className={cn(
                   'py-6 lg:text-lg',
                   methods.formState.errors.header &&
@@ -160,6 +144,7 @@ export const FormExercisePage = () => {
             <FormSectionWrapper className="mb-6 lg:mb-8" label="Frase">
               <Input
                 {...methods.register('phrase')}
+                onBlur={handleSaveDraftOnBlur}
                 className={cn(
                   'py-6 lg:text-lg',
                   methods.formState.errors.phrase &&
@@ -176,6 +161,7 @@ export const FormExercisePage = () => {
             <FormSectionWrapper className="mb-6 lg:mb-8" label="Gabarito">
               <Input
                 {...methods.register('template')}
+                onBlur={handleSaveDraftOnBlur}
                 className={cn(
                   'py-6 lg:text-lg',
                   methods.formState.errors.template &&
@@ -192,6 +178,7 @@ export const FormExercisePage = () => {
             <FormSectionWrapper className="mb-6 lg:mb-8" label="Justificativa">
               <Textarea
                 {...methods.register('justification')}
+                onBlur={handleSaveDraftOnBlur}
                 placeholder="Escreva aqui..."
                 className={cn(
                   'min-h-40 py-4 lg:text-lg',
