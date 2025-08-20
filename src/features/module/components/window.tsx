@@ -8,7 +8,7 @@ import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-w
 import { AddWindow } from './add-window';
 
 interface WindowProps {
-  id: string;
+  id: string | undefined;
   isCurrent?: boolean;
   position: number;
   selectWindow: () => void;
