@@ -26,6 +26,7 @@ type GrammarRuleModuleWindowsStoreState = {
   setWindowsList: (list: WindowList[]) => void;
   setCurrentPosition: (position: number) => void;
   addWindow: (window: WindowType, index: number) => void;
+  moveWindow: (dragIndex: number, hoverIndex: number) => void;
   updateDraftData: (index: number, data: WindowList['draftData']) => void;
 };
 
@@ -53,6 +54,14 @@ export const useGrammarRuleModuleWindows =
             };
             newList.splice(index, 0, newWindowWithIds);
             return { windowsList: newList, currentPosition: index };
+          }),
+        moveWindow: (dragIndex, hoverIndex) =>
+          set((state) => {
+            const reordered = [...state.windowsList];
+            const [dragged] = reordered.splice(dragIndex, 1);
+            reordered.splice(hoverIndex, 0, dragged);
+
+            return { windowsList: reordered };
           }),
         updateDraftData: (index, data) =>
           set((state) => {

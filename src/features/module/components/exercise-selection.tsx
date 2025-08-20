@@ -101,8 +101,8 @@ export default function ExerciseSelector({
       <DialogContent>
         <div className="flex flex-col items-center rounded-md border py-8 lg:m-2">
           <section className="flex w-full flex-col items-center">
-            <DialogTitle>
-              <h2 className="text-l font-bold">Habilidade Linguística</h2>
+            <DialogTitle className="text-l font-bold">
+              Habilidade Linguística
             </DialogTitle>
             <div className="flex h-full w-full justify-between">
               <div className="m-2 flex flex-1 flex-col items-center">
