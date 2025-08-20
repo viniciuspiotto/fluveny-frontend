@@ -57,15 +57,11 @@ export const useGrammarRuleModuleWindows =
           }),
         moveWindow: (dragIndex, hoverIndex) =>
           set((state) => {
-            const reorderedWindows = [...state.windowsList];
-            const [draggedItem] = reorderedWindows.splice(dragIndex, 1);
-            reorderedWindows.splice(hoverIndex, 0, draggedItem);
+            const reordered = [...state.windowsList];
+            const [dragged] = reordered.splice(dragIndex, 1);
+            reordered.splice(hoverIndex, 0, dragged);
 
-            const finalWindows = reorderedWindows.map((window, index) => ({
-              ...window,
-              position: index + 1,
-            }));
-            return { windowsList: finalWindows };
+            return { windowsList: reordered };
           }),
         updateDraftData: (index, data) =>
           set((state) => {

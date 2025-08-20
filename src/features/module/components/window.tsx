@@ -35,15 +35,19 @@ export const Window = ({
   const ref = useRef<HTMLLIElement>(null);
   const { moveWindow } = useGrammarRuleModuleWindows((state) => state);
   const index = position - 1;
-  const [{ handlerId }, drop] = useDrop<
+  const [{ handlerId, isOver }, drop] = useDrop<
     DragItem,
     void,
-    { handlerId: Identifier | null }
+    {
+      handlerId: Identifier | null;
+      isOver: Boolean;
+    }
   >({
     accept: DND_ITEM_TYPE,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
+        isOver: monitor.isOver(),
       };
     },
     hover(item: DragItem, monitor) {
@@ -77,10 +81,8 @@ export const Window = ({
 
   const [{ isDragging }, drag] = useDrag({
     type: DND_ITEM_TYPE,
-    item: () => {
-      return { id, index };
-    },
-    collect: (monitor: any) => ({
+    item: () => ({ id, index }),
+    collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
@@ -103,6 +105,7 @@ export const Window = ({
           'h-18 w-30 flex-shrink-0 cursor-grab rounded-md border-2 p-2 lg:h-24 lg:w-50',
           isCurrent && 'border-primary',
           isDragging && 'opacity-50',
+          isOver && 'ring-primary/50 ring-2',
         )}
         ref={ref}
       >
