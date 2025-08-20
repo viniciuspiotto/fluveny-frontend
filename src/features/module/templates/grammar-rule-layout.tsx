@@ -1,6 +1,6 @@
 import { ROUTES } from '@/app/configs/routes';
 import { DndProvider } from '@/app/providers/dnd-provider';
-import { Modal } from '@/components/modal';
+import { DraftWindowsModal } from '@/components/modal';
 import { NotFound } from '@/components/not-found';
 import { ContentWindow } from '@/features/module/components/content-window';
 import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/use-get-grammar-rule-content';
@@ -100,7 +100,7 @@ export const GrammarRuleLayout = () => {
     <DndProvider>
       <Outlet key={uniqueKey} />
       <ContentWindow key={grammarRuleId} />
-      <Modal
+      <DraftWindowsModal
         isOpen={blocker.state === 'blocked'}
         onCancel={handleCancelNavigation}
         onConfirm={handleConfirmNavigation}
