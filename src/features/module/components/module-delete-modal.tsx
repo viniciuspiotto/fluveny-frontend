@@ -34,9 +34,8 @@ export default function DeleteModal({ children }: DeleteModalProps) {
 
   function handleDelete() {
     if (!moduleId) return;
-    const delResponse = deleteModule(moduleId)
+    deleteModule(moduleId)
       .then(() => {
-        console.log(delResponse);
         navigate('/modules/drafts');
         toast.success('Módulo excluído com sucesso');
       })

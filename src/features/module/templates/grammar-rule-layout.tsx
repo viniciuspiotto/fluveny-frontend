@@ -1,11 +1,13 @@
 import { ROUTES } from '@/app/configs/routes';
 import { DndProvider } from '@/app/providers/dnd-provider';
+import { DraftWindowsModal } from '@/components/modal';
 import { NotFound } from '@/components/not-found';
 import { ContentWindow } from '@/features/module/components/content-window';
 import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/use-get-grammar-rule-content';
 import { useEffect } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router';
+import { Outlet, useBlocker, useNavigate, useParams } from 'react-router';
 import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';
+import { useUpdateGrammarRuleWindows } from '../hooks/api/mutations/use-update-grammar-rule-windows';
 import {
   useGrammarRuleModuleWindows,
   type WindowList,
@@ -18,6 +20,8 @@ export const GrammarRuleLayout = () => {
   const { data: windows, isLoading: isLoadingWindows } =
     useGetGrammarRuleContent(moduleId, grammarRuleId);
 
+  const updateGrammarRuleWindows = useUpdateGrammarRuleWindows();
+
   const windowsList = useGrammarRuleModuleWindows((state) => state.windowsList);
   const setWindowsList = useGrammarRuleModuleWindows(
     (state) => state.setWindowsList,
@@ -29,16 +33,45 @@ export const GrammarRuleLayout = () => {
     (state) => state.setCurrentPosition,
   );
 
+  const hasDraftWindows = windowsList.some((w) => !w.id);
+
+  const blocker = useBlocker(({ nextLocation }) => {
+    if (!moduleId || !grammarRuleId) return false;
+
+    const grammarRuleBasePath = `/modules/create/${moduleId}/grammarRule/${grammarRuleId}`;
+    const isNavigatingWithinEditor =
+      nextLocation.pathname.startsWith(grammarRuleBasePath);
+
+    return !isNavigatingWithinEditor;
+  });
+
   useEffect(() => {
-    setCurrentPosition(0);
-  }, [setCurrentPosition]);
+    if (blocker.state === 'blocked' && !hasDraftWindows) {
+      onSendWindowsPosition(windowsList);
+      blocker.proceed();
+    }
+  }, [blocker, hasDraftWindows, windowsList]);
+
+  const handleConfirmNavigation = () => {
+    if (blocker.state === 'blocked') {
+      const windowsToSave = windowsList.filter((w) => w.id);
+      onSendWindowsPosition(windowsToSave);
+      blocker.proceed();
+    }
+  };
+
+  const handleCancelNavigation = () => {
+    if (blocker.state === 'blocked') {
+      blocker.reset();
+    }
+  };
 
   const currentWindow =
     currentPosition !== null ? windowsList[currentPosition] : null;
   const uniqueKey = currentWindow?.id ?? currentWindow?.clientId;
 
   useEffect(() => {
-    if (windows && windows.length > 0) {
+    if (windows) {
       const windowsWithClientId = windows.map(
         (w) =>
           ({
@@ -47,29 +80,54 @@ export const GrammarRuleLayout = () => {
           }) as WindowList,
       );
       setWindowsList(windowsWithClientId);
+      setCurrentPosition(0);
 
-      const firstWindow = windows[0];
-      navigate(`${firstWindow.type.toLocaleLowerCase()}/${firstWindow.id}`, {
-        replace: true,
-      });
-    } else {
+      if (windows.length > 0) {
+        const firstWindow = windows[0];
+        navigate(`${firstWindow.type.toLocaleLowerCase()}/${firstWindow.id}`, {
+          replace: true,
+        });
+      } else {
+        navigate(ROUTES.presentation, { replace: true });
+      }
+    } else if (!isLoadingWindows) {
       setWindowsList([{ type: 'PRESENTATION', clientId: crypto.randomUUID() }]);
+      setCurrentPosition(0);
       navigate(ROUTES.presentation, { replace: true });
     }
-  }, [windows, setWindowsList, navigate]);
-
-  if (!grammarRuleId || !moduleId) {
-    return <NotFound />;
-  }
+  }, [windows, isLoadingWindows, navigate, setWindowsList, setCurrentPosition]);
 
   if (isLoadingWindows) {
     return <FormPresentationPageSkeleton />;
   }
 
+  if (!moduleId || !grammarRuleId) return <NotFound />;
+
+  const onSendWindowsPosition = (data: WindowList[]) => {
+    const windowsWithId = data
+      .filter((w) => w.id)
+      .map(({ id, type }) => ({
+        id,
+        type,
+      }));
+
+    updateGrammarRuleWindows.mutate(
+      { moduleId, data: windowsWithId, grammarRuleId },
+      {
+        onSuccess: () => {},
+      },
+    );
+  };
+
   return (
-    <DndProvider>
+    <DndProvider key={grammarRuleId}>
       <Outlet key={uniqueKey} />
       <ContentWindow />
+      <DraftWindowsModal
+        isOpen={blocker.state === 'blocked' && hasDraftWindows}
+        onCancel={handleCancelNavigation}
+        onConfirm={handleConfirmNavigation}
+      />
     </DndProvider>
   );
 };
