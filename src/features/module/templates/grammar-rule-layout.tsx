@@ -7,6 +7,7 @@ import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/us
 import { useEffect } from 'react';
 import { Outlet, useBlocker, useNavigate, useParams } from 'react-router';
 import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';
+import { useUpdateGrammarRuleWindows } from '../hooks/api/mutations/use-update-grammar-rule-windows';
 import {
   useGrammarRuleModuleWindows,
   type WindowList,
@@ -19,6 +20,8 @@ export const GrammarRuleLayout = () => {
   const { data: windows, isLoading: isLoadingWindows } =
     useGetGrammarRuleContent(moduleId, grammarRuleId);
 
+  const updateGrammarRuleWindows = useUpdateGrammarRuleWindows();
+
   const windowsList = useGrammarRuleModuleWindows((state) => state.windowsList);
   const setWindowsList = useGrammarRuleModuleWindows(
     (state) => state.setWindowsList,
@@ -30,25 +33,29 @@ export const GrammarRuleLayout = () => {
     (state) => state.setCurrentPosition,
   );
 
-  const hasDraftWindows = windowsList.filter((w) => !w.id).length !== 0;
+  const hasDraftWindows = windowsList.some((w) => !w.id);
+
   const blocker = useBlocker(({ nextLocation }) => {
     if (!moduleId || !grammarRuleId) return false;
 
     const grammarRuleBasePath = `/modules/create/${moduleId}/grammarRule/${grammarRuleId}`;
-
     const isNavigatingWithinEditor =
       nextLocation.pathname.startsWith(grammarRuleBasePath);
 
-    return hasDraftWindows && !isNavigatingWithinEditor;
+    return !isNavigatingWithinEditor;
   });
 
-  const onSendWindowsPosition = () => {
-    console.log('send positions');
-  };
+  useEffect(() => {
+    if (blocker.state === 'blocked' && !hasDraftWindows) {
+      onSendWindowsPosition(windowsList);
+      blocker.proceed();
+    }
+  }, [blocker, hasDraftWindows, windowsList]);
 
   const handleConfirmNavigation = () => {
     if (blocker.state === 'blocked') {
-      onSendWindowsPosition();
+      const windowsToSave = windowsList.filter((w) => w.id);
+      onSendWindowsPosition(windowsToSave);
       blocker.proceed();
     }
   };
@@ -65,43 +72,59 @@ export const GrammarRuleLayout = () => {
 
   useEffect(() => {
     if (windows) {
-      if (windows.length > 0) {
-        const windowsWithClientId = windows.map(
-          (w) =>
-            ({
-              ...w,
-              clientId: w.id,
-            }) as WindowList,
-        );
-        setWindowsList(windowsWithClientId);
-        setCurrentPosition(0);
+      const windowsWithClientId = windows.map(
+        (w) =>
+          ({
+            ...w,
+            clientId: w.id,
+          }) as WindowList,
+      );
+      setWindowsList(windowsWithClientId);
+      setCurrentPosition(0);
 
+      if (windows.length > 0) {
         const firstWindow = windows[0];
         navigate(`${firstWindow.type.toLocaleLowerCase()}/${firstWindow.id}`, {
           replace: true,
         });
+      } else {
+        navigate(ROUTES.presentation, { replace: true });
       }
-    } else {
+    } else if (!isLoadingWindows) {
       setWindowsList([{ type: 'PRESENTATION', clientId: crypto.randomUUID() }]);
       setCurrentPosition(0);
       navigate(ROUTES.presentation, { replace: true });
     }
-  }, [windows, navigate, setWindowsList, setCurrentPosition]);
-
-  if (!grammarRuleId || !moduleId) {
-    return <NotFound />;
-  }
+  }, [windows, isLoadingWindows, navigate, setWindowsList, setCurrentPosition]);
 
   if (isLoadingWindows) {
     return <FormPresentationPageSkeleton />;
   }
 
+  if (!moduleId || !grammarRuleId) return <NotFound />;
+
+  const onSendWindowsPosition = (data: WindowList[]) => {
+    const windowsWithId = data
+      .filter((w) => w.id)
+      .map(({ id, type }) => ({
+        id,
+        type,
+      }));
+
+    updateGrammarRuleWindows.mutate(
+      { moduleId, data: windowsWithId, grammarRuleId },
+      {
+        onSuccess: () => {},
+      },
+    );
+  };
+
   return (
-    <DndProvider>
+    <DndProvider key={grammarRuleId}>
       <Outlet key={uniqueKey} />
-      <ContentWindow key={grammarRuleId} />
+      <ContentWindow />
       <DraftWindowsModal
-        isOpen={blocker.state === 'blocked'}
+        isOpen={blocker.state === 'blocked' && hasDraftWindows}
         onCancel={handleCancelNavigation}
         onConfirm={handleConfirmNavigation}
       />

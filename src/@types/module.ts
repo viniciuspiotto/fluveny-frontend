@@ -29,7 +29,7 @@ export interface GrammarRuleModuleWindow {
   };
 }
 
-export type WindowList = {
+export type WindowListDTO = {
   type: WindowType;
   id?: string;
 };
