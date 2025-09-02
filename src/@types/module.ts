@@ -65,3 +65,5 @@ export type Presentation = {
     content: string;
   };
 };
+
+export type LinguisticAbility = 'WRITE' | 'READ' | 'LISTEN';
