@@ -1,34 +1,70 @@
-import { CreateModuleLayout } from '@/components/layouts/create-module-layout';
-import { PrivateLayout } from '@/components/layouts/private-layout';
-import { DetailsPage } from '@/features/module/pages/details-page';
-import { DraftPage } from '@/features/module/pages/draft-page';
-import { EditDetailsPage } from '@/features/module/pages/edit-details-page';
-import { FinalChallengePage } from '@/features/module/pages/final-challenge-page';
-import { IntroductionPage } from '@/features/module/pages/introduction-page';
-import { ModulePage } from '@/features/module/pages/module-page';
+import { NotFound } from '@/components/not-found';
+import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
+import { DraftsPage } from '@/features/module/pages/drafts-page';
+import { FormExercisePage } from '@/features/module/pages/form-exercise-page';
+import { FormIntroductionPage } from '@/features/module/pages/form-introduction-page';
+import { FormModulePage } from '@/features/module/pages/form-module-page';
+import { FormPresentationPage } from '@/features/module/pages/form-presentation-page';
 import { PanelPage } from '@/features/module/pages/panel-page';
-import { GrammarRulePage } from '@/features/module/pages/topic-page';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { CreateModuleLayout } from '@/features/module/templates/create-module-layout';
+import { GrammarRuleLayout } from '@/features/module/templates/grammar-rule-layout';
+import { PrivateLayout } from '@/templates/private-layout';
+import { createBrowserRouter } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
-export function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={ROUTES.modules} element={<PrivateLayout />}>
-          <Route index element={<PanelPage />} />
-          <Route path="drafts" element={<DraftPage />} />
-          <Route path="new" element={<DetailsPage />} />
-          <Route path=":id" element={<ModulePage />} />
-          <Route path="create/:id" element={<CreateModuleLayout />}>
-            <Route path="introduction" element={<IntroductionPage />} />
-            <Route path=":stepSlug" element={<GrammarRulePage />} />
-            <Route path="final-challenge" element={<FinalChallengePage />} />
-          </Route>
-          <Route path="edit/:id" element={<EditDetailsPage />} />
-        </Route>
-        <Route path="*" element={<div>404 - Not Found</div>} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+export const router = createBrowserRouter([
+  {
+    element: <PrivateLayout />,
+    children: [
+      { path: ROUTES.dashboard, element: <DashboardPage /> },
+      {
+        path: ROUTES.modules,
+        children: [
+          { index: true, element: <PanelPage /> },
+          { path: ROUTES.drafts, element: <DraftsPage /> },
+          { path: ROUTES.create, element: <FormModulePage /> },
+          {
+            path: `${ROUTES.create}/${ROUTES.moduleId}`,
+            element: <FormModulePage />,
+          },
+          {
+            path: `${ROUTES.create}/${ROUTES.moduleId}`,
+            element: <CreateModuleLayout />,
+            children: [
+              {
+                path: ROUTES.introduction,
+                element: <FormIntroductionPage />,
+              },
+              {
+                path: `${ROUTES.grammarRule}/${ROUTES.grammarRuleId}`,
+                element: <GrammarRuleLayout />,
+                children: [
+                  {
+                    path: `${ROUTES.presentation}`,
+                    element: <FormPresentationPage />,
+                  },
+                  {
+                    path: `${ROUTES.exercise}`,
+                    element: <FormExercisePage />,
+                  },
+                  {
+                    path: `${ROUTES.presentation}/${ROUTES.windowId}`,
+                    element: <FormPresentationPage />,
+                  },
+                  {
+                    path: `${ROUTES.exercise}/${ROUTES.windowId}`,
+                    element: <FormExercisePage />,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
+  },
+]);

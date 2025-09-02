@@ -1,6 +1,9 @@
-export type grammarRule = {
+export type Module = {
   id: string;
-  name: string;
+  title: string;
+  description: string;
+  level: Level;
+  grammarRules: GrammarRule[];
 };
 
 export type Level = {
@@ -15,28 +18,50 @@ export type GrammarRule = {
   slug: string;
 };
 
-export type Module = {
+export interface GrammarRuleModuleWindow {
+  type: WindowType;
   id: string;
+  grammarRuleModuleId: string;
   title: string;
-  description: string;
-  level: Level;
-  grammarRules: GrammarRule[];
+  textBlock: {
+    id: string;
+    content: string;
+  };
+}
+
+export type WindowListDTO = {
+  type: WindowType;
+  id?: string;
 };
 
-export interface ModuleCardProps {
-  id: string;
-  title: string;
-  imgSrc: string;
-  grammarRules: grammarRule[];
+export type WindowType = 'EXERCISE' | 'PRESENTATION';
+
+export interface Introduction {
+  idModule: string;
+  textBlock: TextBlock;
 }
 
 type TextBlock = {
   id: string;
   content: string;
 };
-export interface Introduction {
-  idModule: string;
-  textBlock: TextBlock;
-}
 
-export type StepMode = 'create' | 'edit';
+export type GrammarRuleModuleIdAndTitle = {
+  id: string;
+  title: string;
+};
+
+export type Exercise = {
+  grammarRuleModuleId: string;
+  header: string;
+  phrase: string;
+  template: string;
+  justification: string;
+};
+
+export type Presentation = {
+  title: string;
+  textBlock: {
+    content: string;
+  };
+};

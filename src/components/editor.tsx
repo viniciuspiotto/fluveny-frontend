@@ -1,4 +1,5 @@
-import { useModuleWizard } from '@/features/module/store/use-module-wizard';
+import { cn } from '@/app/utils/cn';
+import { useGrammarRuleModuleWindows } from '@/features/module/stores/use-grammar-rule-module-windows';
 import Color from '@tiptap/extension-color';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
@@ -10,23 +11,32 @@ import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useFormContext, type FieldError } from 'react-hook-form';
 import { Toolbar } from './toolbar';
 
 interface EditorProps {
+  registerCamp: string;
   initialContent?: string;
+  error: FieldError | undefined;
 }
 
-export const Editor = ({ initialContent }: EditorProps) => {
-  const [isEmpty, setIsEmpty] = useState(true);
-  const { setValue, register } = useFormContext();
-
-  const { currentStep, setStepCompletion } = useModuleWizard();
+export const Editor = ({
+  registerCamp,
+  initialContent,
+  error,
+}: EditorProps) => {
+  const { register, setValue, getValues } = useFormContext();
+  const updateDraftData = useGrammarRuleModuleWindows(
+    (state) => state.updateDraftData,
+  );
+  const currentPosition = useGrammarRuleModuleWindows(
+    (state) => state.currentPosition,
+  );
 
   useEffect(() => {
-    register('textBlock');
-  }, [register]);
+    register(registerCamp);
+  }, [register, registerCamp]);
 
   const editor = useEditor({
     extensions: [
@@ -45,58 +55,10 @@ export const Editor = ({ initialContent }: EditorProps) => {
       TableCell,
       Link.configure({
         autolink: true,
-        defaultProtocol: 'https',
-        protocols: ['http', 'https'],
-        isAllowedUri: (url, ctx) => {
-          try {
-            const parsedUrl = url.includes(':')
-              ? new URL(url)
-              : new URL(`${ctx.defaultProtocol}://${url}`);
-
-            if (!ctx.defaultValidate(parsedUrl.href)) {
-              return false;
-            }
-
-            const disallowedProtocols = ['ftp', 'file', 'mailto'];
-            const protocol = parsedUrl.protocol.replace(':', '');
-
-            if (disallowedProtocols.includes(protocol)) {
-              return false;
-            }
-
-            const allowedProtocols = ctx.protocols.map((p) =>
-              typeof p === 'string' ? p : p.scheme,
-            );
-
-            if (!allowedProtocols.includes(protocol)) {
-              return false;
-            }
-
-            return true;
-          } catch {
-            return false;
-          }
-        },
-        shouldAutoLink: (url) => {
-          try {
-            const parsedUrl = url.includes(':')
-              ? new URL(url)
-              : new URL(`https://${url}`);
-
-            const disallowedDomains = [
-              'example-no-autolink.com',
-              'another-no-autolink.com',
-            ];
-            const domain = parsedUrl.hostname;
-
-            return !disallowedDomains.includes(domain);
-          } catch {
-            return false;
-          }
-        },
+        openOnClick: false,
       }),
     ],
-    content: '',
+    content: initialContent || '',
     editorProps: {
       attributes: {
         class: 'focus:outline-none',
@@ -104,23 +66,31 @@ export const Editor = ({ initialContent }: EditorProps) => {
     },
     onUpdate({ editor }) {
       const html = editor.getHTML();
-      setIsEmpty(editor.isEmpty);
-      setValue('textBlock', html, { shouldDirty: true });
+      const value = html === '<p></p>' ? '' : html;
+      setValue(registerCamp, value, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    onBlur() {
+      if (currentPosition !== null) {
+        const values = getValues();
+        updateDraftData(currentPosition, values);
+      }
     },
   });
 
   useEffect(() => {
-    if (editor && initialContent) {
-      editor.commands.setContent(initialContent);
-      setIsEmpty(false);
+    if (!editor || initialContent === undefined) {
+      return;
     }
-  }, [editor, initialContent]);
 
-  useEffect(() => {
-    if (editor && currentStep) {
-      setStepCompletion(currentStep, !isEmpty);
+    const currentContent = editor.getHTML();
+
+    if (currentContent !== initialContent) {
+      editor.commands.setContent(initialContent, false);
     }
-  }, [editor, isEmpty, currentStep, setStepCompletion]);
+  }, [initialContent, editor]);
 
   return (
     <EditorContext.Provider value={{ editor }}>
@@ -128,8 +98,16 @@ export const Editor = ({ initialContent }: EditorProps) => {
         <Toolbar />
         <EditorContent
           editor={editor}
-          className="prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg max-w-none rounded-md border p-4"
+          className={cn(
+            'prose prose-sm md:prose-lg prose-img:mx-auto prose-p:text-lg min-h-50 max-w-none rounded-md border p-4 lg:min-h-100',
+            error && 'animate-shake border-red-500 text-red-500',
+          )}
         />
+        {error && (
+          <p className="flex text-center text-sm text-red-500">
+            {error.message}
+          </p>
+        )}
       </div>
     </EditorContext.Provider>
   );

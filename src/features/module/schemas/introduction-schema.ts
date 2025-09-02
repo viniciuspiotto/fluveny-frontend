@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
-export const introductionSchema = z.object({
-  textBlock: z.string().min(1),
+export const introductionFormSchema = z.object({
+  textBlock: z.object({
+    content: z
+      .string()
+      .trim()
+      .min(8, { message: 'A introdução é obrigatória' }),
+  }),
 });
 
-export type IntroductionData = z.infer<typeof introductionSchema>;
+export type IntroductionForm = z.infer<typeof introductionFormSchema>;

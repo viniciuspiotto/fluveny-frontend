@@ -1,16 +1,16 @@
 import '@/styles/global.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router';
 import { ReactQueryProvider } from './app/providers/react-query-provider';
-import { ThemeProvider } from './app/providers/theme-provider';
-import { AppRoutes } from './app/routes/app-routes';
+import { router } from './app/routes/app-routes';
+import { Toaster } from './components/ui/toaster';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="light" storageKey="fluveny-ui-theme">
-      <ReactQueryProvider>
-        <AppRoutes />
-      </ReactQueryProvider>
-    </ThemeProvider>
+    <ReactQueryProvider>
+      <RouterProvider router={router} />
+      <Toaster />
+    </ReactQueryProvider>
   </StrictMode>,
 );

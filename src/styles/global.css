@@ -157,4 +157,20 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply h-3;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply rounded-lg bg-white;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-lg;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/90;
+  }
 }
