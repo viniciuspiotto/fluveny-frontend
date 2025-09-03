@@ -1,4 +1,5 @@
 import { NotFound } from '@/components/not-found';
+import { Register } from '@/features/authentication/pages/register';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
 import { FormExercisePage } from '@/features/module/pages/form-exercise-page';
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: 'register',
+    element: <Register />,
   },
   {
     path: '*',
