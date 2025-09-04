@@ -21,8 +21,8 @@ export const Register = () => {
   };
 
   return (
-    <div className="flex h-full flex-col lg:grid lg:grid-cols-2">
-      <div className="lg:bg-primary relative space-y-8 overflow-hidden border-b-2 px-4 pt-10 pb-20 lg:grid lg:grid-rows-3 lg:border-r-2 lg:border-b-0 lg:text-white">
+    <div className="h-full lg:grid lg:grid-cols-2">
+      <div className="lg:bg-primary overflow-hidden border-b-2 px-4 py-10 lg:relative lg:grid lg:grid-rows-3 lg:border-r-2 lg:border-b-0 lg:pt-10 lg:pb-20 lg:text-white">
         <div>
           <div className="flex gap-2 lg:text-lg">
             Já possui uma conta?{' '}
@@ -36,7 +36,7 @@ export const Register = () => {
               <ArrowRight className="absolute top-1/2 left-0 size-5 -translate-x-full -translate-y-1/2 opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100" />
             </div>
           </div>
-          <div className="flex h-full flex-col items-center justify-center gap-10">
+          <div className="flex h-full flex-col items-center justify-center gap-10 py-10">
             <div className="w-full text-center">
               <p className="text-2xl lg:text-4xl">Aprenda inglês de forma</p>
               <AnimateBlock />
@@ -46,15 +46,20 @@ export const Register = () => {
         <img
           src="/img/register.svg"
           alt="Mulher comemorando e olhando no celular"
-          className="absolute -bottom-46 left-0 w-full"
+          className="absolute bottom-0 left-1/2 hidden w-screen -translate-x-1/2 lg:-bottom-40 lg:flex"
         />
       </div>
+      <img
+        src="/assets/logo.svg"
+        alt="Logo Fluveny"
+        className="absolute top-56 left-1/2 m-auto mb-16 h-14 -translate-x-1/2 transform bg-white px-2 lg:hidden"
+      />
       <div className="flex w-full items-center justify-center">
         <div className="flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 pt-20 pb-10">
           <img
             src="/assets/logo.svg"
             alt="Logo Fluveny"
-            className="mb-16 h-14"
+            className="mb-16 hidden h-14"
           />
           <h1 className="text-center text-xl font-semibold lg:text-2xl">
             Crie sua conta na Fluveny

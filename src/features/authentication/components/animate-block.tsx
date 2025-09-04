@@ -16,11 +16,11 @@ export const AnimateBlock = () => {
   }, []);
 
   return (
-    <div className="relative mt-2 flex justify-center gap-2">
+    <div className="relative flex justify-center gap-2 lg:mt-2">
       <img
         src="/img/effect.svg"
         alt="efeito de pincelada"
-        className="absolute inset-0 -top-2 left-70 z-10 w-90 object-cover"
+        className="absolute -top-2 left-1/2 z-10 hidden w-90 -translate-x-1/2 lg:flex"
       />
       <div
         className={cn(
