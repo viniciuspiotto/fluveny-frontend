@@ -16,14 +16,19 @@ export const AnimateBlock = () => {
   }, []);
 
   return (
-    <div className="flex justify-center gap-2">
+    <div className="relative mt-2 flex justify-center gap-2">
+      <img
+        src="/img/effect.svg"
+        alt="efeito de pincelada"
+        className="absolute inset-0 -top-2 left-70 z-10 w-90 object-cover"
+      />
       <div
         className={cn(
-          'relative h-10 overflow-hidden rounded-sm text-left text-xl transition-[width] duration-700 ease-in-out',
+          'relative h-10 overflow-hidden rounded-sm text-left text-xl transition-[width] duration-700 ease-in-out lg:text-4xl',
           {
-            'w-36': currentIndex === 0,
-            'w-51': currentIndex === 1,
-            'w-44': currentIndex === 2,
+            'w-44': currentIndex === 0,
+            'w-62': currentIndex === 1,
+            'w-52': currentIndex === 2,
           },
         )}
       >
@@ -34,9 +39,9 @@ export const AnimateBlock = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '-100%', opacity: 0 }}
             transition={{ duration: 0.7, ease: 'easeInOut' }}
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 z-20 flex items-center justify-center"
           >
-            <p className="font-lexend-zetta text-left text-3xl font-bold tracking-widest">
+            <p className="font-lexend-zetta from-primary to-destructive bg-gradient-to-r bg-clip-text text-left text-4xl font-bold tracking-widest text-transparent">
               {words[currentIndex]}.
             </p>
           </motion.div>
