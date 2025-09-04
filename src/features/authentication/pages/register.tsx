@@ -1,11 +1,25 @@
 import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { AnimateBlock } from '../components/animate-block';
 import { PasswordInput } from '../components/password-input';
 import { RegisterCamp } from '../components/register-camp';
+import {
+  registerStudentFormSchema,
+  type RegisterStudentForm,
+} from '../schemas/register-student-schema';
 
 export const Register = () => {
+  const methods = useForm<RegisterStudentForm>({
+    resolver: zodResolver(registerStudentFormSchema),
+  });
+
+  const onSubmit = (formData: RegisterStudentForm) => {
+    console.log(formData);
+  };
+
   return (
     <div>
       <div className="relative space-y-8 border-b-2 px-4 pt-10 pb-20">
@@ -35,21 +49,50 @@ export const Register = () => {
         <h1 className="text-center text-xl font-semibold">
           Crie sua conta na Fluveny
         </h1>
-        <form className="space-y-4">
-          <RegisterCamp label="Nome de usuário" type="text" />
-          <RegisterCamp label="E-mail" type="email" />
-          <PasswordInput
-            label="Senha"
-            descriptions={[
-              'A senha deve conter entre 8 a 16 caracteres',
-              'A senha deve conter, pelo menos, um caractere especial, uma letra  maiúscula, e um número',
-            ]}
-          />
-        </form>
+        <FormProvider {...methods}>
+          <form
+            className="space-y-4"
+            onSubmit={methods.handleSubmit(onSubmit)}
+            id="register_student"
+          >
+            <RegisterCamp
+              label="Nome de usuário"
+              type="text"
+              field="username"
+              hasError={!!methods.formState.errors.username}
+            />
+            {methods.formState.errors.username && (
+              <p className="mt-1 text-sm text-red-500">
+                {methods.formState.errors.username.message as string}
+              </p>
+            )}
+            <RegisterCamp
+              label="E-mail"
+              type="email"
+              field="email"
+              hasError={!!methods.formState.errors.email}
+            />
+            {methods.formState.errors.email && (
+              <p className="mt-1 text-sm text-red-500">
+                {methods.formState.errors.email.message as string}
+              </p>
+            )}
+            <PasswordInput
+              label="Senha"
+              descriptions={[
+                'A senha deve conter entre 8 a 200 caracteres',
+                'A senha deve conter, pelo menos, um caractere especial, uma letra  maiúscula, uma letra minúscula, e um número',
+              ]}
+              field="password"
+              hasError={!!methods.formState.errors.password}
+            />
+          </form>
+        </FormProvider>
         <div className="space-y-4 py-4">
           <Button
             type="submit"
             className="w-full cursor-pointer py-7 text-xl font-bold"
+            form="register_student"
           >
             Criar usuário
           </Button>

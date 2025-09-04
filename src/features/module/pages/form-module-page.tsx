@@ -54,25 +54,26 @@ export const FormModulePage = () => {
 
   const onSubmit = (formData: ModuleForm) => {
     if (isEditMode) {
-      updateModuleMutation.mutate({ moduleId, data: formData },
-      {
-        onSuccess: () => {
-          navigate(
-            `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
-          );
+      updateModuleMutation.mutate(
+        { moduleId, data: formData },
+        {
+          onSuccess: () => {
+            navigate(
+              `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
+            );
+          },
         },
-      },
-    );
+      );
     } else {
       createModuleMutation.mutate(formData, {
-      onSuccess: (data) => {
-        const newModuleId = data.id;
-        navigate(
-          `${ROUTES.modules}/${ROUTES.create}/${newModuleId}/${ROUTES.introduction}`,
-        );
-      },
-    });
-  }
+        onSuccess: (data) => {
+          const newModuleId = data.id;
+          navigate(
+            `${ROUTES.modules}/${ROUTES.create}/${newModuleId}/${ROUTES.introduction}`,
+          );
+        },
+      });
+    }
   };
 
   if (isLoading) {
