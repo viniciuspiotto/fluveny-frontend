@@ -10,9 +10,9 @@ const Toaster = () => {
       closeButton={false}
       duration={3000}
       icons={{
-        success: <CheckCircle className="size-5 text-green-500" />,
-        warning: <AlertTriangle className="size-5 text-yellow-500" />,
-        error: <AlertCircle className="size-5 text-red-500" />,
+        success: <CheckCircle className="text-success size-5" />,
+        warning: <AlertTriangle className="text-warning size-5" />,
+        error: <AlertCircle className="text-destructive size-5" />,
       }}
       toastOptions={{
         unstyled: true,
@@ -25,9 +25,9 @@ const Toaster = () => {
           ),
           title: cn('text-base font-medium'),
           description: cn('text-sm'),
-          success: cn('!text-green-500'),
-          warning: cn('!text-yellow-500'),
-          error: cn('!text-red-500'),
+          success: cn('!text-success'),
+          warning: cn('!text-warning'),
+          error: cn('!text-destructive'),
         },
       }}
     />
