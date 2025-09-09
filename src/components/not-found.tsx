@@ -78,10 +78,14 @@ export const NotFound = () => {
   const sentenceParts = currentSentence.split(placeholder);
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex items-center justify-center p-4">
       <div className="animate-slide-in w-full max-w-2xl space-y-8">
+        <div className="flex justify-center">
+          <img src="/img/404.svg" alt="Logo Fluveny" className="w-64 lg:w-90" />
+        </div>
+
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex-col items-center justify-center gap-2">
             <h1 className="text-primary text-4xl font-bold">
               Página não encontrada
             </h1>
@@ -127,7 +131,7 @@ export const NotFound = () => {
               <h2 className="text-foreground text-2xl font-semibold">
                 Complete a sentença:
               </h2>
-              <p className="text-foreground/90 bg-secondary/50 rounded-lg p-4 text-xl leading-relaxed">
+              <p className="text-foreground/90 bg-secondary/50 rounded-lg p-4 text-lg leading-relaxed lg:text-2xl">
                 {sentenceParts.map((part, index, array) => (
                   <span key={index}>
                     {part}
@@ -138,7 +142,7 @@ export const NotFound = () => {
                           onChange={(e) => setUserAnswer(e.target.value)}
                           onKeyDown={handleKeyPress}
                           style={{ width: inputWidth, minWidth: '6ch' }}
-                          className={`inline-block text-center text-xl font-semibold transition-all duration-300 ${
+                          className={`inline-block text-center text-lg font-semibold transition-all duration-300 lg:text-lg ${
                             isCorrect === true
                               ? 'border-success bg-success/10'
                               : isCorrect === false

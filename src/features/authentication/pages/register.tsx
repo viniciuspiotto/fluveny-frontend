@@ -24,9 +24,9 @@ export const Register = () => {
     <div className="h-full lg:grid lg:grid-cols-2">
       <div className="lg:bg-primary overflow-hidden border-b-2 px-4 py-10 lg:relative lg:grid lg:grid-rows-3 lg:border-r-2 lg:border-b-0 lg:pt-10 lg:pb-20 lg:text-white">
         <div>
-          <div className="flex gap-2 lg:text-lg">
+          <Link to={'/login'} className="flex gap-2 lg:text-lg">
             Já possui uma conta?{' '}
-            <div className="group relative flex w-27 cursor-pointer items-center overflow-hidden underline lg:w-29">
+            <div className="group text-primary relative flex w-27 cursor-pointer items-center overflow-hidden underline lg:w-29 lg:text-white">
               <span className="relative z-10 transition-transform duration-300 ease-in-out group-hover:translate-x-6">
                 Faça login
               </span>
@@ -35,7 +35,7 @@ export const Register = () => {
 
               <ArrowRight className="absolute top-1/2 left-0 size-5 -translate-x-full -translate-y-1/2 opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100" />
             </div>
-          </div>
+          </Link>
           <div className="flex h-full flex-col items-center justify-center gap-10 py-10">
             <div className="w-full text-center">
               <p className="text-2xl lg:text-4xl">Aprenda inglês de forma</p>
@@ -46,7 +46,7 @@ export const Register = () => {
         <img
           src="/img/register.svg"
           alt="Mulher comemorando e olhando no celular"
-          className="absolute bottom-0 left-1/2 hidden w-screen -translate-x-1/2 lg:-bottom-40 lg:flex"
+          className="absolute bottom-0 left-1/2 hidden w-screen -translate-x-1/2 lg:-bottom-50 lg:flex"
         />
       </div>
       <img

@@ -10,6 +10,7 @@ import { PanelPage } from '@/features/module/pages/panel-page';
 import { CreateModuleLayout } from '@/features/module/templates/create-module-layout';
 import { GrammarRuleLayout } from '@/features/module/templates/grammar-rule-layout';
 import { PrivateLayout } from '@/templates/private-layout';
+import { PublicLayout } from '@/templates/public-layout';
 import { createBrowserRouter } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
@@ -65,11 +66,16 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'register',
-    element: <Register />,
+    element: <PublicLayout />,
+    children: [
+      {
+        path: '*',
+        element: <NotFound />,
+      },
+    ],
   },
   {
-    path: '*',
-    element: <NotFound />,
+    path: 'register',
+    element: <Register />,
   },
 ]);

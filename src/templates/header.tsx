@@ -17,8 +17,16 @@ export function Header() {
 
   return (
     <header className="relative flex h-16 w-full items-center justify-between border-b px-4 py-4 lg:px-8 lg:py-10">
-      <div className="flex items-center">
-        <Link to="/" onClick={() => setMenuOpen(false)}>
+      <div className="flex items-center gap-2">
+        <Button
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label={menuOpen ? 'Fechar Menu' : 'Abrir Menu'}
+          variant="ghost"
+          className="p-2 lg:hidden"
+        >
+          {menuOpen ? <X className="size-8" /> : <Menu className="size-8" />}
+        </Button>
+        <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
           <img
             src="/assets/logo.svg"
             alt="Logo Fluveny"
@@ -42,15 +50,6 @@ export function Header() {
       </div>
 
       {isLoading ? <UserProfileSkeleton /> : <UserProfile />}
-
-      <Button
-        onClick={() => setMenuOpen((open) => !open)}
-        aria-label={menuOpen ? 'Fechar Menu' : 'Abrir Menu'}
-        variant="ghost"
-        className="p-2 lg:hidden"
-      >
-        {menuOpen ? <X className="size-8" /> : <Menu className="size-8" />}
-      </Button>
 
       <AnimatePresence initial={false}>
         {menuOpen && (
