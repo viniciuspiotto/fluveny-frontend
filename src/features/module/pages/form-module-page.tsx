@@ -52,6 +52,10 @@ export const FormModulePage = () => {
     }
   }, [moduleData, isEditMode, methods]);
 
+  if (isLoading) {
+    return <FormModulePageSkeleton />;
+  }
+
   const onSubmit = (formData: ModuleForm) => {
     if (isEditMode) {
       updateModuleMutation.mutate(
@@ -75,10 +79,6 @@ export const FormModulePage = () => {
       });
     }
   };
-
-  if (isLoading) {
-    return <FormModulePageSkeleton />;
-  }
 
   return (
     <FormProvider {...methods}>

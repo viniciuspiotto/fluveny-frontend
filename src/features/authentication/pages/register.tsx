@@ -3,9 +3,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
+import { toast } from 'sonner';
 import { AnimateBlock } from '../components/animate-block';
 import { PasswordInput } from '../components/password-input';
 import { RegisterCamp } from '../components/register-camp';
+import { useCreateStudent } from '../hooks/register-student';
 import {
   registerStudentFormSchema,
   type RegisterStudentForm,
@@ -16,8 +18,17 @@ export const Register = () => {
     resolver: zodResolver(registerStudentFormSchema),
   });
 
+  const createStudent = useCreateStudent();
+
   const onSubmit = (formData: RegisterStudentForm) => {
-    console.log(formData);
+    createStudent.mutate(
+      { data: formData },
+      {
+        onSuccess: () => {
+          toast.success('Usuário criado com sucesso!');
+        },
+      },
+    );
   };
 
   return (

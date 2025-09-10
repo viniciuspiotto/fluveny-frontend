@@ -42,6 +42,10 @@ export const FormIntroductionPage = () => {
     }
   }, [introductionData, isEditMode, methods]);
 
+  if (isLoading) {
+    return <FormIntroductionPageSkeleton />;
+  }
+
   if (!moduleId || !grammarRuleModuleInfo) {
     return <NotFound />;
   }
@@ -77,10 +81,6 @@ export const FormIntroductionPage = () => {
       );
     }
   };
-
-  if (isLoading) {
-    return <FormIntroductionPageSkeleton />;
-  }
 
   return (
     <>
