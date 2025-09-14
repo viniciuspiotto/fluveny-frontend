@@ -1,8 +1,8 @@
 import { cn } from '@/app/utils/cn';
 import { Editor } from '@/components/editor';
-import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { NotFound } from '@/templates/not-found';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Info } from 'lucide-react';
 import { useEffect } from 'react';

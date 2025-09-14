@@ -1,9 +1,9 @@
 import { ROUTES } from '@/app/configs/routes';
 import { DndProvider } from '@/app/providers/dnd-provider';
 import { DraftWindowsModal } from '@/components/modal';
-import { NotFound } from '@/components/not-found';
 import { ContentWindow } from '@/features/module/components/content-window';
 import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/use-get-grammar-rule-content';
+import { NotFound } from '@/templates/not-found';
 import { useEffect } from 'react';
 import { Outlet, useBlocker, useNavigate, useParams } from 'react-router';
 import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';

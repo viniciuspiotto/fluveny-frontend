@@ -1,6 +1,6 @@
 import { ROUTES } from '@/app/configs/routes';
-import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
+import { NotFound } from '@/templates/not-found';
 import { Home, PencilRuler } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
 

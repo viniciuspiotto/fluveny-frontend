@@ -1,6 +1,6 @@
 import { ROUTES } from '@/app/configs/routes';
-import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
+import { NotFound } from '@/templates/not-found';
 import { Link, useNavigate } from 'react-router';
 import { Back } from '../../../components/back';
 import { DraftsSkeleton } from '../components/drafts-skeleton';
