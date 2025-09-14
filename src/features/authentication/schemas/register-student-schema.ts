@@ -4,8 +4,8 @@ export const registerStudentFormSchema = z.object({
   username: z
     .string()
     .trim()
-    .min(6, 'Nome de usuário é obrigatório e deve ter pelo menos 6 caracteres')
-    .max(100, 'Nome de usupario deve ter no máximo 100 caracteres'),
+    .min(8, 'Nome de usuário é obrigatório e deve ter pelo menos 8 caracteres')
+    .max(100, 'Nome de usuário deve ter no máximo 100 caracteres'),
   email: z.string().trim().email('E-mail inválido ou incorreto'),
   password: z
     .string()
