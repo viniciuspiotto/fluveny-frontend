@@ -1,5 +1,5 @@
-import { NotFound } from '@/components/not-found';
-import { Register } from '@/features/authentication/pages/register';
+import { LoginPage } from '@/features/authentication/pages/login';
+import { RegisterPage } from '@/features/authentication/pages/register';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
 import { FormExercisePage } from '@/features/module/pages/form-exercise-page';
@@ -9,53 +9,84 @@ import { FormPresentationPage } from '@/features/module/pages/form-presentation-
 import { PanelPage } from '@/features/module/pages/panel-page';
 import { CreateModuleLayout } from '@/features/module/templates/create-module-layout';
 import { GrammarRuleLayout } from '@/features/module/templates/grammar-rule-layout';
-import { PrivateLayout } from '@/templates/private-layout';
-import { PublicLayout } from '@/templates/public-layout';
+import { Layout } from '@/templates/layout';
+import { NotFound } from '@/templates/not-found';
+import { ProtectedRoute } from '@/templates/private-routes';
 import { createBrowserRouter } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
 export const router = createBrowserRouter([
   {
-    element: <PrivateLayout />,
+    element: <Layout />,
     children: [
-      { path: ROUTES.dashboard, element: <DashboardPage /> },
+      {
+        path: ROUTES.dashboard,
+        element: (
+          <ProtectedRoute
+            permittedRoles={['STUDENT', 'CONTENT_CREATOR', 'ADMIN']}
+            redirect="/login"
+          >
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: ROUTES.modules,
         children: [
-          { index: true, element: <PanelPage /> },
-          { path: ROUTES.drafts, element: <DraftsPage /> },
-          { path: ROUTES.create, element: <FormModulePage /> },
           {
-            path: `${ROUTES.create}/${ROUTES.moduleId}`,
-            element: <FormModulePage />,
+            index: true,
+            element: (
+              <ProtectedRoute
+                permittedRoles={['STUDENT', 'CONTENT_CREATOR', 'ADMIN']}
+                redirect="/login"
+              >
+                <PanelPage />
+              </ProtectedRoute>
+            ),
           },
           {
-            path: `${ROUTES.create}/${ROUTES.moduleId}`,
-            element: <CreateModuleLayout />,
+            element: (
+              <ProtectedRoute
+                permittedRoles={['CONTENT_CREATOR']}
+                redirect="/dashboard"
+              />
+            ),
             children: [
+              { path: ROUTES.drafts, element: <DraftsPage /> },
+              { path: ROUTES.create, element: <FormModulePage /> },
               {
-                path: ROUTES.introduction,
-                element: <FormIntroductionPage />,
+                path: `${ROUTES.create}/${ROUTES.moduleId}`,
+                element: <FormModulePage />,
               },
               {
-                path: `${ROUTES.grammarRule}/${ROUTES.grammarRuleId}`,
-                element: <GrammarRuleLayout />,
+                path: `${ROUTES.create}/${ROUTES.moduleId}`,
+                element: <CreateModuleLayout />,
                 children: [
                   {
-                    path: `${ROUTES.presentation}`,
-                    element: <FormPresentationPage />,
+                    path: ROUTES.introduction,
+                    element: <FormIntroductionPage />,
                   },
                   {
-                    path: `${ROUTES.exercise}`,
-                    element: <FormExercisePage />,
-                  },
-                  {
-                    path: `${ROUTES.presentation}/${ROUTES.windowId}`,
-                    element: <FormPresentationPage />,
-                  },
-                  {
-                    path: `${ROUTES.exercise}/${ROUTES.windowId}`,
-                    element: <FormExercisePage />,
+                    path: `${ROUTES.grammarRule}/${ROUTES.grammarRuleId}`,
+                    element: <GrammarRuleLayout />,
+                    children: [
+                      {
+                        path: `${ROUTES.presentation}`,
+                        element: <FormPresentationPage />,
+                      },
+                      {
+                        path: `${ROUTES.exercise}`,
+                        element: <FormExercisePage />,
+                      },
+                      {
+                        path: `${ROUTES.presentation}/${ROUTES.windowId}`,
+                        element: <FormPresentationPage />,
+                      },
+                      {
+                        path: `${ROUTES.exercise}/${ROUTES.windowId}`,
+                        element: <FormExercisePage />,
+                      },
+                    ],
                   },
                 ],
               },
@@ -63,19 +94,18 @@ export const router = createBrowserRouter([
           },
         ],
       },
-    ],
-  },
-  {
-    element: <PublicLayout />,
-    children: [
       {
         path: '*',
         element: <NotFound />,
       },
+      {
+        path: 'register',
+        element: <RegisterPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
     ],
-  },
-  {
-    path: 'register',
-    element: <Register />,
   },
 ]);
