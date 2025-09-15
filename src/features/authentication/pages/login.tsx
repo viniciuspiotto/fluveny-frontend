@@ -51,7 +51,7 @@ export const LoginPage = () => {
         />
       </div>
       <div className="lg:animate-right-to-left bg-background z-5 flex h-full w-full items-center justify-center">
-        <div className="mb-16 flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 pb-16 lg:px-4 lg:pb-10">
+        <div className="flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 pb-16 not-md:mb-16 lg:px-4 lg:pb-10">
           <div className="text-primary flex justify-end underline lg:-mt-12 lg:mb-8">
             <Link to="/register">
               Cadastre-se
