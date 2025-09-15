@@ -16,9 +16,9 @@
   --animate-word-enter: word-enter 0.7s ease-out forwards;
   --animate-word-exit: word-exit 0.7s ease-out forwards;
 
-  --animate-left-to-right: left-to-right 0.7s cubic-bezier(0.2, 0, 0.65, 1)
+  --animate-left-to-right: left-to-right 0.7s cubic-bezier(0.25, 0, 0.25, 1)
     forwards;
-  --animate-right-to-left: right-to-left 0.7s cubic-bezier(0.2, 0, 0.65, 1)
+  --animate-right-to-left: right-to-left 0.7s cubic-bezier(0.25, 0, 0.25, 1)
     forwards;
 
   @keyframes word-enter {

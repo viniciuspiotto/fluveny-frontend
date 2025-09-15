@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowLeft } from 'lucide-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
 import { toast } from 'sonner';
@@ -34,7 +35,7 @@ export const RegisterPage = () => {
 
   return (
     <div className="h-full lg:grid lg:grid-cols-2">
-      <div className="lg:bg-primary overflow-hidden border-b-2 px-4 py-10 lg:relative lg:grid lg:grid-rows-3 lg:border-r-2 lg:border-b-0 lg:pt-10 lg:pb-20 lg:text-white">
+      <div className="lg:bg-primary overflow-hidden border-b-2 px-4 py-10 not-lg:hidden lg:relative lg:grid lg:grid-rows-3 lg:border-r-2 lg:border-b-0 lg:pt-10 lg:pb-20 lg:text-white">
         <div>
           <div className="flex h-full flex-col items-center justify-center gap-10 py-10">
             <div className="w-full text-center">
@@ -49,13 +50,14 @@ export const RegisterPage = () => {
           className="absolute left-1/2 hidden w-screen -translate-x-1/2 md:top-30 lg:flex xl:-top-20"
         />
       </div>
-      <img
-        src="/assets/logo.svg"
-        alt="Logo Fluveny"
-        className="absolute left-1/2 m-auto mb-16 h-14 -translate-x-1/2 -translate-y-1/2 transform bg-white px-2 lg:hidden"
-      />
-      <div className="animate-left-to-right bg-background flex w-full items-center justify-center">
-        <div className="flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 pt-20 pb-10">
+      <div className="lg:animate-left-to-right bg-background flex w-full items-center justify-center">
+        <div className="flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 py-10">
+          <div className="text-primary flex justify-start underline">
+            <Link to="/login">
+              <ArrowLeft className="inline" />
+              Faça Login
+            </Link>
+          </div>
           <img
             src="/assets/logo.svg"
             alt="Logo Fluveny"
@@ -96,14 +98,14 @@ export const RegisterPage = () => {
                 label="Senha"
                 descriptions={[
                   'A senha deve conter entre 8 a 200 caracteres',
-                  'A senha deve conter, pelo menos, um caractere especial, uma letra  maiúscula, uma letra minúscula, e um número',
+                  'A senha deve conter, pelo menos, um caractere especial, uma letra  maiúscula, uma letra minúscula e um número',
                 ]}
                 field="password"
                 hasError={!!methods.formState.errors.password}
               />
             </form>
           </FormProvider>
-          <div className="space-y-4 py-4">
+          <div className="space-y-2">
             <Button
               type="submit"
               className="w-full cursor-pointer py-7 text-xl font-bold"
