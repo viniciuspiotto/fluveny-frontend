@@ -54,7 +54,7 @@ export const RegisterPage = () => {
         alt="Logo Fluveny"
         className="absolute left-1/2 m-auto mb-16 h-14 -translate-x-1/2 -translate-y-1/2 transform bg-white px-2 lg:hidden"
       />
-      <div className="flex w-full items-center justify-center">
+      <div className="animate-left-to-right bg-background flex w-full items-center justify-center">
         <div className="flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 pt-20 pb-10">
           <img
             src="/assets/logo.svg"

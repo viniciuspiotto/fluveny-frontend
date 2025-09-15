@@ -16,6 +16,11 @@
   --animate-word-enter: word-enter 0.7s ease-out forwards;
   --animate-word-exit: word-exit 0.7s ease-out forwards;
 
+  --animate-left-to-right: left-to-right 0.7s cubic-bezier(0.2, 0, 0.65, 1)
+    forwards;
+  --animate-right-to-left: right-to-left 0.7s cubic-bezier(0.2, 0, 0.65, 1)
+    forwards;
+
   @keyframes word-enter {
     0% {
       transform: translateY(100%);
@@ -52,6 +57,23 @@
 
     75% {
       transform: translateX(4px);
+    }
+  }
+
+  @keyframes left-to-right {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  @keyframes right-to-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
     }
   }
 }

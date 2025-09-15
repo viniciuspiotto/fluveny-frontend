@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/stores/auth-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { AnimateBlock } from '../components/animate-block';
 import { PasswordInput } from '../components/password-input';
@@ -34,28 +34,13 @@ export const LoginPage = () => {
 
   return (
     <div className="h-full lg:grid lg:grid-cols-2">
-      <div className="lg:bg-primary overflow-hidden border-b-2 px-4 py-10 lg:relative lg:grid lg:grid-rows-3 lg:border-r-2 lg:border-b-0 lg:pt-10 lg:pb-20 lg:text-white">
-        <div>
-          <div className="flex h-full flex-col items-center justify-center gap-10 py-10">
-            <div className="w-full text-center">
-              <p className="text-2xl lg:text-4xl">Aprenda inglês de forma</p>
-              <AnimateBlock />
-            </div>
-          </div>
-        </div>
-        <img
-          src="/img/register.svg"
-          alt="Mulher comemorando e olhando no celular"
-          className="absolute left-1/2 hidden w-screen -translate-x-1/2 md:top-30 lg:flex xl:-top-20"
-        />
-      </div>
       <img
         src="/assets/logo.svg"
         alt="Logo Fluveny"
         className="absolute left-1/2 m-auto mb-16 h-14 -translate-x-1/2 -translate-y-1/2 transform bg-white px-2 lg:hidden"
       />
-      <div className="flex w-full items-center justify-center">
-        <div className="flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 pt-20 pb-10">
+      <div className="animate-right-to-left bg-background z-5 flex w-full items-center justify-center">
+        <div className="flex w-full max-w-[640px] flex-col justify-center space-y-6 px-4 pb-10">
           <img
             src="/assets/logo.svg"
             alt="Logo Fluveny"
@@ -96,8 +81,29 @@ export const LoginPage = () => {
             >
               Fazer Login
             </Button>
+            <p className="text-center text-sm text-zinc-500">
+              Não tem uma conta?{' '}
+              <Link to={'/register'} className="underline">
+                Registre-se
+              </Link>
+            </p>{' '}
           </div>
         </div>
+      </div>
+      <div className="lg:bg-primary overflow-hidden border-b-2 px-4 py-10 lg:relative lg:grid lg:grid-rows-3 lg:border-r-2 lg:border-b-0 lg:pt-10 lg:pb-20 lg:text-white">
+        <div>
+          <div className="flex h-full flex-col items-center justify-center gap-10 py-10">
+            <div className="w-full text-center">
+              <p className="text-2xl lg:text-4xl">Aprenda inglês de forma</p>
+              <AnimateBlock />
+            </div>
+          </div>
+        </div>
+        <img
+          src="/img/register.svg"
+          alt="Mulher comemorando e olhando no celular"
+          className="absolute left-1/2 hidden w-screen -translate-x-1/2 md:top-30 lg:flex xl:-top-20"
+        />
       </div>
     </div>
   );
