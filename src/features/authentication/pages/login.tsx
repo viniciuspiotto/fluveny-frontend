@@ -45,9 +45,9 @@ export const LoginPage = () => {
           </div>
         </div>
         <img
-          src="/img/login.png"
+          src="/img/login.svg"
           alt="Homem segurando um celular e sorrindo"
-          className="absolute bottom-0 left-1/2 hidden w-screen -translate-x-1/2 translate-y-68 md:top-50 lg:flex xl:-top-20"
+          className="absolute bottom-0 left-1/2 hidden w-screen -translate-x-1/2 -translate-y-24 md:top-50 lg:flex xl:-top-20"
         />
       </div>
       <div className="lg:animate-right-to-left bg-background z-5 flex h-full w-full items-center justify-center">

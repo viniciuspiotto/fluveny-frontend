@@ -42,7 +42,7 @@ export const loginSchema = z.object({
     .min(8, 'A senha deve ter no mínimo 8 caracteres')
     .max(200, 'A senha deve ter no máximo 200 caracteres')
     .regex(
-      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_]).{8,}$/,
       'A senha deve conter ao menos: 1 letra maiúscula, 1 número e 1 caractere especial (!@#$%)',
     ),
 });
