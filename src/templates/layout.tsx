@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router';
 import { Header } from './header';
 
-export function PrivateLayout() {
+export const Layout = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex h-screen flex-col">
       <Header />
-      <main>
+      <main className="h-screen">
         <Outlet />
       </main>
     </div>
   );
-}
+};
