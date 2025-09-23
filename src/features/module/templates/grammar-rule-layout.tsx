@@ -50,6 +50,7 @@ export const GrammarRuleLayout = () => {
       onSendWindowsPosition(windowsList);
       blocker.proceed();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocker, hasDraftWindows, windowsList]);
 
   const handleConfirmNavigation = () => {
@@ -121,13 +122,15 @@ export const GrammarRuleLayout = () => {
 
   return (
     <DndProvider key={grammarRuleId}>
-      <Outlet key={uniqueKey} />
-      <ContentWindow />
-      <DraftWindowsModal
-        isOpen={blocker.state === 'blocked' && hasDraftWindows}
-        onCancel={handleCancelNavigation}
-        onConfirm={handleConfirmNavigation}
-      />
+      <div>
+        <Outlet key={uniqueKey} />
+        <ContentWindow />
+        <DraftWindowsModal
+          isOpen={blocker.state === 'blocked' && hasDraftWindows}
+          onCancel={handleCancelNavigation}
+          onConfirm={handleConfirmNavigation}
+        />
+      </div>
     </DndProvider>
   );
 };
