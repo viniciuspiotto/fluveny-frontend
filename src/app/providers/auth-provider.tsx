@@ -1,18 +1,21 @@
 import { useGetUserInformation } from '@/hooks/use-get-user-information';
 import { useAuthStore } from '@/stores/auth-store';
 import { useEffect, type ReactNode } from 'react';
+import { useNavigate } from 'react-router';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { data: user, isSuccess } = useGetUserInformation();
+  const { data: response, isSuccess } = useGetUserInformation();
   const setUser = useAuthStore((state) => state.setUser);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isSuccess) {
-      setUser(user);
+      setUser(response.data);
+      navigate('/dashboard');
     } else {
       setUser(null);
     }
-  }, [isSuccess, user, setUser]);
+  }, [isSuccess, response, setUser, navigate]);
 
   return <>{children}</>;
 };

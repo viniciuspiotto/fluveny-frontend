@@ -9,5 +9,5 @@ interface GetUserInformationResponse {
 export const getUserInformation =
   async (): Promise<GetUserInformationResponse> => {
     const response = await api.get('auth/me');
-    return response.data.data;
+    return response.data;
   };
