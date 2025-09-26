@@ -12,6 +12,7 @@ interface WindowProps {
   isCurrent?: boolean;
   position: number;
   selectWindow: () => void;
+  isPresentationEnabled: boolean;
   isDraft: boolean;
   type: WindowType;
 }
@@ -29,6 +30,7 @@ export const Window = ({
   isCurrent = false,
   position,
   isDraft,
+  isPresentationEnabled,
   type,
   selectWindow,
 }: WindowProps) => {
@@ -96,7 +98,11 @@ export const Window = ({
         !isCurrent && 'hover:mx-4',
       )}
     >
-      <AddWindow side="left" insertionIndex={position - 1} />
+      <AddWindow
+        side="left"
+        insertionIndex={position - 1}
+        isPresentationEnabled={isPresentationEnabled}
+      />
 
       <li
         onClick={selectWindow}
@@ -125,7 +131,11 @@ export const Window = ({
         <span className="absolute bottom-0 left-2 lg:text-lg">{position}</span>
       </li>
 
-      <AddWindow side="right" insertionIndex={position} />
+      <AddWindow
+        side="right"
+        insertionIndex={position}
+        isPresentationEnabled={isPresentationEnabled}
+      />
     </div>
   );
 };

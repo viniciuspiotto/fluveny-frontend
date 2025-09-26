@@ -1,4 +1,5 @@
-import { useGrammarRuleModuleWindows } from '@/features/module/stores/use-grammar-rule-module-windows';
+import type { Exercise } from '@/features/module/stores/use-final-challenge-exercises';
+import { type WindowsType } from '@/features/module/stores/use-grammar-rule-module-windows';
 import { BowArrow, Presentation } from 'lucide-react';
 import { Button } from './ui/button';
 import {
@@ -14,15 +15,15 @@ interface DraftWindowsModalProps {
   isOpen: boolean;
   onCancel: () => void;
   onConfirm: () => void;
+  windowsList: WindowsType[] | Exercise[];
 }
 
 export const DraftWindowsModal = ({
   isOpen,
   onCancel,
   onConfirm,
+  windowsList,
 }: DraftWindowsModalProps) => {
-  const windowsList = useGrammarRuleModuleWindows((state) => state.windowsList);
-
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       onCancel();

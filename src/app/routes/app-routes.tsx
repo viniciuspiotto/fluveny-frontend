@@ -2,7 +2,8 @@ import { LoginPage } from '@/features/authentication/pages/login';
 import { RegisterPage } from '@/features/authentication/pages/register';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
-import { FormExercisePage } from '@/features/module/pages/form-exercise-page';
+import { FormExerciseGrammarRulePage } from '@/features/module/pages/form-exercise-grammar-rule-page';
+import { FormFinalChallengePage } from '@/features/module/pages/form-final-challenge-page';
 import { FormIntroductionPage } from '@/features/module/pages/form-introduction-page';
 import { FormModulePage } from '@/features/module/pages/form-module-page';
 import { FormPresentationPage } from '@/features/module/pages/form-presentation-page';
@@ -76,7 +77,7 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: `${ROUTES.exercise}`,
-                        element: <FormExercisePage />,
+                        element: <FormExerciseGrammarRulePage />,
                       },
                       {
                         path: `${ROUTES.presentation}/${ROUTES.windowId}`,
@@ -84,9 +85,13 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: `${ROUTES.exercise}/${ROUTES.windowId}`,
-                        element: <FormExercisePage />,
+                        element: <FormExerciseGrammarRulePage />,
                       },
                     ],
+                  },
+                  {
+                    path: ROUTES.finalChallenge,
+                    element: <FormFinalChallengePage />,
                   },
                 ],
               },

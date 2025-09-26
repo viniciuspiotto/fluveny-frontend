@@ -1,7 +1,7 @@
 import { ROUTES } from '@/app/configs/routes';
 import { Button } from '@/components/ui/button';
 import { NotFound } from '@/templates/not-found';
-import { Home, PencilRuler } from 'lucide-react';
+import { Home, PencilRuler, Swords } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
 
 interface SectionButtonProps {
@@ -36,6 +36,12 @@ export const SectionButton = ({
         );
         break;
       }
+      case 'finalChallenge': {
+        navigate(
+          `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.finalChallenge}`,
+        );
+        break;
+      }
     }
   };
 
@@ -46,6 +52,8 @@ export const SectionButton = ({
     >
       {variant === 'grammarRule' ? (
         <PencilRuler className="text-primary size-8" />
+      ) : variant === 'finalChallenge' ? (
+        <Swords className="text-primary size-8" />
       ) : (
         <Home className="text-primary size-8" />
       )}

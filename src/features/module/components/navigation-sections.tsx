@@ -32,6 +32,7 @@ export const NavigationSections = () => {
             />
           );
         })}
+        <SectionButton title="Desafio Final" variant="finalChallenge" />
       </div>
     </footer>
   );

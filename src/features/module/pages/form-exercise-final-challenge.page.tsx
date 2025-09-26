@@ -10,20 +10,19 @@ import { useParams } from 'react-router';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
-import { useCreateTranslateExercise } from '../hooks/api/mutations/use-create-translate-exercise';
-import { useUpdateTranslateExercise } from '../hooks/api/mutations/use-update-translate-exercise';
-import { useGetExercise } from '../hooks/api/queries/use-get-exercise';
 import {
   TranslateExerciseSchema,
   type TranslateExerciseForm,
 } from '../schemas/translate-exercise-schema';
-import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
+import { useFinalChallengeExercise } from '../stores/use-final-challenge-exercises';
 
-export const FormExercisePage = () => {
-  const { moduleId, grammarRuleId, windowId } = useParams();
+export const FormExerciseFinalChallengePage = () => {
+  const { moduleId, windowId } = useParams();
 
-  const { windowsList, currentPosition, setWindowsList, updateDraftData } =
-    useGrammarRuleModuleWindows();
+  // const { windowsList, currentPosition, setWindowsList, updateDraftData } =
+  //   useGrammarRuleModuleWindows();
+  const { exerciseList, currentPosition, updateDraftData } =
+    useFinalChallengeExercise();
 
   const methods = useForm<TranslateExerciseForm>({
     resolver: zodResolver(TranslateExerciseSchema),
@@ -35,16 +34,23 @@ export const FormExercisePage = () => {
     },
   });
 
-  const { data: translateExerciseContent, isLoading } = useGetExercise({
-    moduleId,
-    grammarRuleId,
-    windowId,
-  });
+  // TODO: get exercise to final challenge
+  // const { data: translateExerciseContent, isLoading } = useGetExercise({
+  //   moduleId,
+  //   windowId,
+  // });
+  const isLoading = false;
+  const translateExerciseContent = {
+    header: 'ma1sdm',
+    justification: 'akosd2pa',
+    phrase: 'mas3kdma',
+    template: 'masdm4asmd',
+  } as TranslateExerciseForm;
 
   const isEditMode = !!windowId;
 
   const currentWindow =
-    currentPosition !== null ? windowsList[currentPosition] : undefined;
+    currentPosition !== null ? exerciseList[currentPosition] : undefined;
   const draftData =
     currentWindow?.type === 'EXERCISE'
       ? (currentWindow.draftData as Partial<TranslateExerciseForm>)
@@ -71,51 +77,50 @@ export const FormExercisePage = () => {
     }
   };
 
-  const updateTranslateExercise = useUpdateTranslateExercise();
-  const createTranslateExercise = useCreateTranslateExercise();
+  // get update and create a translate exercise in final challenge
+  // const updateTranslateExercise = useUpdateTranslateExercise();
+  // const createTranslateExercise = useCreateTranslateExercise();
 
   if (isLoading) {
     return <FormExercisePageSkeleton />;
   }
 
-  if (!moduleId || !grammarRuleId) {
+  if (!moduleId) {
     return <NotFound />;
   }
 
   const onSubmit = (formData: TranslateExerciseForm) => {
-    if (isEditMode) {
-      updateTranslateExercise.mutate({
-        moduleId,
-        grammarRuleId,
-        windowId,
-        data: formData,
-      });
-    } else {
-      createTranslateExercise.mutate(
-        {
-          moduleId,
-          grammarRuleId,
-          data: formData,
-        },
-        {
-          onSuccess: (newlyCreatedWindow) => {
-            if (currentPosition === null) return;
-            const newList = [...windowsList];
-
-            const clientId = newList[currentPosition]?.clientId;
-
-            newList[currentPosition] = {
-              id: newlyCreatedWindow.id,
-              type: 'EXERCISE',
-              clientId,
-              draftData: {},
-            };
-
-            setWindowsList(newList);
-          },
-        },
-      );
-    }
+    // if (isEditMode) {
+    //   updateTranslateExercise.mutate({
+    //     moduleId,
+    //     grammarRuleId,
+    //     windowId,
+    //     data: formData,
+    //   });
+    // } else {
+    //   createTranslateExercise.mutate(
+    //     {
+    //       moduleId,
+    //       grammarRuleId,
+    //       data: formData,
+    //     },
+    //     {
+    //       onSuccess: (newlyCreatedWindow) => {
+    //         if (currentPosition === null) return;
+    //         const newList = [...windowsList];
+    //         const clientId = newList[currentPosition]?.clientId;
+    //         newList[currentPosition] = {
+    //           id: newlyCreatedWindow.id,
+    //           type: 'EXERCISE',
+    //           clientId,
+    //           draftData: {},
+    //         };
+    //         setWindowsList(newList);
+    //       },
+    //     },
+    //   );
+    // }
+    console.log('enviei: ' + formData);
   };
 
   return (

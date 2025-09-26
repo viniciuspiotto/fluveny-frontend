@@ -14,9 +14,14 @@ import ExerciseSelector from './exercise-selection';
 interface AddWindowProps {
   side: 'left' | 'right';
   insertionIndex: number;
+  isPresentationEnabled: boolean;
 }
 
-export const AddWindow = ({ side, insertionIndex }: AddWindowProps) => {
+export const AddWindow = ({
+  side,
+  insertionIndex,
+  isPresentationEnabled,
+}: AddWindowProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const addWindow = useGrammarRuleModuleWindows((state) => state.addWindow);
 
@@ -40,13 +45,15 @@ export const AddWindow = ({ side, insertionIndex }: AddWindowProps) => {
       </PopoverTrigger>
       <PopoverContent side="top" asChild className="w-40 p-0 lg:w-50">
         <div className="border-primary flex flex-col rounded-md border-1">
-          <Button
-            onClick={() => handleSelectWindowType('PRESENTATION')}
-            variant={'ghost'}
-            className="border-primary cursor-pointer rounded-t-md rounded-b-none border-b-1 lg:py-5 lg:text-base"
-          >
-            Apresentação
-          </Button>
+          {isPresentationEnabled && (
+            <Button
+              onClick={() => handleSelectWindowType('PRESENTATION')}
+              variant={'ghost'}
+              className="border-primary cursor-pointer rounded-t-md rounded-b-none border-b-1 lg:py-5 lg:text-base"
+            >
+              Apresentação
+            </Button>
+          )}
           <ExerciseSelector handleAddNewWindow={handleSelectWindowType}>
             <Button
               variant={'ghost'}

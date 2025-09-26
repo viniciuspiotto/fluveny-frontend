@@ -18,16 +18,16 @@ type ExerciseWindow = {
   draftData?: Partial<TranslateExerciseForm>;
 };
 
-export type WindowList = PresentationWindow | ExerciseWindow;
+export type WindowsType = PresentationWindow | ExerciseWindow;
 
 type GrammarRuleModuleWindowsStoreState = {
-  windowsList: WindowList[];
+  windowsList: WindowsType[];
   currentPosition: null | number;
-  setWindowsList: (list: WindowList[]) => void;
+  setWindowsList: (list: WindowsType[]) => void;
   setCurrentPosition: (position: number) => void;
   addWindow: (window: WindowType, index: number) => void;
   moveWindow: (dragIndex: number, hoverIndex: number) => void;
-  updateDraftData: (index: number, data: WindowList['draftData']) => void;
+  updateDraftData: (index: number, data: WindowsType['draftData']) => void;
 };
 
 export const useGrammarRuleModuleWindows =
