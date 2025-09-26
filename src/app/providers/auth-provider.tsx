@@ -1,6 +1,6 @@
 import { useGetUserInformation } from '@/hooks/use-get-user-information';
 import { useAuthStore } from '@/stores/auth-store';
-import { LoaderCircle } from 'lucide-react';
+import { LoadingScreen } from '@/templates/loading-screen';
 import { useEffect, type ReactNode } from 'react';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -31,11 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [isLoading, isSuccess, isError, response, setUser, setIsLoading]);
 
   if (isAuthLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-gray-100">
-        <LoaderCircle className="h-12 w-12 animate-spin text-indigo-600" />
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return <>{children}</>;

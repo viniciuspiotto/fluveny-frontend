@@ -21,6 +21,21 @@
   --animate-right-to-left: right-to-left 0.7s cubic-bezier(0.25, 0, 0.25, 1)
     forwards;
 
+  --animate-indeterminate-progress: indeterminate-progress 2s ease-in-out
+    infinite;
+
+  @keyframes indeterminate-progress {
+    0% {
+      transform: translateX(-50%) scaleX(0.2);
+    }
+    50% {
+      transform: translateX(0) scaleX(1);
+    }
+    100% {
+      transform: translateX(50%) scaleX(0.2);
+    }
+  }
+
   @keyframes word-enter {
     0% {
       transform: translateY(100%);
