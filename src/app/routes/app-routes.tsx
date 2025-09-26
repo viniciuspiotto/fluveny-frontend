@@ -12,7 +12,8 @@ import { CreateModuleLayout } from '@/features/module/templates/create-module-la
 import { GrammarRuleLayout } from '@/features/module/templates/grammar-rule-layout';
 import { Layout } from '@/templates/layout';
 import { NotFound } from '@/templates/not-found';
-import { ProtectedRoute } from '@/templates/private-routes';
+import { ProtectedRoute } from '@/templates/private-route';
+import { PublicRoute } from '@/templates/public-route';
 import { createBrowserRouter } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
@@ -105,11 +106,19 @@ export const router = createBrowserRouter([
       },
       {
         path: 'register',
-        element: <RegisterPage />,
+        element: (
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        ),
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: (
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        ),
       },
     ],
   },

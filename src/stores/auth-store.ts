@@ -4,14 +4,17 @@ import { create } from 'zustand';
 type AuthStoreState = {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
 
   setUser: (user: User | null) => void;
+  setIsLoading: (loading: boolean) => void;
   logout: () => void;
 };
 
 export const useAuthStore = create<AuthStoreState>((set) => ({
   user: null,
   isAuthenticated: false,
+  isLoading: true,
 
   setUser: (userData) => {
     set({
@@ -19,6 +22,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
       isAuthenticated: !!userData,
     });
   },
+  setIsLoading: (loading) => set({ isLoading: loading }),
   logout: () => {
     set({ user: null, isAuthenticated: false });
   },

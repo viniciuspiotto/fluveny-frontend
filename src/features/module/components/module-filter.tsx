@@ -1,13 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import { useQueryState } from 'nuqs';
+
 import { Search } from 'lucide-react';
 
 export const ModuleFilter = () => {
+  const [name, setName] = useQueryState('name');
+
   return (
     <form className="mb-6 flex gap-4 lg:mb-7">
       <div className="relative lg:w-140">
         <Input
+          value={name || ''}
+          onChange={(e) => setName(e.target.value)}
           className="placeholder:text-md px-4 py-5 pr-10 text-sm placeholder:text-zinc-400 lg:px-5 lg:py-6 lg:text-lg"
           placeholder="Regras gramaticais..."
         />
@@ -15,7 +21,7 @@ export const ModuleFilter = () => {
       </div>
       {/* <LevelSelect /> */}
       <Button
-        type="submit"
+        type="button"
         className="flex h-10 items-center gap-2 rounded-md text-lg font-normal lg:px-4 lg:py-6 lg:text-lg"
       >
         <span className="hidden lg:block">Filtrar</span>
