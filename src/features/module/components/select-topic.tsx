@@ -16,19 +16,20 @@ import {
 } from '@/components/ui/popover';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useGetGrammarRules } from '../hooks/api/queries/use-get-grammar-rules';
 
 interface SelectGrammarRuleProps {
   initialValue: string[];
   value: GrammarRule[];
   onSelectGrammarRule: (grammarRules: GrammarRule[]) => void;
+  variant?: 'desktop' | 'dialog';
 }
 
 export const SelectGrammarRule = ({
   initialValue,
   value,
   onSelectGrammarRule,
+  variant = 'desktop',
 }: SelectGrammarRuleProps) => {
   const [open, setOpen] = useState(false);
   const { data: response, isLoading, isError } = useGetGrammarRules();
@@ -38,7 +39,6 @@ export const SelectGrammarRule = ({
     if (!response || !initialValue) return;
 
     const grammarRules = response ?? [];
-
     const selected = grammarRules.filter((rule) =>
       initialValue.includes(rule.id),
     );
@@ -57,10 +57,6 @@ export const SelectGrammarRule = ({
     }
   }, [response, initialValue, onSelectGrammarRule, value]);
 
-  const {
-    formState: { errors },
-  } = useFormContext();
-
   const toggleGrammarRule = (rule: GrammarRule) => {
     const isSelected = value.some((r) => r.id === rule.id);
     let next: GrammarRule[];
@@ -68,12 +64,17 @@ export const SelectGrammarRule = ({
     if (isSelected) {
       next = value.filter((r) => r.id !== rule.id);
     } else {
-      if (value.length >= 5) return;
+      if (value.length >= 5) return; // Limite de 5 seleções
       next = [...value, rule];
     }
 
     onSelectGrammarRule(next);
   };
+
+  const triggerText =
+    value.length > 0
+      ? value.map((rule) => rule.title).join(', ')
+      : 'Selecione as regras...';
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -83,27 +84,32 @@ export const SelectGrammarRule = ({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            'text-md w-full justify-between overflow-hidden py-6 text-zinc-700',
-            errors.id_grammarRules &&
-              'animate-shake border-red-500 text-red-500',
+            'w-76 justify-between overflow-x-hidden font-normal md:w-full',
+            variant === 'desktop'
+              ? 'h-auto rounded-lg px-4 py-3.5 text-base'
+              : 'h-12 text-base',
           )}
         >
-          Selecione os tópicos...
+          <span className="truncate">{triggerText}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" side="bottom" className="w-85 p-0 lg:w-120">
-        <Command className="text-left">
-          <CommandInput placeholder="Selecione um tópico..." />
+      <PopoverContent align="start" side="bottom" className="w-90 p-0 lg:w-100">
+        <Command className="p-2 text-left">
+          <CommandInput
+            className="text-md"
+            placeholder="Buscar regra gramatical..."
+          />
           <CommandList>
             {isLoading && <CommandItem disabled>Carregando...</CommandItem>}
-            {isError && <CommandEmpty>Erro ao carregar tópicos.</CommandEmpty>}
+            {isError && <CommandEmpty>Erro ao carregar regras.</CommandEmpty>}
             {!isLoading && grammarRules.length === 0 && (
-              <CommandEmpty>Nenhum tópico encontrado.</CommandEmpty>
+              <CommandEmpty>Nenhuma regra encontrada.</CommandEmpty>
             )}
             <CommandGroup>
               {grammarRules.map((grammarRule) => (
                 <CommandItem
+                  className="text-md"
                   key={grammarRule.id}
                   value={grammarRule.title}
                   onSelect={() => toggleGrammarRule(grammarRule)}

@@ -1,6 +1,7 @@
 import { ROUTES } from '@/app/configs/routes';
 import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -34,6 +35,7 @@ export const FormModulePage = () => {
       description: '',
       id_level: '',
       title: '',
+      estimatedTime: 0,
       id_grammarRules: [],
     },
   });
@@ -48,6 +50,7 @@ export const FormModulePage = () => {
         description: moduleData.description,
         id_grammarRules: moduleData.grammarRules.map((rule) => rule.id),
         id_level: moduleData.level.id,
+        estimatedTime: moduleData.estimatedTime,
       });
     }
   }, [moduleData, isEditMode, methods]);
@@ -94,7 +97,19 @@ export const FormModulePage = () => {
           <TitleInput />
           <GrammarRulesField />
           <FormSectionWrapper label="Nível de dificuldade" htmlFor="id_level">
-            <LevelSelect />
+            <LevelSelect name="id_level" />
+          </FormSectionWrapper>
+          <FormSectionWrapper label="Tempo estimado" htmlFor="estimatedTime">
+            <div className="flex items-center gap-2">
+              <Input
+                {...methods.register('estimatedTime', { valueAsNumber: true })}
+                type="number"
+                className="w-18 py-6 text-center"
+                max={600}
+                min={1}
+              />
+              <span className="">min</span>
+            </div>
           </FormSectionWrapper>
           <FormSectionWrapper label="Descrição" htmlFor="description">
             <DescriptionField />

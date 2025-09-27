@@ -32,7 +32,7 @@ export const FilterDropdown = <T extends string>({
           <ChevronDown className="size-5" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-60 p-2">
+      <PopoverContent className="w-60 p-2" align="start">
         <div className="flex flex-col gap-1">
           {items.map((item) => (
             <label

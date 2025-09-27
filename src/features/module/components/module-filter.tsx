@@ -1,11 +1,23 @@
+import type { GrammarRule } from '@/@types/module';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
 import { createParser } from 'nuqs/server';
+import { useState } from 'react';
+import { CheckboxGroup } from './checkbox-group';
 import { FilterDropdown } from './filter-dropdown';
+import { SelectGrammarRule } from './select-topic';
 
-const grammarRules = ['rule1', 'rule2', 'rule3', 'rule4'] as const;
+// TODO: get levels in endpoint
 const difficultyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
 const statusOptions = {
   in_progress: 'Em Andamento',
@@ -26,7 +38,7 @@ const parseAsEnum = <T extends string>(validValues: readonly T[]) =>
 
 const parsers = {
   q: parseAsString.withDefault(''),
-  grammarRules: parseAsArrayOf(parseAsEnum(grammarRules)).withDefault([]),
+  grammarRules: parseAsArrayOf(parseAsString).withDefault([]),
   levels: parseAsArrayOf(parseAsEnum(difficultyLevels)).withDefault([]),
   statuses: parseAsArrayOf(
     parseAsEnum(Object.keys(statusOptions) as StatusKey[]),
@@ -36,20 +48,21 @@ const parsers = {
 export const ModuleFilter = () => {
   const [filters, setFilters] = useQueryStates(parsers);
 
+  const [selectedGrammarRules, setSelectedGrammarRules] = useState<
+    GrammarRule[]
+  >([]);
+
+  const handleGrammarRulesChange = (newRules: GrammarRule[]) => {
+    setSelectedGrammarRules(newRules);
+    const newIds = newRules.map((r) => r.id);
+    setFilters({ grammarRules: newIds.length > 0 ? newIds : null });
+  };
+
   const handleLevelChange = (level: (typeof difficultyLevels)[number]) => {
     const newLevels = filters.levels.includes(level)
       ? filters.levels.filter((l) => l !== level)
       : [...filters.levels, level];
     setFilters({ levels: newLevels });
-  };
-
-  const handleGrammarRuleChange = (
-    grammarRule: (typeof grammarRules)[number],
-  ) => {
-    const newGrammarRules = filters.grammarRules.includes(grammarRule)
-      ? filters.grammarRules.filter((gr) => gr !== grammarRule)
-      : [...filters.grammarRules, grammarRule];
-    setFilters({ grammarRules: newGrammarRules });
   };
 
   const handleStatusChange = (status: StatusKey) => {
@@ -60,6 +73,7 @@ export const ModuleFilter = () => {
   };
 
   const handleClearFilters = () => {
+    setSelectedGrammarRules([]);
     setFilters({ q: '', grammarRules: [], levels: [], statuses: [] });
   };
 
@@ -83,6 +97,12 @@ export const ModuleFilter = () => {
         </div>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <SelectGrammarRule
+            initialValue={filters.grammarRules}
+            value={selectedGrammarRules}
+            onSelectGrammarRule={handleGrammarRulesChange}
+          />
+
           <FilterDropdown
             triggerText="Nível"
             items={difficultyLevels.map((level) => ({
@@ -92,15 +112,7 @@ export const ModuleFilter = () => {
             selectedValues={filters.levels}
             onValueChange={handleLevelChange}
           />
-          <FilterDropdown
-            triggerText="Regra Gramatical"
-            items={grammarRules.map((gr) => ({
-              value: gr,
-              label: gr,
-            }))}
-            selectedValues={filters.grammarRules}
-            onValueChange={handleGrammarRuleChange}
-          />
+
           <FilterDropdown
             triggerText="Status"
             items={Object.entries(statusOptions).map(([value, label]) => ({
@@ -123,19 +135,56 @@ export const ModuleFilter = () => {
             </Button>
           )}
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          className="flex h-12 w-12 items-center justify-center rounded-lg border-zinc-300 font-normal lg:hidden"
-        >
-          <SlidersHorizontal className="size-5" />
-        </Button>
-        <Button
-          type="button"
-          className="flex h-12 w-12 items-center justify-center rounded-lg border-zinc-300 font-normal lg:hidden"
-        >
-          <Search className="size-5" />
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex h-12 w-12 items-center justify-center rounded-lg border-zinc-300 font-normal lg:hidden"
+            >
+              <SlidersHorizontal className="size-5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="text-lg">Filtros</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-6 py-4">
+              <div className="space-y-2">
+                <Label className="text-base font-bold">Regra Gramatical</Label>
+                <div className="space-x-4">
+                  <SelectGrammarRule
+                    initialValue={filters.grammarRules}
+                    value={selectedGrammarRules}
+                    onSelectGrammarRule={handleGrammarRulesChange}
+                    variant="dialog"
+                  />
+                  <span>{selectedGrammarRules.length}/5</span>
+                </div>
+              </div>
+
+              <CheckboxGroup
+                title="Nível de Dificuldade"
+                items={difficultyLevels.map((level) => ({
+                  value: level,
+                  label: level,
+                }))}
+                selectedValues={filters.levels}
+                onValueChange={handleLevelChange}
+              />
+
+              <CheckboxGroup
+                title="Status do Módulo"
+                items={Object.entries(statusOptions).map(([value, label]) => ({
+                  value: value as StatusKey,
+                  label,
+                }))}
+                selectedValues={filters.statuses}
+                onValueChange={handleStatusChange}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
