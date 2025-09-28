@@ -20,8 +20,6 @@ export const GrammarRuleLayout = () => {
   const { data: windows, isLoading: isLoadingWindows } =
     useGetGrammarRuleContent(moduleId, grammarRuleId);
 
-  console.log(windows);
-
   const updateGrammarRuleWindows = useUpdateGrammarRuleWindows();
 
   const windowsList = useGrammarRuleModuleWindows((state) => state.windowsList);

@@ -10,6 +10,9 @@ import { useParams } from 'react-router';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
+import { useCreateFinalChallengeTranslateExercise } from '../hooks/api/mutations/use-create-final-challenge-translate-exercise';
+import { useUpdateFinalChallengeTranslateExercise } from '../hooks/api/mutations/use-update-final-challenge-translate-exercise';
+import { useGetFinalChallengeExercise } from '../hooks/api/queries/use-get-final-challenge-exercise';
 import {
   TranslateExerciseSchema,
   type TranslateExerciseForm,
@@ -17,11 +20,9 @@ import {
 import { useFinalChallengeExercise } from '../stores/use-final-challenge-exercises';
 
 export const FormExerciseFinalChallengePage = () => {
-  const { moduleId, windowId } = useParams();
+  const { moduleId, exerciseId } = useParams();
 
-  // const { windowsList, currentPosition, setWindowsList, updateDraftData } =
-  //   useGrammarRuleModuleWindows();
-  const { exerciseList, currentPosition, updateDraftData } =
+  const { exerciseList, setExerciseList, currentPosition, updateDraftData } =
     useFinalChallengeExercise();
 
   const methods = useForm<TranslateExerciseForm>({
@@ -34,20 +35,13 @@ export const FormExerciseFinalChallengePage = () => {
     },
   });
 
-  // TODO: get exercise to final challenge
-  // const { data: translateExerciseContent, isLoading } = useGetExercise({
-  //   moduleId,
-  //   windowId,
-  // });
-  const isLoading = false;
-  const translateExerciseContent = {
-    header: 'ma1sdm',
-    justification: 'akosd2pa',
-    phrase: 'mas3kdma',
-    template: 'masdm4asmd',
-  } as TranslateExerciseForm;
+  const { data: translateExerciseContent, isLoading } =
+    useGetFinalChallengeExercise({
+      moduleId,
+      exerciseId,
+    });
 
-  const isEditMode = !!windowId;
+  const isEditMode = !!exerciseId;
 
   const currentWindow =
     currentPosition !== null ? exerciseList[currentPosition] : undefined;
@@ -77,9 +71,8 @@ export const FormExerciseFinalChallengePage = () => {
     }
   };
 
-  // get update and create a translate exercise in final challenge
-  // const updateTranslateExercise = useUpdateTranslateExercise();
-  // const createTranslateExercise = useCreateTranslateExercise();
+  const updateTranslateExercise = useUpdateFinalChallengeTranslateExercise();
+  const createTranslateExercise = useCreateFinalChallengeTranslateExercise();
 
   if (isLoading) {
     return <FormExercisePageSkeleton />;
@@ -90,37 +83,35 @@ export const FormExerciseFinalChallengePage = () => {
   }
 
   const onSubmit = (formData: TranslateExerciseForm) => {
-    // if (isEditMode) {
-    //   updateTranslateExercise.mutate({
-    //     moduleId,
-    //     grammarRuleId,
-    //     windowId,
-    //     data: formData,
-    //   });
-    // } else {
-    //   createTranslateExercise.mutate(
-    //     {
-    //       moduleId,
-    //       grammarRuleId,
-    //       data: formData,
-    //     },
-    //     {
-    //       onSuccess: (newlyCreatedWindow) => {
-    //         if (currentPosition === null) return;
-    //         const newList = [...windowsList];
-    //         const clientId = newList[currentPosition]?.clientId;
-    //         newList[currentPosition] = {
-    //           id: newlyCreatedWindow.id,
-    //           type: 'EXERCISE',
-    //           clientId,
-    //           draftData: {},
-    //         };
-    //         setWindowsList(newList);
-    //       },
-    //     },
-    //   );
-    // }
-    console.log('enviei: ' + formData);
+    if (isEditMode) {
+      updateTranslateExercise.mutate({
+        moduleId,
+        exerciseId,
+        data: formData,
+      });
+    } else {
+      createTranslateExercise.mutate(
+        {
+          moduleId,
+          data: formData,
+        },
+        {
+          onSuccess: (newlyCreatedWindow) => {
+            if (currentPosition === null) return;
+            const newList = [...exerciseList];
+            const clientId = newList[currentPosition]?.clientId;
+            newList[currentPosition] = {
+              id: newlyCreatedWindow.id,
+              type: 'EXERCISE',
+              style: 'TRANSLATE',
+              clientId,
+              draftData: {},
+            };
+            setExerciseList(newList);
+          },
+        },
+      );
+    }
   };
 
   return (

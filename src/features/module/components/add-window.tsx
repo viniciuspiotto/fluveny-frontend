@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/popover';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useFinalChallengeExercise } from '../stores/use-final-challenge-exercises';
 import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
 import ExerciseSelector from './exercise-selection';
 
@@ -23,10 +24,20 @@ export const AddWindow = ({
   isPresentationEnabled,
 }: AddWindowProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const addWindow = useGrammarRuleModuleWindows((state) => state.addWindow);
+  const addWindowGrammarRule = useGrammarRuleModuleWindows(
+    (state) => state.addWindow,
+  );
+  const addFinalChallengeExercise = useFinalChallengeExercise(
+    (state) => state.addExercise,
+  );
 
+  // TODO: Change this to accept other's exercise type
   const handleSelectWindowType = (type: WindowType) => {
-    addWindow(type, insertionIndex);
+    if (isPresentationEnabled) {
+      addWindowGrammarRule(type, insertionIndex);
+    } else {
+      addFinalChallengeExercise('TRANSLATE', insertionIndex);
+    }
     setIsOpen(false);
   };
 

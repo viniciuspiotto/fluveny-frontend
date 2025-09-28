@@ -2,6 +2,7 @@ import { LoginPage } from '@/features/authentication/pages/login';
 import { RegisterPage } from '@/features/authentication/pages/register';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
+import { FormExerciseFinalChallengePage } from '@/features/module/pages/form-exercise-final-challenge.page';
 import { FormExerciseGrammarRulePage } from '@/features/module/pages/form-exercise-grammar-rule-page';
 import { FormFinalChallengePage } from '@/features/module/pages/form-final-challenge-page';
 import { FormIntroductionPage } from '@/features/module/pages/form-introduction-page';
@@ -93,6 +94,12 @@ export const router = createBrowserRouter([
                   {
                     path: ROUTES.finalChallenge,
                     element: <FormFinalChallengePage />,
+                    children: [
+                      {
+                        path: `${ROUTES.exerciseId}`,
+                        element: <FormExerciseFinalChallengePage />,
+                      },
+                    ],
                   },
                 ],
               },

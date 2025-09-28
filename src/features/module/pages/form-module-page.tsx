@@ -29,15 +29,18 @@ export const FormModulePage = () => {
 
   const { data: moduleData, isLoading } = useGetModule(moduleId);
 
+  const formValues = {
+    title: moduleData?.title ?? '',
+    description: moduleData?.description ?? '',
+    id_grammarRules:
+      moduleData?.grammarRules.map((rule) => String(rule.id)) ?? [],
+    id_level: moduleData ? moduleData.level.id : '',
+    estimatedTime: moduleData?.estimatedTime ?? 0,
+  };
+
   const methods = useForm<ModuleForm>({
     resolver: zodResolver(moduleFormSchema),
-    defaultValues: {
-      description: '',
-      id_level: '',
-      title: '',
-      estimatedTime: 0,
-      id_grammarRules: [],
-    },
+    values: formValues,
   });
 
   const createModuleMutation = useCreateModule();

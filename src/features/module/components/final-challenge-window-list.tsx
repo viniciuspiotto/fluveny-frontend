@@ -16,7 +16,7 @@ export const FinalChallengeContentWindow = () => {
   useEffect(() => {
     if (currentPosition !== null && exerciseList[currentPosition]) {
       const currentWindow = exerciseList[currentPosition];
-      const path = `${currentWindow.id ? `/${currentWindow.id}` : ''}`;
+      const path = `${currentWindow.id ? `${currentWindow.id}` : ''}`;
       navigate(path);
     }
   }, [currentPosition, exerciseList, navigate]);

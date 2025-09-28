@@ -1,30 +1,26 @@
-import { ROUTES } from '@/app/configs/routes';
 import { DndProvider } from '@/app/providers/dnd-provider';
 import { DraftWindowsModal } from '@/components/modal';
 import { NotFound } from '@/templates/not-found';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useBlocker, useNavigate, useParams } from 'react-router';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FinalChallengeContentWindow } from '../components/final-challenge-window-list';
+import { useUpdateFinalChallengeExercisesChallenge } from '../hooks/api/mutations/use-update-final-challenge-exercises';
+import { useGetFinalChallengeExercises } from '../hooks/api/queries/use-get-final-challenge-exercises';
 import {
   useFinalChallengeExercise,
   type Exercise,
 } from '../stores/use-final-challenge-exercises';
 import { FormExerciseFinalChallengePage } from './form-exercise-final-challenge.page';
 
-const exercises = undefined;
-
 export const FormFinalChallengePage = () => {
   const navigate = useNavigate();
   const { moduleId } = useParams();
 
-  // TODO: endpoint to get final challenge windows
-  const isLoadingExercises = false;
-  // const { data: exercises, isLoading: isLoadingExercises } =
-  //   useGetFinalChallengeContent(moduleId);
+  const { data: exercises, isLoading: isLoadingExercises } =
+    useGetFinalChallengeExercises(moduleId);
 
-  // TODO: endpoint to update the final challenge windows position
-  // const updateFinalChallengeWindows = useUpdateFinalChallengeWindows();
+  const updateExercisesMutation = useUpdateFinalChallengeExercisesChallenge();
 
   const exerciseList = useFinalChallengeExercise((state) => state.exerciseList);
   const setExerciseList = useFinalChallengeExercise(
@@ -37,51 +33,85 @@ export const FormFinalChallengePage = () => {
     (state) => state.setCurrentPosition,
   );
 
-  // TODO: check if have a draft exercise
   const hasDraftExercises = exerciseList.some((e) => !e.id);
+
+  const onSendExercisesPosition = useCallback(
+    (data: Exercise[]) => {
+      if (!moduleId) return;
+
+      const exerciseIds = data
+        .filter((w) => w.id)
+        .map(({ id }) => id as string);
+
+      if (exerciseIds.length > 0) {
+        updateExercisesMutation.mutate({ moduleId, data: exerciseIds });
+      }
+    },
+    [moduleId, updateExercisesMutation],
+  );
 
   const blocker = useBlocker(({ nextLocation }) => {
     if (!moduleId) return false;
 
-    const finalChallengeBasePath = `/${ROUTES.modules}/${ROUTES.create}/${moduleId}/
-    ${ROUTES.finalChallenge}`;
+    const finalChallengeBasePath = `/modules/create/${moduleId}/finalChallenge`;
     const isNavigatingWithinEditor = nextLocation.pathname.startsWith(
       finalChallengeBasePath,
     );
 
-    return !isNavigatingWithinEditor;
+    return hasDraftExercises && !isNavigatingWithinEditor;
   });
 
-  // const onSendExercisesPosition = useCallback(
-  //   (data: Exercise[]) => {
-  //     // const exercisesWithId = data
-  //     //   .filter((w) => w.id)
-  //     //   .map(({ id, style }) => ({
-  //     //     id,
-  //     //     style,
-  //     //   }));
-  //     // updateFinalChallengeWindows.mutate(
-  //     //   { moduleId, data: exercisesWithId },
-  //     //   {
-  //     //     onSuccess: () => {},
-  //     //   },
-  //     // );
-  //   },
-  //   [moduleId],
-  // );
+  useEffect(() => {
+    if (exercises) {
+      const exercisesWithClientId = exercises.map(
+        (exerciseId) =>
+          ({
+            id: exerciseId,
+            clientId: crypto.randomUUID(),
+            type: 'EXERCISE',
+            style: 'TRANSLATE',
+          }) as Exercise,
+      );
 
-  // TODO: check if is in blocked state and has draft exercises
+      if (exercisesWithClientId.length > 0) {
+        setExerciseList(exercisesWithClientId);
+        setCurrentPosition(0);
+        navigate(`${exercises[0]}`, { replace: true });
+      } else {
+        setExerciseList([
+          {
+            style: 'TRANSLATE',
+            type: 'EXERCISE',
+            clientId: crypto.randomUUID(),
+          },
+        ]);
+        setCurrentPosition(0);
+      }
+    } else if (!isLoadingExercises) {
+      setExerciseList([
+        { style: 'TRANSLATE', type: 'EXERCISE', clientId: crypto.randomUUID() },
+      ]);
+      setCurrentPosition(0);
+    }
+  }, [
+    isLoadingExercises,
+    navigate,
+    setExerciseList,
+    setCurrentPosition,
+    exercises,
+  ]);
+
   useEffect(() => {
     if (blocker.state === 'blocked' && !hasDraftExercises) {
-      // onSendExercisesPosition(exerciseList);
+      onSendExercisesPosition(exerciseList);
       blocker.proceed();
     }
-  }, [blocker, hasDraftExercises, exerciseList]);
+  }, [blocker, hasDraftExercises, exerciseList, onSendExercisesPosition]);
 
   const handleConfirmNavigation = () => {
     if (blocker.state === 'blocked') {
-      // const windowsToSave = exerciseList.filter((e) => e.id);
-      // onSendExercisesPosition(windowsToSave);
+      const exercisesToSave = exerciseList.filter((e) => e.id);
+      onSendExercisesPosition(exercisesToSave);
       blocker.proceed();
     }
   };
@@ -92,42 +122,17 @@ export const FormFinalChallengePage = () => {
     }
   };
 
-  const currentWindow =
+  const currentExercise =
     currentPosition !== null ? exerciseList[currentPosition] : null;
-  const uniqueKey = currentWindow?.id ?? currentWindow?.clientId;
-
-  useEffect(() => {
-    if (exercises) {
-      const windowsWithClientId = exercises.map(
-        (w) =>
-          ({
-            ...w,
-            clientId: w.id,
-          }) as Exercise,
-      );
-      setExerciseList(windowsWithClientId);
-      setCurrentPosition(0);
-
-      if (exercises.length > 0) {
-        const firstWindow = exercises[0];
-        navigate(`${firstWindow.id}`, {
-          replace: true,
-        });
-      }
-    } else if (!isLoadingExercises) {
-      console.log('carreguei');
-      setExerciseList([
-        { style: 'TRANSLATE', type: 'EXERCISE', clientId: crypto.randomUUID() },
-      ]);
-      setCurrentPosition(0);
-    }
-  }, [isLoadingExercises, navigate, setExerciseList, setCurrentPosition]);
+  const uniqueKey = currentExercise?.id ?? currentExercise?.clientId;
 
   if (isLoadingExercises) {
     return <FormExercisePageSkeleton />;
   }
 
-  if (!moduleId) return <NotFound />;
+  if (!moduleId) {
+    return <NotFound />;
+  }
 
   return (
     <DndProvider key={`${moduleId}-finalChallenge`}>
