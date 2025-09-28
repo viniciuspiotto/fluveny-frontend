@@ -84,7 +84,7 @@ export const SelectGrammarRule = ({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            'w-76 justify-between overflow-x-hidden font-normal md:w-full',
+            'w-76 max-w-120 justify-between overflow-x-hidden font-normal md:w-100',
             variant === 'desktop'
               ? 'h-auto rounded-lg px-4 py-3.5 text-base'
               : 'h-12 text-base',

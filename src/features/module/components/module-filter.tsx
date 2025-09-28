@@ -13,17 +13,16 @@ import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
 import { createParser } from 'nuqs/server';
 import { useState } from 'react';
+import { useGetLevels } from '../hooks/api/queries/use-get-levels';
 import { CheckboxGroup } from './checkbox-group';
 import { FilterDropdown } from './filter-dropdown';
 import { SelectGrammarRule } from './select-topic';
 
-// TODO: get levels in endpoint
-const difficultyLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
 const statusOptions = {
-  in_progress: 'Em Andamento',
-  completed: 'Finalizados',
-  not_started: 'Não iniciados',
-  favorites: 'Favoritos',
+  IN_PROGRESS: 'Em Andamento',
+  COMPLETED: 'Finalizados',
+  NOT_STARTED: 'Não iniciados',
+  FAVORITE: 'Favoritos',
 } as const;
 
 type StatusKey = keyof typeof statusOptions;
@@ -36,10 +35,10 @@ const parseAsEnum = <T extends string>(validValues: readonly T[]) =>
     serialize: (value) => String(value),
   });
 
-const parsers = {
+export const parsers = {
   q: parseAsString.withDefault(''),
   grammarRules: parseAsArrayOf(parseAsString).withDefault([]),
-  levels: parseAsArrayOf(parseAsEnum(difficultyLevels)).withDefault([]),
+  levels: parseAsArrayOf(parseAsString).withDefault([]),
   statuses: parseAsArrayOf(
     parseAsEnum(Object.keys(statusOptions) as StatusKey[]),
   ).withDefault([]),
@@ -52,16 +51,18 @@ export const ModuleFilter = () => {
     GrammarRule[]
   >([]);
 
+  const { data: levelsData } = useGetLevels();
+
   const handleGrammarRulesChange = (newRules: GrammarRule[]) => {
     setSelectedGrammarRules(newRules);
     const newIds = newRules.map((r) => r.id);
     setFilters({ grammarRules: newIds.length > 0 ? newIds : null });
   };
 
-  const handleLevelChange = (level: (typeof difficultyLevels)[number]) => {
-    const newLevels = filters.levels.includes(level)
-      ? filters.levels.filter((l) => l !== level)
-      : [...filters.levels, level];
+  const handleLevelChange = (levelId: string) => {
+    const newLevels = filters.levels.includes(levelId)
+      ? filters.levels.filter((id) => id !== levelId)
+      : [...filters.levels, levelId];
     setFilters({ levels: newLevels });
   };
 
@@ -82,6 +83,12 @@ export const ModuleFilter = () => {
     filters.grammarRules.length > 0 ||
     filters.levels.length > 0 ||
     filters.statuses.length > 0;
+
+  const levelOptions =
+    levelsData?.map((level) => ({
+      value: level.id,
+      label: level.title,
+    })) ?? [];
 
   return (
     <div className="mb-6 flex flex-col gap-4 lg:mb-7">
@@ -105,10 +112,7 @@ export const ModuleFilter = () => {
 
           <FilterDropdown
             triggerText="Nível"
-            items={difficultyLevels.map((level) => ({
-              value: level,
-              label: level,
-            }))}
+            items={levelOptions}
             selectedValues={filters.levels}
             onValueChange={handleLevelChange}
           />
@@ -159,16 +163,12 @@ export const ModuleFilter = () => {
                     onSelectGrammarRule={handleGrammarRulesChange}
                     variant="dialog"
                   />
-                  <span>{selectedGrammarRules.length}/5</span>
                 </div>
               </div>
 
               <CheckboxGroup
                 title="Nível de Dificuldade"
-                items={difficultyLevels.map((level) => ({
-                  value: level,
-                  label: level,
-                }))}
+                items={levelOptions}
                 selectedValues={filters.levels}
                 onValueChange={handleLevelChange}
               />
