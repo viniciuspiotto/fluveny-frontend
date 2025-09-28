@@ -1,7 +1,7 @@
 import { DndProvider } from '@/app/providers/dnd-provider';
 import { DraftWindowsModal } from '@/components/modal';
 import { NotFound } from '@/templates/not-found';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useBlocker, useNavigate, useParams } from 'react-router';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FinalChallengeContentWindow } from '../components/final-challenge-window-list';
@@ -35,20 +35,15 @@ export const FormFinalChallengePage = () => {
 
   const hasDraftExercises = exerciseList.some((e) => !e.id);
 
-  const onSendExercisesPosition = useCallback(
-    (data: Exercise[]) => {
-      if (!moduleId) return;
+  const onSendExercisesPosition = (data: Exercise[]) => {
+    if (!moduleId) return;
 
-      const exerciseIds = data
-        .filter((w) => w.id)
-        .map(({ id }) => id as string);
+    const exerciseIds = data.filter((w) => w.id).map(({ id }) => id as string);
 
-      if (exerciseIds.length > 0) {
-        updateExercisesMutation.mutate({ moduleId, data: exerciseIds });
-      }
-    },
-    [moduleId, updateExercisesMutation],
-  );
+    if (exerciseIds.length > 0) {
+      updateExercisesMutation.mutate({ moduleId, data: exerciseIds });
+    }
+  };
 
   const blocker = useBlocker(({ nextLocation }) => {
     if (!moduleId) return false;
@@ -58,7 +53,7 @@ export const FormFinalChallengePage = () => {
       finalChallengeBasePath,
     );
 
-    return hasDraftExercises && !isNavigatingWithinEditor;
+    return !isNavigatingWithinEditor;
   });
 
   useEffect(() => {
@@ -106,7 +101,8 @@ export const FormFinalChallengePage = () => {
       onSendExercisesPosition(exerciseList);
       blocker.proceed();
     }
-  }, [blocker, hasDraftExercises, exerciseList, onSendExercisesPosition]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocker, hasDraftExercises, exerciseList]);
 
   const handleConfirmNavigation = () => {
     if (blocker.state === 'blocked') {

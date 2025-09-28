@@ -4,7 +4,6 @@ import type { Identifier, XYCoord } from 'dnd-core';
 import { BowArrow, Presentation } from 'lucide-react';
 import { useRef } from 'react';
 import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
-import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
 import { AddWindow } from './add-window';
 
 interface WindowProps {
@@ -15,6 +14,7 @@ interface WindowProps {
   isPresentationEnabled: boolean;
   isDraft: boolean;
   type: WindowType;
+  moveWindow: (dragIndex: number, hoverIndex: number) => void;
 }
 
 interface DragItem {
@@ -36,9 +36,9 @@ export const Window = ({
   isPresentationEnabled,
   type,
   selectWindow,
+  moveWindow,
 }: WindowProps) => {
   const ref = useRef<HTMLLIElement>(null);
-  const { moveWindow } = useGrammarRuleModuleWindows((state) => state);
   const index = position - 1;
 
   const [{ handlerId, isOver }, drop] = useDrop<

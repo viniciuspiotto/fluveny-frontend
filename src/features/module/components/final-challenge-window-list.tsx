@@ -11,6 +11,8 @@ export const FinalChallengeContentWindow = () => {
   const setCurrentPosition = useFinalChallengeExercise(
     (state) => state.setCurrentPosition,
   );
+  const moveExercise = useFinalChallengeExercise((state) => state.moveExercise);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +29,7 @@ export const FinalChallengeContentWindow = () => {
       windows={exerciseList}
       currentPosition={currentPosition}
       onSelectWindow={setCurrentPosition}
+      moveWindow={moveExercise}
     />
   );
 };

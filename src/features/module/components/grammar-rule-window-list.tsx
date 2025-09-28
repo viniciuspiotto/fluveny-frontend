@@ -9,6 +9,7 @@ export const GrammarRuleWindowList = () => {
   const setCurrentPosition = useGrammarRuleModuleWindows(
     (state) => state.setCurrentPosition,
   );
+  const moveWindow = useGrammarRuleModuleWindows((state) => state.moveWindow);
 
   return (
     <WindowList
@@ -16,6 +17,7 @@ export const GrammarRuleWindowList = () => {
       windows={windowsList}
       currentPosition={currentPosition}
       onSelectWindow={setCurrentPosition}
+      moveWindow={moveWindow}
     />
   );
 };

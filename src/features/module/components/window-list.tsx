@@ -7,6 +7,7 @@ type WindowListProps = {
   currentPosition: number | null;
   onSelectWindow: (index: number) => void;
   isPresentationEnabled: boolean;
+  moveWindow: (dragIndex: number, hoverIndex: number) => void;
 };
 
 export const WindowList = ({
@@ -14,6 +15,7 @@ export const WindowList = ({
   currentPosition,
   onSelectWindow,
   isPresentationEnabled,
+  moveWindow,
 }: WindowListProps) => {
   return (
     <ol className="custom-scrollbar fixed bottom-0 left-0 mb-20 flex w-full items-center gap-4 overflow-x-auto bg-white px-4 py-8 lg:px-10">
@@ -27,6 +29,7 @@ export const WindowList = ({
           selectWindow={() => onSelectWindow(i)}
           isDraft={!w.id}
           type={w.type}
+          moveWindow={moveWindow}
         />
       ))}
     </ol>
