@@ -29,18 +29,8 @@ export const FormModulePage = () => {
 
   const { data: moduleData, isLoading } = useGetModule(moduleId);
 
-  const formValues = {
-    title: moduleData?.title ?? '',
-    description: moduleData?.description ?? '',
-    id_grammarRules:
-      moduleData?.grammarRules.map((rule) => String(rule.id)) ?? [],
-    id_level: moduleData ? moduleData.level.id : '',
-    estimatedTime: moduleData?.estimatedTime ?? 0,
-  };
-
   const methods = useForm<ModuleForm>({
     resolver: zodResolver(moduleFormSchema),
-    values: formValues,
   });
 
   const createModuleMutation = useCreateModule();
@@ -51,14 +41,15 @@ export const FormModulePage = () => {
       methods.reset({
         title: moduleData.title,
         description: moduleData.description,
-        id_grammarRules: moduleData.grammarRules.map((rule) => rule.id),
+        id_grammarRules: moduleData.grammarRules.map((rule) => String(rule.id)),
         id_level: moduleData.level.id,
         estimatedTime: moduleData.estimatedTime,
       });
     }
-  }, [moduleData, isEditMode, methods]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditMode, moduleData]);
 
-  if (isLoading) {
+  if (isEditMode && isLoading) {
     return <FormModulePageSkeleton />;
   }
 
@@ -100,7 +91,7 @@ export const FormModulePage = () => {
           <TitleInput />
           <GrammarRulesField />
           <FormSectionWrapper label="Nível de dificuldade" htmlFor="id_level">
-            <LevelSelect name="id_level" />
+            <LevelSelect name="id_level" level={moduleData?.level.id} />
           </FormSectionWrapper>
           <FormSectionWrapper label="Tempo estimado" htmlFor="estimatedTime">
             <div className="flex items-center gap-2">

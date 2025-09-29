@@ -16,32 +16,28 @@ import { useFormContext } from 'react-hook-form';
 
 interface FormSelectProps {
   name: string;
+  level: string | undefined;
 }
 
-export const LevelSelect = ({ name }: FormSelectProps) => {
+export const LevelSelect = ({ name, level }: FormSelectProps) => {
   const { control } = useFormContext();
-
-  const { data: levels, isLoading } = useGetLevels();
+  const { data: levels } = useGetLevels();
 
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <Select
-            onValueChange={field.onChange}
-            disabled={isLoading}
-            value={field.value ?? ''}
-          >
-            <FormControl>
-              <SelectTrigger className="text-md px-4 py-6">
-                <SelectValue placeholder={'Nível'} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {levels ? (
-                levels.map((level) => (
+        <>
+          <FormItem>
+            <Select onValueChange={field.onChange} value={field.value ?? level}>
+              <FormControl>
+                <SelectTrigger className="text-md px-4 py-6">
+                  <SelectValue placeholder={'Nível'} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {levels?.map((level) => (
                   <SelectItem
                     className="text-md"
                     key={level.id}
@@ -49,14 +45,12 @@ export const LevelSelect = ({ name }: FormSelectProps) => {
                   >
                     {level.title}
                   </SelectItem>
-                ))
-              ) : (
-                <span>Carregando...</span>
-              )}
-            </SelectContent>
-          </Select>
-          <FormMessage />
-        </FormItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        </>
       )}
     />
   );

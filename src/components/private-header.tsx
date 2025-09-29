@@ -41,18 +41,18 @@ export function PrivateHeader() {
           />
         </Link>
         <nav className="hidden space-x-12 px-10 lg:flex">
-          <Link to="/modules" className="text-lg">
+          <Link to="/modules" className="hover:text-primary text-lg">
             Módulos
           </Link>
-          <Link to="/exercises" className="text-lg">
+          {/* <Link to="/exercises" className="hover:text-primary text-lg">
             Exercícios
           </Link>
-          <Link to="/roadmap" className="text-lg">
+          <Link to="/roadmap" className="hover:text-primary text-lg">
             Roadmap
           </Link>
-          <Link to="/conversation" className="text-lg">
+          <Link to="/conversation" className="hover:text-primary text-lg">
             Conversação
-          </Link>
+          </Link> */}
         </nav>
       </div>
 
