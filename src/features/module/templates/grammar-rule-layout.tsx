@@ -1,4 +1,3 @@
-import { ROUTES } from '@/app/configs/routes';
 import { DndProvider } from '@/app/providers/dnd-provider';
 import { DraftWindowsModal } from '@/components/modal';
 import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/use-get-grammar-rule-content';
@@ -82,21 +81,11 @@ export const GrammarRuleLayout = () => {
       );
       setWindowsList(windowsWithClientId);
       setCurrentPosition(0);
-
-      if (windows.length > 0) {
-        const firstWindow = windows[0];
-        navigate(`${firstWindow.type.toLocaleLowerCase()}/${firstWindow.id}`, {
-          replace: true,
-        });
-      } else {
-        navigate(ROUTES.presentation, { replace: true });
-      }
     } else if (!isLoadingWindows) {
       setWindowsList([{ type: 'PRESENTATION', clientId: crypto.randomUUID() }]);
       setCurrentPosition(0);
-      navigate(ROUTES.presentation, { replace: true });
     }
-  }, [windows, isLoadingWindows, navigate, setWindowsList, setCurrentPosition]);
+  }, [windows, isLoadingWindows, setWindowsList, setCurrentPosition]);
 
   useEffect(() => {
     if (

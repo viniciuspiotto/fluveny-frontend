@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 export default function CitationButton() {
   const { editor } = useCurrentEditor();
 
-  if (!editor) return;
+  if (!editor) return null;
 
   const handleClick = () => {
     if (editor.isActive('blockquote')) {

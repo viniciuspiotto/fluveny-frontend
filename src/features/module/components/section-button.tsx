@@ -1,8 +1,10 @@
 import { ROUTES } from '@/app/configs/routes';
+import { cn } from '@/app/utils/cn';
 import { Button } from '@/components/ui/button';
 import { NotFound } from '@/templates/not-found';
 import { Home, PencilRuler, Swords } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router';
+import { useMemo } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router';
 
 interface SectionButtonProps {
   variant: 'introduction' | 'grammarRule' | 'finalChallenge' | 'revision';
@@ -17,38 +19,42 @@ export const SectionButton = ({
 }: SectionButtonProps) => {
   const { moduleId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const targetPath = useMemo(() => {
+    switch (variant) {
+      case 'introduction':
+        return `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`;
+      case 'grammarRule':
+        return `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.grammarRule}/${grammarRuleId}`;
+      case 'finalChallenge':
+        return `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.finalChallenge}`;
+      default:
+        return '';
+    }
+  }, [variant, moduleId, grammarRuleId]);
 
   if (!moduleId) {
     return <NotFound />;
   }
 
+  const isCurrentPage = location.pathname.startsWith(targetPath);
+
   const handleClick = () => {
-    switch (variant) {
-      case 'introduction': {
-        navigate(
-          `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
-        );
-        break;
-      }
-      case 'grammarRule': {
-        navigate(
-          `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.grammarRule}/${grammarRuleId}`,
-        );
-        break;
-      }
-      case 'finalChallenge': {
-        navigate(
-          `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.finalChallenge}`,
-        );
-        break;
-      }
+    if (!isCurrentPage) {
+      navigate(targetPath);
     }
   };
 
   return (
     <Button
-      className="cursor-pointer items-center bg-zinc-50 py-6 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:bg-zinc-50"
+      className={cn(
+        'items-center bg-zinc-50 py-6 transition-all duration-300 ease-in-out',
+        !isCurrentPage &&
+          'cursor-pointer hover:-translate-y-1 hover:scale-105 hover:bg-zinc-50',
+      )}
       onClick={handleClick}
+      disabled={isCurrentPage}
     >
       {variant === 'grammarRule' ? (
         <PencilRuler className="text-primary size-8" />

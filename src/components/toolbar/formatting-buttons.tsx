@@ -5,14 +5,14 @@ import { Button } from '../ui/button';
 export const FormattingButtons = () => {
   const { editor } = useCurrentEditor();
 
-  if (!editor) return;
+  if (!editor) return null;
 
   return (
     <>
       <Button
         title="Negrito"
         onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
+        disabled={!editor.can().toggleBold()}
         variant={editor.isActive('bold') ? 'default' : 'ghost'}
         type="button"
       >
@@ -21,7 +21,7 @@ export const FormattingButtons = () => {
       <Button
         title="Itálico"
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        disabled={!editor.can().toggleItalic()}
         variant={editor.isActive('italic') ? 'default' : 'ghost'}
         type="button"
       >

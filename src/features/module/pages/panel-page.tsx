@@ -21,7 +21,7 @@ export const PanelPage = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedFilters(filters);
-    }, 2000);
+    }, 700);
 
     return () => {
       clearTimeout(handler);

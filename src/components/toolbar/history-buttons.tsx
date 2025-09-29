@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 export default function HistoryButtons() {
   const { editor } = useCurrentEditor();
 
-  if (!editor) return;
+  if (!editor) return null;
 
   return (
     <>

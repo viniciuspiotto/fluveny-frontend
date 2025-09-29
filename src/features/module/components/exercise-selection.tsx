@@ -4,9 +4,11 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogFooter,
+  DialogHeader,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { DialogTitle } from '@radix-ui/react-dialog';
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import {
   AudioLines,
   Boxes,
@@ -101,12 +103,20 @@ export default function ExerciseSelector({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent aria-description="selecionar o tipo do exercício">
-        <div className="flex flex-col items-center gap-4 rounded-md border-0 pt-8 lg:m-2">
+      <DialogContent>
+        <DialogHeader className="hidden">
+          <DialogTitle>Selecione o tipo do exercício</DialogTitle>
+          <DialogDescription>
+            Escolha uma habilidade para praticar e, em seguida, um estilo de
+            exercício correspondente.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-6 pt-4">
           <section className="flex w-full flex-col items-center">
-            <DialogTitle className="mb-2 text-lg font-bold">
+            <h3 className="mb-4 text-lg font-semibold">
               Habilidade Linguística
-            </DialogTitle>
+            </h3>
             <div className="flex h-full w-full justify-around">
               {linguisticSkills.map((skill) => (
                 <SkillToggle
@@ -124,9 +134,10 @@ export default function ExerciseSelector({
 
           {languageSkill && (
             <section className="flex w-full flex-col items-center">
-              <DialogTitle>
-                <h2 className="mb-2 text-lg font-bold">Estilo de Exercício</h2>
-              </DialogTitle>
+              {/* Usando <h3> para subtítulo */}
+              <h3 className="mb-4 text-lg font-semibold">
+                Estilo de Exercício
+              </h3>
               <div className="flex h-full w-full justify-around">
                 {exercisesBySkill[languageSkill].map((exercise, i) => (
                   <SkillToggle
@@ -142,7 +153,7 @@ export default function ExerciseSelector({
           )}
         </div>
 
-        <div className="mt-4 flex w-full justify-end">
+        <DialogFooter>
           <DialogClose asChild>
             <Button
               className="text-md cursor-pointer"
@@ -152,7 +163,7 @@ export default function ExerciseSelector({
               Confirmar
             </Button>
           </DialogClose>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
