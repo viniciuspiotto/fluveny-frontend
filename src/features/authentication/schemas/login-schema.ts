@@ -12,27 +12,35 @@ const usernameValidation = z
 
 const emailValidation = z
   .string()
-  .email('Formato de e-mail inválido')
   .min(8, 'O e-mail deve ter pelo menos 8 caracteres')
-  .max(100, 'E-mail deve ter no máximo 100 caracteres');
+  .max(100, 'E-mail deve ter no máximo 100 caracteres')
+  .email({ message: 'Formato de e-mail inválido' });
 
 export const loginSchema = z.object({
   usernameOrEmail: z
-    .string({
-      required_error: 'O campo é obrigatório',
-    })
+    .string()
     .trim()
     .min(1, 'O campo é obrigatório')
     .superRefine((value, ctx) => {
       if (value.includes('@')) {
         const emailCheck = emailValidation.safeParse(value);
         if (!emailCheck.success) {
-          emailCheck.error.issues.forEach((issue) => ctx.addIssue(issue));
+          emailCheck.error.issues.forEach((issue) => {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: issue.message,
+            });
+          });
         }
       } else {
         const usernameCheck = usernameValidation.safeParse(value);
         if (!usernameCheck.success) {
-          usernameCheck.error.issues.forEach((issue) => ctx.addIssue(issue));
+          usernameCheck.error.issues.forEach((issue) => {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: issue.message,
+            });
+          });
         }
       }
     }),
