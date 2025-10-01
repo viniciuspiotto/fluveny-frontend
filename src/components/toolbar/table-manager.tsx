@@ -34,7 +34,7 @@ function ToolbarButton({
   const variant = active ? 'default' : 'ghost';
   return (
     <Button variant={variant} title={title} onClick={onClick} type="button">
-      <Icon />
+      <Icon className="size-5" />
     </Button>
   );
 }
@@ -42,7 +42,7 @@ function ToolbarButton({
 export default function TableManager() {
   const { editor } = useCurrentEditor();
 
-  if (!editor) return;
+  if (!editor) return null;
 
   const handleTable = () => {
     if (editor.isActive('table')) {
@@ -64,7 +64,7 @@ export default function TableManager() {
         icon={Table}
         active={editor.isActive('table')}
       />
-      <PopoverToolbar trigger={<Grid2X2Plus />}>
+      <PopoverToolbar trigger={<Grid2X2Plus className="size-5" />}>
         <ToolbarButton
           title="Adicionar Linha"
           onClick={() => editor.chain().focus().addRowAfter().run()}
@@ -78,7 +78,7 @@ export default function TableManager() {
           active={false}
         />
       </PopoverToolbar>
-      <PopoverToolbar trigger={<Grid2X2X />}>
+      <PopoverToolbar trigger={<Grid2X2X className="size-5" />}>
         <ToolbarButton
           title="Remover Linha"
           onClick={() => editor.chain().focus().deleteRow().run()}
@@ -92,7 +92,7 @@ export default function TableManager() {
           active={false}
         />
       </PopoverToolbar>
-      <PopoverToolbar trigger={<Table2 />}>
+      <PopoverToolbar trigger={<Table2 className="size-5" />}>
         <ToolbarButton
           title="Alterar Cabeçalho de Linha"
           onClick={() => editor.chain().focus().toggleHeaderRow().run()}
@@ -118,7 +118,11 @@ export default function TableManager() {
         onClick={() => editor.chain().focus().mergeOrSplit().run()}
         type="button"
       >
-        {editor.can().mergeCells() ? <TableCellsMerge /> : <TableCellsSplit />}
+        {editor.can().mergeCells() ? (
+          <TableCellsMerge className="size-5" />
+        ) : (
+          <TableCellsSplit className="size-5" />
+        )}
       </Button>
     </div>
   );

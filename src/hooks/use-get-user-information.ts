@@ -7,5 +7,6 @@ export const useGetUserInformation = () => {
     queryFn: getUserInformation,
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: true,
+    retry: false,
   });
 };

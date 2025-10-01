@@ -14,7 +14,7 @@ export const ImageButton = () => {
   const { editor } = useCurrentEditor();
   const imageRef = useRef<HTMLInputElement>(null);
 
-  if (!editor) return;
+  if (!editor) return null;
 
   const handleAddImage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

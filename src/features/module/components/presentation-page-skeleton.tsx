@@ -1,6 +1,6 @@
 export default function FormPresentationPageSkeleton() {
   return (
-    <div className="p-2 lg:px-80">
+    <div className="p-2 lg:px-40">
       <div className="mt-18 h-12 animate-pulse rounded-xl bg-zinc-200 md:mx-auto md:w-120 lg:mx-auto lg:w-145" />
 
       <div className="m-2 mt-20 h-12 animate-pulse rounded-md bg-zinc-200" />

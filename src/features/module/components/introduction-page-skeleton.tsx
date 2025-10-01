@@ -1,7 +1,7 @@
 export default function FormIntroductionPageSkeleton() {
   return (
-    <div className="p-2 lg:px-80">
-      <div className="mt-18 h-12 animate-pulse rounded-xl bg-zinc-200 md:mx-auto md:w-120 lg:mx-auto lg:w-145" />
+    <div className="flex flex-col justify-center px-40">
+      <div className="mt-18 h-12 w-150 animate-pulse rounded-xl bg-zinc-200 text-center md:mx-auto" />
 
       <div className="m-2 mt-8 h-38 animate-pulse rounded-md bg-zinc-200 md:h-27 lg:mt-6 lg:h-16" />
 

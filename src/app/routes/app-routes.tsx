@@ -2,7 +2,9 @@ import { LoginPage } from '@/features/authentication/pages/login';
 import { RegisterPage } from '@/features/authentication/pages/register';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
-import { FormExercisePage } from '@/features/module/pages/form-exercise-page';
+import { FormExerciseFinalChallengePage } from '@/features/module/pages/form-exercise-final-challenge.page';
+import { FormExerciseGrammarRulePage } from '@/features/module/pages/form-exercise-grammar-rule-page';
+import { FormFinalChallengePage } from '@/features/module/pages/form-final-challenge-page';
 import { FormIntroductionPage } from '@/features/module/pages/form-introduction-page';
 import { FormModulePage } from '@/features/module/pages/form-module-page';
 import { FormPresentationPage } from '@/features/module/pages/form-presentation-page';
@@ -11,7 +13,8 @@ import { CreateModuleLayout } from '@/features/module/templates/create-module-la
 import { GrammarRuleLayout } from '@/features/module/templates/grammar-rule-layout';
 import { Layout } from '@/templates/layout';
 import { NotFound } from '@/templates/not-found';
-import { ProtectedRoute } from '@/templates/private-routes';
+import { ProtectedRoute } from '@/templates/private-route';
+import { PublicRoute } from '@/templates/public-route';
 import { createBrowserRouter } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
@@ -76,7 +79,7 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: `${ROUTES.exercise}`,
-                        element: <FormExercisePage />,
+                        element: <FormExerciseGrammarRulePage />,
                       },
                       {
                         path: `${ROUTES.presentation}/${ROUTES.windowId}`,
@@ -84,7 +87,17 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: `${ROUTES.exercise}/${ROUTES.windowId}`,
-                        element: <FormExercisePage />,
+                        element: <FormExerciseGrammarRulePage />,
+                      },
+                    ],
+                  },
+                  {
+                    path: ROUTES.finalChallenge,
+                    element: <FormFinalChallengePage />,
+                    children: [
+                      {
+                        path: `${ROUTES.exerciseId}`,
+                        element: <FormExerciseFinalChallengePage />,
                       },
                     ],
                   },
@@ -100,11 +113,19 @@ export const router = createBrowserRouter([
       },
       {
         path: 'register',
-        element: <RegisterPage />,
+        element: (
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        ),
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: (
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        ),
       },
     ],
   },

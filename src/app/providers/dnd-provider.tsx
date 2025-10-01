@@ -1,3 +1,4 @@
+import { CustomDragLayer } from '@/features/module/components/custom-drag-layer';
 import type { ReactNode } from 'react';
 import { DndProvider as DndProviderDep } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -7,5 +8,10 @@ interface ReactQueryProviderProps {
 }
 
 export function DndProvider({ children }: ReactQueryProviderProps) {
-  return <DndProviderDep backend={HTML5Backend}>{children}</DndProviderDep>;
+  return (
+    <DndProviderDep backend={HTML5Backend}>
+      <CustomDragLayer />
+      {children}
+    </DndProviderDep>
+  );
 }

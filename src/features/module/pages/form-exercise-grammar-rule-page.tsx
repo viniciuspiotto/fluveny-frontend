@@ -19,7 +19,7 @@ import {
 } from '../schemas/translate-exercise-schema';
 import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
 
-export const FormExercisePage = () => {
+export const FormExerciseGrammarRulePage = () => {
   const { moduleId, grammarRuleId, windowId } = useParams();
 
   const { windowsList, currentPosition, setWindowsList, updateDraftData } =

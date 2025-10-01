@@ -11,4 +11,6 @@ export const ROUTES = {
   presentation: 'presentation',
   exercise: 'exercise',
   windowId: ':windowId',
+  exerciseId: ':exerciseId',
+  finalChallenge: 'finalChallenge',
 };

@@ -1,9 +1,9 @@
-import type { WindowList } from '@/@types/module';
+import type { WindowListDTO } from '@/@types/module';
 import { api } from '@/app/libs/api';
 
 export interface GetGrammarRulesContentResponse {
   message: string;
-  data: WindowList[];
+  data: WindowListDTO[];
 }
 
 interface GetGrammarRulesContentRequest {

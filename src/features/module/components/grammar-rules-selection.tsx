@@ -29,7 +29,7 @@ export const GrammarRulesSelection = ({
 
   return (
     <>
-      <div className="grid grid-cols-[1fr_50px] items-center gap-4 lg:grid-cols-2">
+      <div className="items-center space-x-4 lg:grid-cols-2">
         <SelectGrammarRule
           initialValue={initialValue}
           value={selectedGrammarRules}

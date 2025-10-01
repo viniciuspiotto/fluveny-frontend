@@ -1,16 +1,15 @@
-import { ROUTES } from '@/app/configs/routes';
 import { DndProvider } from '@/app/providers/dnd-provider';
 import { DraftWindowsModal } from '@/components/modal';
-import { ContentWindow } from '@/features/module/components/content-window';
 import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/use-get-grammar-rule-content';
 import { NotFound } from '@/templates/not-found';
 import { useEffect } from 'react';
 import { Outlet, useBlocker, useNavigate, useParams } from 'react-router';
+import { GrammarRuleWindowList } from '../components/grammar-rule-window-list';
 import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';
 import { useUpdateGrammarRuleWindows } from '../hooks/api/mutations/use-update-grammar-rule-windows';
 import {
   useGrammarRuleModuleWindows,
-  type WindowList,
+  type WindowsType,
 } from '../stores/use-grammar-rule-module-windows';
 
 export const GrammarRuleLayout = () => {
@@ -78,25 +77,29 @@ export const GrammarRuleLayout = () => {
           ({
             ...w,
             clientId: w.id,
-          }) as WindowList,
+          }) as WindowsType,
       );
       setWindowsList(windowsWithClientId);
       setCurrentPosition(0);
-
-      if (windows.length > 0) {
-        const firstWindow = windows[0];
-        navigate(`${firstWindow.type.toLocaleLowerCase()}/${firstWindow.id}`, {
-          replace: true,
-        });
-      } else {
-        navigate(ROUTES.presentation, { replace: true });
-      }
     } else if (!isLoadingWindows) {
       setWindowsList([{ type: 'PRESENTATION', clientId: crypto.randomUUID() }]);
       setCurrentPosition(0);
-      navigate(ROUTES.presentation, { replace: true });
     }
-  }, [windows, isLoadingWindows, navigate, setWindowsList, setCurrentPosition]);
+  }, [windows, isLoadingWindows, setWindowsList, setCurrentPosition]);
+
+  useEffect(() => {
+    if (
+      currentPosition !== null &&
+      windowsList.length > 0 &&
+      windowsList[currentPosition]
+    ) {
+      const currentWindow = windowsList[currentPosition];
+      const path = `${currentWindow.type.toLowerCase()}${
+        currentWindow.id ? `/${currentWindow.id}` : ''
+      }`;
+      navigate(path, { replace: true });
+    }
+  }, [currentPosition, windowsList, navigate]);
 
   if (isLoadingWindows) {
     return <FormPresentationPageSkeleton />;
@@ -104,7 +107,7 @@ export const GrammarRuleLayout = () => {
 
   if (!moduleId || !grammarRuleId) return <NotFound />;
 
-  const onSendWindowsPosition = (data: WindowList[]) => {
+  const onSendWindowsPosition = (data: WindowsType[]) => {
     const windowsWithId = data
       .filter((w) => w.id)
       .map(({ id, type }) => ({
@@ -124,11 +127,13 @@ export const GrammarRuleLayout = () => {
     <DndProvider key={grammarRuleId}>
       <div>
         <Outlet key={uniqueKey} />
-        <ContentWindow />
+        <GrammarRuleWindowList />
         <DraftWindowsModal
+          key={'grammar-rule'}
           isOpen={blocker.state === 'blocked' && hasDraftWindows}
           onCancel={handleCancelNavigation}
           onConfirm={handleConfirmNavigation}
+          windowsList={windowsList}
         />
       </div>
     </DndProvider>

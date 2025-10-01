@@ -3,6 +3,7 @@ export type Module = {
   title: string;
   description: string;
   level: Level;
+  estimatedTime: number;
   grammarRules: GrammarRule[];
 };
 

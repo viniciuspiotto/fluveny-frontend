@@ -1,6 +1,7 @@
 import { ROUTES } from '@/app/configs/routes';
 import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -30,12 +31,6 @@ export const FormModulePage = () => {
 
   const methods = useForm<ModuleForm>({
     resolver: zodResolver(moduleFormSchema),
-    defaultValues: {
-      description: '',
-      id_level: '',
-      title: '',
-      id_grammarRules: [],
-    },
   });
 
   const createModuleMutation = useCreateModule();
@@ -46,13 +41,15 @@ export const FormModulePage = () => {
       methods.reset({
         title: moduleData.title,
         description: moduleData.description,
-        id_grammarRules: moduleData.grammarRules.map((rule) => rule.id),
+        id_grammarRules: moduleData.grammarRules.map((rule) => String(rule.id)),
         id_level: moduleData.level.id,
+        estimatedTime: moduleData.estimatedTime,
       });
     }
-  }, [moduleData, isEditMode, methods]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditMode, moduleData]);
 
-  if (isLoading) {
+  if (isEditMode && isLoading) {
     return <FormModulePageSkeleton />;
   }
 
@@ -94,7 +91,19 @@ export const FormModulePage = () => {
           <TitleInput />
           <GrammarRulesField />
           <FormSectionWrapper label="Nível de dificuldade" htmlFor="id_level">
-            <LevelSelect />
+            <LevelSelect name="id_level" level={moduleData?.level.id} />
+          </FormSectionWrapper>
+          <FormSectionWrapper label="Tempo estimado" htmlFor="estimatedTime">
+            <div className="flex items-center gap-2">
+              <Input
+                {...methods.register('estimatedTime', { valueAsNumber: true })}
+                type="number"
+                className="w-18 py-6 text-center"
+                max={600}
+                min={1}
+              />
+              <span className="">min</span>
+            </div>
           </FormSectionWrapper>
           <FormSectionWrapper label="Descrição" htmlFor="description">
             <DescriptionField />
