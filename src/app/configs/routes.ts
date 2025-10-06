@@ -1,5 +1,5 @@
 export const ROUTES = {
-  dashboard: '/',
+  dashboard: '/dashboard',
   modules: '/modules',
   introduction: 'introduction',
   drafts: 'drafts',
@@ -11,4 +11,6 @@ export const ROUTES = {
   presentation: 'presentation',
   exercise: 'exercise',
   windowId: ':windowId',
+  exerciseId: ':exerciseId',
+  finalChallenge: 'finalChallenge',
 };

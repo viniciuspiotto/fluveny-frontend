@@ -3,6 +3,7 @@ export type Module = {
   title: string;
   description: string;
   level: Level;
+  estimatedTime: number;
   grammarRules: GrammarRule[];
 };
 
@@ -65,3 +66,5 @@ export type Presentation = {
     content: string;
   };
 };
+
+export type LinguisticAbility = 'WRITE' | 'READ' | 'LISTEN';

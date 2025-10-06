@@ -8,20 +8,36 @@ import {
 } from '@/components/ui/popover';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useFinalChallengeExercise } from '../stores/use-final-challenge-exercises';
 import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
 import ExerciseSelector from './exercise-selection';
 
 interface AddWindowProps {
   side: 'left' | 'right';
   insertionIndex: number;
+  isPresentationEnabled: boolean;
 }
 
-export const AddWindow = ({ side, insertionIndex }: AddWindowProps) => {
+export const AddWindow = ({
+  side,
+  insertionIndex,
+  isPresentationEnabled,
+}: AddWindowProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const addWindow = useGrammarRuleModuleWindows((state) => state.addWindow);
+  const addWindowGrammarRule = useGrammarRuleModuleWindows(
+    (state) => state.addWindow,
+  );
+  const addFinalChallengeExercise = useFinalChallengeExercise(
+    (state) => state.addExercise,
+  );
 
+  // TODO: Change this to accept other's exercise type
   const handleSelectWindowType = (type: WindowType) => {
-    addWindow(type, insertionIndex);
+    if (isPresentationEnabled) {
+      addWindowGrammarRule(type, insertionIndex);
+    } else {
+      addFinalChallengeExercise('TRANSLATE', insertionIndex);
+    }
     setIsOpen(false);
   };
 
@@ -40,13 +56,15 @@ export const AddWindow = ({ side, insertionIndex }: AddWindowProps) => {
       </PopoverTrigger>
       <PopoverContent side="top" asChild className="w-40 p-0 lg:w-50">
         <div className="border-primary flex flex-col rounded-md border-1">
-          <Button
-            onClick={() => handleSelectWindowType('PRESENTATION')}
-            variant={'ghost'}
-            className="border-primary cursor-pointer rounded-t-md rounded-b-none border-b-1 lg:py-5 lg:text-base"
-          >
-            Apresentação
-          </Button>
+          {isPresentationEnabled && (
+            <Button
+              onClick={() => handleSelectWindowType('PRESENTATION')}
+              variant={'ghost'}
+              className="border-primary cursor-pointer rounded-t-md rounded-b-none border-b-1 lg:py-5 lg:text-base"
+            >
+              Apresentação
+            </Button>
+          )}
           <ExerciseSelector handleAddNewWindow={handleSelectWindowType}>
             <Button
               variant={'ghost'}

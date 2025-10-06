@@ -5,29 +5,35 @@ import { Toaster as Sonner } from 'sonner';
 const Toaster = () => {
   return (
     <Sonner
-      className={cn('group', 'toaster', '[--width:auto]', '[--padding:1rem]')}
+      className="toaster group"
       position="top-right"
-      closeButton={false}
+      closeButton={true}
       duration={3000}
       icons={{
-        success: <CheckCircle className="size-5 text-green-500" />,
-        warning: <AlertTriangle className="size-5 text-yellow-500" />,
-        error: <AlertCircle className="size-5 text-red-500" />,
+        success: <CheckCircle className="text-success size-5" />,
+        warning: <AlertTriangle className="text-warning size-5" />,
+        error: <AlertCircle className="text-destructive size-5" />,
       }}
       toastOptions={{
         unstyled: true,
         classNames: {
           toast: cn(
             'group toast',
-            'flex items-center gap-4',
-            'bg-white py-3 px-5 text-zinc-500',
-            'border-2 rounded shadow-lg',
+            'relative flex w-full items-center gap-3',
+            'bg-white p-4 text-zinc-900',
+            'border rounded-lg shadow-md',
           ),
-          title: cn('text-base font-medium'),
-          description: cn('text-sm'),
-          success: cn('!text-green-500'),
-          warning: cn('!text-yellow-500'),
-          error: cn('!text-red-500'),
+          title: cn('text-sm font-semibold'),
+          description: cn('text-sm text-zinc-500'),
+          success: cn('!text-success'),
+          warning: cn('!text-warning'),
+          error: cn('!text-destructive'),
+          closeButton: cn(
+            'absolute top-2 right-2',
+            'p-1 rounded-md',
+            'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900',
+            'transition-colors',
+          ),
         },
       }}
     />

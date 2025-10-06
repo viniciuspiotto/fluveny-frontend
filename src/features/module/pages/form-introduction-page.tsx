@@ -1,7 +1,7 @@
 import { ROUTES } from '@/app/configs/routes';
 import { Editor } from '@/components/editor';
-import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
+import { NotFound } from '@/templates/not-found';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -42,6 +42,10 @@ export const FormIntroductionPage = () => {
     }
   }, [introductionData, isEditMode, methods]);
 
+  if (isLoading) {
+    return <FormIntroductionPageSkeleton />;
+  }
+
   if (!moduleId || !grammarRuleModuleInfo) {
     return <NotFound />;
   }
@@ -77,10 +81,6 @@ export const FormIntroductionPage = () => {
       );
     }
   };
-
-  if (isLoading) {
-    return <FormIntroductionPageSkeleton />;
-  }
 
   return (
     <>

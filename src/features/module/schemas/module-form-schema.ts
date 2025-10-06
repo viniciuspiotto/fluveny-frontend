@@ -16,6 +16,10 @@ export const moduleFormSchema = z.object({
     .trim()
     .min(10, 'Descrição deve ter no mínimo 10 caracteres')
     .max(500, 'Descrição deve ter no máximo 500 caracteres'),
+  estimatedTime: z
+    .number()
+    .min(1, 'O tempo estimado deve ter no mínimo 1 minuto')
+    .max(600, 'O tempo estimado deve ter no máximo 600 minutos'),
 });
 
 export type ModuleForm = z.infer<typeof moduleFormSchema>;

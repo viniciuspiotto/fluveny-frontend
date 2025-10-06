@@ -14,41 +14,24 @@ export default function LinkButton() {
   const { editor } = useCurrentEditor();
   const linkRef = useRef<HTMLInputElement>(null);
 
-  if (!editor) return;
+  if (!editor) return null;
 
   const handleClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    editor.chain().focus().run();
     if (!linkRef.current) return;
 
-    const link = linkRef.current.value;
+    let url = linkRef.current.value.trim();
 
-    if (editor.isActive('link')) {
-      // empty
-      if (link === '' || !link) {
-        editor.chain().focus().unsetLink().run();
-
-        return;
-      }
-
-      // update link
-
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange('link')
-        .setLink({ href: link })
-        .run();
-    } else {
-      if (link) {
-        editor
-          .chain()
-          .focus()
-          .extendMarkRange('link')
-          .setLink({ href: link })
-          .run();
-      }
+    if (url === '') {
+      editor.chain().focus().unsetLink().run();
+      return;
     }
+
+    if (!/^(https?:\/\/)/i.test(url)) {
+      url = `https://${url}`;
+    }
+
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
   };
 
   return (
@@ -63,7 +46,7 @@ export default function LinkButton() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
-        <form onSubmit={(e) => handleClick(e)}>
+        <form onSubmit={handleClick}>
           <div className="grid gap-4 pb-4">
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="link">Link</Label>
@@ -73,11 +56,12 @@ export default function LinkButton() {
                 autoComplete="off"
                 className="col-span-3 h-8"
                 ref={linkRef}
+                defaultValue={editor.getAttributes('link').href ?? ''}
               />
             </div>
           </div>
           <div className="flex justify-end">
-            <Button type="submit">Aplicar</Button>
+            <Button type="button">Aplicar</Button>
           </div>
         </form>
       </PopoverContent>

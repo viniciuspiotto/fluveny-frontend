@@ -1,8 +1,8 @@
 import { cn } from '@/app/utils/cn';
-import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { NotFound } from '@/templates/not-found';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -19,7 +19,7 @@ import {
 } from '../schemas/translate-exercise-schema';
 import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
 
-export const FormExercisePage = () => {
+export const FormExerciseGrammarRulePage = () => {
   const { moduleId, grammarRuleId, windowId } = useParams();
 
   const { windowsList, currentPosition, setWindowsList, updateDraftData } =

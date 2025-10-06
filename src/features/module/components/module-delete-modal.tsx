@@ -2,11 +2,15 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
-  DialogContentNoClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { AlertTriangle } from 'lucide-react'; // Ícone de alerta
 import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
@@ -26,8 +30,14 @@ export default function DeleteModal({ children }: DeleteModalProps) {
   useEffect(() => {
     async function setTitle() {
       if (!moduleId) return;
-      const moduleData = await getModule(moduleId);
-      setModuleTitle(moduleData.data.title);
+      try {
+        const moduleData = await getModule(moduleId);
+        setModuleTitle(moduleData.data.title);
+      } catch (error) {
+        setModuleTitle('N/A');
+        console.error(error);
+        toast.error('Não foi possível carregar o nome do módulo.');
+      }
     }
     setTitle();
   }, [moduleId]);
@@ -46,44 +56,44 @@ export default function DeleteModal({ children }: DeleteModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContentNoClose
-        className="p-4 md:max-w-2/3 lg:max-w-1/3"
-        aria-describedby="Confirmar Deleção"
-      >
-        <div className="flex w-full flex-col items-center">
-          <DialogTitle className="p-2 text-xl font-bold">
-            Confirmar Exclusão
-          </DialogTitle>
-          <section>
-            <p className="inline text-sm">
-              Para confirmar a exclusão, digite o nome do Módulo:{' '}
-            </p>
-            <p className="inline text-sm text-gray-400 select-none">
-              ({moduleTitle})
-            </p>
-            <Input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-          </section>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="text-destructive size-6" />
+            <DialogTitle className="text-xl">Confirmar Exclusão</DialogTitle>
+          </div>
+          <DialogDescription className="pt-2 text-left">
+            Esta ação é irreversível. Para confirmar, digite
+            <strong className="text-foreground px-1 font-medium select-none">
+              {moduleTitle}
+            </strong>
+            no campo abaixo.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="py-2">
+          <Input
+            type="text"
+            placeholder="Digite o nome do módulo"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoComplete="off"
+          />
         </div>
-        <div className="flex w-full justify-end">
+
+        <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" className="mr-2">
-              <p>Cancelar</p>
-            </Button>
+            <Button variant="outline">Cancelar</Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button
-              disabled={inputValue !== moduleTitle}
-              onClick={handleDelete}
-            >
-              <p>Confirmar</p>
-            </Button>
-          </DialogClose>
-        </div>
-      </DialogContentNoClose>
+          <Button
+            variant="destructive"
+            disabled={inputValue !== moduleTitle}
+            onClick={handleDelete}
+          >
+            Eu entendo, excluir este módulo
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }
