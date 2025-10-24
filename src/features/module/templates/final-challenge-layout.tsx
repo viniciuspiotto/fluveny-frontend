@@ -4,6 +4,7 @@ import { NotFound } from '@/templates/not-found';
 import { useEffect } from 'react';
 import { Outlet, useBlocker, useNavigate, useParams } from 'react-router';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
+import { FinalChallengeContentWindow } from '../components/final-challenge-window-list';
 import { useUpdateFinalChallengeExercisesChallenge } from '../hooks/api/mutations/use-update-final-challenge-exercises';
 import { useGetFinalChallengeExercises } from '../hooks/api/queries/use-get-final-challenge-exercises';
 import {
@@ -109,6 +110,22 @@ export const FinalChallengeLayout = () => {
     exercises,
   ]);
 
+  useEffect(() => {
+    if (
+      currentPosition !== null &&
+      exerciseList.length > 0 &&
+      exerciseList[currentPosition]
+    ) {
+      const currentExercise = exerciseList[currentPosition];
+
+      const path = currentExercise.id ?? currentExercise.style;
+
+      if (path) {
+        navigate(path, { replace: true });
+      }
+    }
+  }, [currentPosition, exerciseList, navigate]);
+
   const onSendExercisesPosition = (data: Exercise[]) => {
     if (!moduleId) return;
 
@@ -131,6 +148,7 @@ export const FinalChallengeLayout = () => {
     <DndProvider key={`${moduleId}-finalChallenge`}>
       <div>
         <Outlet key={uniqueKey} />
+        <FinalChallengeContentWindow />
         <DraftWindowsModal
           key={'final-challenge'}
           isOpen={blocker.state === 'blocked' && hasDraftExercises}
