@@ -1,9 +1,16 @@
 import { ROUTES } from '@/app/configs/routes';
 import { Button } from '@/components/ui/button';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import { useAuthStore } from '@/stores/auth-store';
 import { LoadingScreen } from '@/templates/loading-screen';
 import { NotFound } from '@/templates/not-found';
-import { useQueryStates } from 'nuqs';
+import { parseAsInteger, useQueryStates } from 'nuqs';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { ModuleCard } from '../components/module-card';
@@ -15,7 +22,11 @@ const permittedRoles = ['ADMIN', 'CONTENT_CREATOR'];
 export const PanelPage = () => {
   const { user } = useAuthStore();
 
-  const [filters] = useQueryStates(parsers);
+  const [query, setQuery] = useQueryStates({
+    ...parsers,
+    page: parseAsInteger.withDefault(1),
+  });
+  const { page, ...filters } = query;
   const [debouncedFilters, setDebouncedFilters] = useState(filters);
 
   useEffect(() => {
@@ -28,12 +39,18 @@ export const PanelPage = () => {
     };
   }, [filters]);
 
-  const { modules, isLoading, isError } = useGetSearchStudentModules({
-    moduleName: debouncedFilters.q,
-    grammarRulesId: debouncedFilters.grammarRules,
-    levelId: debouncedFilters.levels,
-    status: debouncedFilters.statuses,
-  });
+  const { modules, isLoading, isError } = useGetSearchStudentModules(
+    {
+      moduleName: debouncedFilters.q,
+      grammarRulesId: debouncedFilters.grammarRules,
+      levelId: debouncedFilters.levels,
+      status: debouncedFilters.statuses,
+    },
+    {
+      pageNumber: page - 1,
+      pageSize: 10,
+    },
+  );
 
   const canViewDrafts = user && permittedRoles.includes(user.role);
 
@@ -46,7 +63,7 @@ export const PanelPage = () => {
       return <NotFound />;
     }
 
-    if (!modules || modules.length === 0) {
+    if (!modules || modules.size === 0) {
       return (
         <div className="flex w-full justify-center text-lg">
           Nenhum módulo encontrado com os filtros aplicados.
@@ -56,11 +73,20 @@ export const PanelPage = () => {
 
     return (
       <ul className="grid grid-rows-4 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 lg:gap-6">
-        {modules.map((module) => (
+        {modules.content.map((module) => (
           <ModuleCard key={module.id} {...module} />
         ))}
       </ul>
     );
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (!modules) return;
+
+    if (newPage < 1 || newPage > modules.totalPages) {
+      return;
+    }
+    setQuery({ page: newPage });
   };
 
   return (
@@ -80,6 +106,44 @@ export const PanelPage = () => {
       <ModuleFilter />
 
       {renderContent()}
+
+      {!isLoading && !isError && modules && (
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePageChange(page - 1);
+                }}
+                className={page === 1 ? 'pointer-events-none opacity-50' : ''}
+              />
+            </PaginationItem>
+
+            <PaginationItem>
+              <span className="px-4 text-sm">
+                Página {page} de {modules.totalPages}
+              </span>
+            </PaginationItem>
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePageChange(page + 1);
+                }}
+                className={
+                  page === modules.totalPages
+                    ? 'pointer-events-none opacity-50'
+                    : ''
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 };
