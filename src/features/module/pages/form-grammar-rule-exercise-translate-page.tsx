@@ -7,11 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
+import { toast } from 'sonner';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
-import { useCreateTranslateExercise } from '../hooks/api/mutations/use-create-translate-exercise';
-import { useUpdateTranslateExercise } from '../hooks/api/mutations/use-update-translate-exercise';
+import { useCreateGrammarRuleExercise } from '../hooks/api/mutations/use-create-grammar-rule-exercise';
+import { useUpdateGrammarRuleExercise } from '../hooks/api/mutations/use-update-grammar-rule-exercise';
 import { useGetExercise } from '../hooks/api/queries/use-get-exercise';
 import {
   TranslateExerciseSchema,
@@ -19,11 +20,19 @@ import {
 } from '../schemas/translate-exercise-schema';
 import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
 
-export const FormExerciseGrammarRulePage = () => {
-  const { moduleId, grammarRuleId, windowId } = useParams();
-
+export const FormGrammarRuleExerciseTranslatePage = () => {
+  const { windowId, moduleId, grammarRuleId } = useParams();
   const { windowsList, currentPosition, setWindowsList, updateDraftData } =
     useGrammarRuleModuleWindows();
+
+  const isEditMode = !!windowId;
+
+  const currentWindow =
+    currentPosition !== null ? windowsList[currentPosition] : undefined;
+  const draftData =
+    currentWindow?.type === 'EXERCISE'
+      ? (currentWindow.draftData as Partial<TranslateExerciseForm>)
+      : undefined;
 
   const methods = useForm<TranslateExerciseForm>({
     resolver: zodResolver(TranslateExerciseSchema),
@@ -41,18 +50,9 @@ export const FormExerciseGrammarRulePage = () => {
     windowId,
   });
 
-  const isEditMode = !!windowId;
-
-  const currentWindow =
-    currentPosition !== null ? windowsList[currentPosition] : undefined;
-  const draftData =
-    currentWindow?.type === 'EXERCISE'
-      ? (currentWindow.draftData as Partial<TranslateExerciseForm>)
-      : undefined;
-
   useEffect(() => {
     if (isEditMode && translateExerciseContent) {
-      methods.reset(translateExerciseContent);
+      methods.reset(translateExerciseContent as TranslateExerciseForm);
     } else if (!isEditMode && draftData) {
       methods.reset({
         header: draftData.header || '',
@@ -64,6 +64,9 @@ export const FormExerciseGrammarRulePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [translateExerciseContent, isEditMode, methods]);
 
+  const updateTranslateExercise = useUpdateGrammarRuleExercise();
+  const createTranslateExercise = useCreateGrammarRuleExercise();
+
   const handleSaveDraftOnBlur = () => {
     if (!isEditMode && currentPosition !== null) {
       const currentValues = methods.getValues();
@@ -71,31 +74,34 @@ export const FormExerciseGrammarRulePage = () => {
     }
   };
 
-  const updateTranslateExercise = useUpdateTranslateExercise();
-  const createTranslateExercise = useCreateTranslateExercise();
-
-  if (isLoading) {
-    return <FormExercisePageSkeleton />;
-  }
-
   if (!moduleId || !grammarRuleId) {
     return <NotFound />;
   }
 
   const onSubmit = (formData: TranslateExerciseForm) => {
+    const dataWithStyle = {
+      ...formData,
+      style: 'TRANSLATE',
+    };
+
     if (isEditMode) {
-      updateTranslateExercise.mutate({
-        moduleId,
-        grammarRuleId,
-        windowId,
-        data: formData,
-      });
+      updateTranslateExercise.mutate(
+        {
+          moduleId,
+          grammarRuleId,
+          windowId,
+          data: dataWithStyle,
+        },
+        {
+          onSuccess: () => toast.success('Exercício atualizado com sucesso!'),
+        },
+      );
     } else {
       createTranslateExercise.mutate(
         {
           moduleId,
           grammarRuleId,
-          data: formData,
+          data: dataWithStyle,
         },
         {
           onSuccess: (newlyCreatedWindow) => {
@@ -107,20 +113,27 @@ export const FormExerciseGrammarRulePage = () => {
             newList[currentPosition] = {
               id: newlyCreatedWindow.id,
               type: 'EXERCISE',
+              style: 'TRANSLATE',
               clientId,
               draftData: {},
             };
 
             setWindowsList(newList);
+
+            toast.success('Exercício criado com sucesso!');
           },
         },
       );
     }
   };
 
+  if (isLoading) {
+    return <FormExercisePageSkeleton />;
+  }
+
   return (
     <>
-      <ModuleHeader step={'Exercício'} />
+      <ModuleHeader step={'Exercício de Tradução'} />
       <div className="mx-auto mb-30 flex w-full max-w-300 flex-col px-4 pb-8">
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>

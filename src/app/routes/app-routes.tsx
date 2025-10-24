@@ -2,14 +2,14 @@ import { LoginPage } from '@/features/authentication/pages/login';
 import { RegisterPage } from '@/features/authentication/pages/register';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
-import { FormExerciseFinalChallengePage } from '@/features/module/pages/form-exercise-final-challenge.page';
-import { FormExerciseGrammarRulePage } from '@/features/module/pages/form-exercise-grammar-rule-page';
-import { FormFinalChallengePage } from '@/features/module/pages/form-final-challenge-page';
 import { FormIntroductionPage } from '@/features/module/pages/form-introduction-page';
 import { FormModulePage } from '@/features/module/pages/form-module-page';
 import { FormPresentationPage } from '@/features/module/pages/form-presentation-page';
 import { PanelPage } from '@/features/module/pages/panel-page';
 import { CreateModuleLayout } from '@/features/module/templates/create-module-layout';
+import { ExerciseFinalChallengeOrchestrator } from '@/features/module/templates/exercise-final-challenge-orchestrator';
+import { ExerciseGrammarRuleOrchestrator } from '@/features/module/templates/exercise-grammar-rule-orchestrator';
+import { FinalChallengeLayout } from '@/features/module/templates/final-challenge-layout';
 import { GrammarRuleLayout } from '@/features/module/templates/grammar-rule-layout';
 import { Layout } from '@/templates/layout';
 import { NotFound } from '@/templates/not-found';
@@ -78,26 +78,30 @@ export const router = createBrowserRouter([
                         element: <FormPresentationPage />,
                       },
                       {
-                        path: `${ROUTES.exercise}`,
-                        element: <FormExerciseGrammarRulePage />,
-                      },
-                      {
                         path: `${ROUTES.presentation}/${ROUTES.windowId}`,
                         element: <FormPresentationPage />,
                       },
                       {
-                        path: `${ROUTES.exercise}/${ROUTES.windowId}`,
-                        element: <FormExerciseGrammarRulePage />,
+                        path: `${ROUTES.exercise}/${ROUTES.style}`,
+                        element: <ExerciseGrammarRuleOrchestrator />,
+                      },
+                      {
+                        path: `${ROUTES.exercise}/${ROUTES.style}/${ROUTES.windowId}/`,
+                        element: <ExerciseGrammarRuleOrchestrator />,
                       },
                     ],
                   },
                   {
                     path: ROUTES.finalChallenge,
-                    element: <FormFinalChallengePage />,
+                    element: <FinalChallengeLayout />,
                     children: [
                       {
-                        path: `${ROUTES.exerciseId}`,
-                        element: <FormExerciseFinalChallengePage />,
+                        path: `${ROUTES.style}`,
+                        element: <ExerciseFinalChallengeOrchestrator />,
+                      },
+                      {
+                        path: `${ROUTES.style}/${ROUTES.exerciseId}`,
+                        element: <ExerciseFinalChallengeOrchestrator />,
                       },
                     ],
                   },

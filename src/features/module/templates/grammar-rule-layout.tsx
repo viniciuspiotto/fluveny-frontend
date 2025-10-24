@@ -94,9 +94,19 @@ export const GrammarRuleLayout = () => {
       windowsList[currentPosition]
     ) {
       const currentWindow = windowsList[currentPosition];
-      const path = `${currentWindow.type.toLowerCase()}${
-        currentWindow.id ? `/${currentWindow.id}` : ''
-      }`;
+
+      const pathSegments = [currentWindow.type.toLowerCase()];
+
+      if (currentWindow.type === 'EXERCISE' && currentWindow.style) {
+        pathSegments.push(currentWindow.style);
+      }
+
+      if (currentWindow.id) {
+        pathSegments.push(currentWindow.id);
+      }
+
+      const path = pathSegments.join('/');
+
       navigate(path, { replace: true });
     }
   }, [currentPosition, windowsList, navigate]);

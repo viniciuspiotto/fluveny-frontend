@@ -1,25 +1,19 @@
+import type { ExerciseRequest, ExerciseResponse } from '@/@types/exercise';
 import { api } from '@/app/libs/api';
-import type { TranslateExerciseForm } from '../../schemas/translate-exercise-schema';
 
 interface ModuleTranslateExerciseResponse {
   message: string;
-  data: {
-    grammarRuleId: string;
-    header: string;
-    phrase: string;
-    template: string;
-    justification: string;
-  };
+  data: ExerciseResponse;
 }
 
 interface updateTranslateExerciseRequest {
-  data: TranslateExerciseForm;
+  data: ExerciseRequest;
   moduleId: string;
   grammarRuleId: string;
   windowId: string;
 }
 
-export const updateTranslateExercise = async ({
+export const updateGrammarRuleExercise = async ({
   data,
   grammarRuleId,
   moduleId,

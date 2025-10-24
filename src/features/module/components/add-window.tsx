@@ -1,4 +1,4 @@
-import type { WindowType } from '@/@types/module';
+import type { ExerciseStyle, WindowType } from '@/@types/module';
 import { cn } from '@/app/utils/cn';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,13 +31,17 @@ export const AddWindow = ({
     (state) => state.addExercise,
   );
 
-  // TODO: Change this to accept other's exercise type
-  const handleSelectWindowType = (type: WindowType) => {
+  const handleSelectWindowType = (type: WindowType, style?: ExerciseStyle) => {
     if (isPresentationEnabled) {
-      addWindowGrammarRule(type, insertionIndex);
-    } else {
-      addFinalChallengeExercise('TRANSLATE', insertionIndex);
+      if (type === 'EXERCISE') {
+        addWindowGrammarRule(insertionIndex, type, style);
+      } else {
+        addWindowGrammarRule(insertionIndex, type);
+      }
+    } else if (style) {
+      addFinalChallengeExercise(insertionIndex, style);
     }
+
     setIsOpen(false);
   };
 

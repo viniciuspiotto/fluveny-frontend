@@ -12,11 +12,10 @@ export const useUpdateFinalChallengeExercisesChallenge = () => {
       moduleId,
       data,
     }: UpdateFinalChallengeExercisesRequest) => {
-      const response = await updateFinalChallengeExercises({
+      await updateFinalChallengeExercises({
         data,
         moduleId,
       });
-      return response.data;
     },
   });
 };

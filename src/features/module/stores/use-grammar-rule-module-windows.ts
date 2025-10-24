@@ -1,6 +1,8 @@
+import type { ExerciseStyle } from '@/@types/exercise';
 import type { WindowType } from '@/@types/module';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { BuildPhraseExerciseForm } from '../schemas/build-phrase-schema';
 import type { PresentationForm } from '../schemas/presentation-schema';
 import type { TranslateExerciseForm } from '../schemas/translate-exercise-schema';
 
@@ -14,8 +16,9 @@ type PresentationWindow = {
 type ExerciseWindow = {
   id?: string;
   type: 'EXERCISE';
+  style: ExerciseStyle;
   clientId?: string;
-  draftData?: Partial<TranslateExerciseForm>;
+  draftData?: Partial<TranslateExerciseForm> | Partial<BuildPhraseExerciseForm>;
 };
 
 export type WindowsType = PresentationWindow | ExerciseWindow;
@@ -25,7 +28,7 @@ type GrammarRuleModuleWindowsStoreState = {
   currentPosition: null | number;
   setWindowsList: (list: WindowsType[]) => void;
   setCurrentPosition: (position: number) => void;
-  addWindow: (window: WindowType, index: number) => void;
+  addWindow: (index: number, window: WindowType, style?: ExerciseStyle) => void;
   moveWindow: (dragIndex: number, hoverIndex: number) => void;
   updateDraftData: (index: number, data: WindowsType['draftData']) => void;
 };
@@ -44,15 +47,27 @@ export const useGrammarRuleModuleWindows =
           set({ windowsList: listWithClientIds });
         },
         setCurrentPosition: (position) => set({ currentPosition: position }),
-        addWindow: (type, index) =>
+        addWindow: (index, type, style) =>
           set((state) => {
             const newList = [...state.windowsList];
-            const newWindowWithIds = {
-              type,
-              clientId: crypto.randomUUID(),
-              draftData: {},
-            };
-            newList.splice(index, 0, newWindowWithIds);
+            let newWindow: WindowsType;
+
+            if (type === 'EXERCISE') {
+              newWindow = {
+                type: 'EXERCISE',
+                style: style || 'TRANSLATE',
+                clientId: crypto.randomUUID(),
+                draftData: {},
+              };
+            } else {
+              newWindow = {
+                type: 'PRESENTATION',
+                clientId: crypto.randomUUID(),
+                draftData: {},
+              };
+            }
+
+            newList.splice(index, 0, newWindow);
             return { windowsList: newList, currentPosition: index };
           }),
         moveWindow: (dragIndex, hoverIndex) =>

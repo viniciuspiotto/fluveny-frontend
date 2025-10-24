@@ -7,11 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
+import { toast } from 'sonner';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
-import { useCreateFinalChallengeTranslateExercise } from '../hooks/api/mutations/use-create-final-challenge-translate-exercise';
-import { useUpdateFinalChallengeTranslateExercise } from '../hooks/api/mutations/use-update-final-challenge-translate-exercise';
+import { useCreateFinalChallengeExercise } from '../hooks/api/mutations/use-create-final-challenge-exercise';
+import { useUpdateFinalChallengeExercise } from '../hooks/api/mutations/use-update-final-challenge-exercise';
 import { useGetFinalChallengeExercise } from '../hooks/api/queries/use-get-final-challenge-exercise';
 import {
   TranslateExerciseSchema,
@@ -19,7 +20,7 @@ import {
 } from '../schemas/translate-exercise-schema';
 import { useFinalChallengeExercise } from '../stores/use-final-challenge-exercises';
 
-export const FormExerciseFinalChallengePage = () => {
+export const FormFinalChallengeExerciseTranslatePage = () => {
   const { moduleId, exerciseId } = useParams();
 
   const { exerciseList, setExerciseList, currentPosition, updateDraftData } =
@@ -52,7 +53,7 @@ export const FormExerciseFinalChallengePage = () => {
 
   useEffect(() => {
     if (isEditMode && translateExerciseContent) {
-      methods.reset(translateExerciseContent);
+      methods.reset(translateExerciseContent as TranslateExerciseForm);
     } else if (!isEditMode && draftData) {
       methods.reset({
         header: draftData.header || '',
@@ -71,8 +72,8 @@ export const FormExerciseFinalChallengePage = () => {
     }
   };
 
-  const updateTranslateExercise = useUpdateFinalChallengeTranslateExercise();
-  const createTranslateExercise = useCreateFinalChallengeTranslateExercise();
+  const updateExercise = useUpdateFinalChallengeExercise();
+  const createExercise = useCreateFinalChallengeExercise();
 
   if (isLoading) {
     return <FormExercisePageSkeleton />;
@@ -84,13 +85,18 @@ export const FormExerciseFinalChallengePage = () => {
 
   const onSubmit = (formData: TranslateExerciseForm) => {
     if (isEditMode) {
-      updateTranslateExercise.mutate({
-        moduleId,
-        exerciseId,
-        data: formData,
-      });
+      updateExercise.mutate(
+        {
+          moduleId,
+          exerciseId,
+          data: formData,
+        },
+        {
+          onSuccess: () => toast.success('Exercício atualizado com sucesso'),
+        },
+      );
     } else {
-      createTranslateExercise.mutate(
+      createExercise.mutate(
         {
           moduleId,
           data: formData,
@@ -103,11 +109,12 @@ export const FormExerciseFinalChallengePage = () => {
             newList[currentPosition] = {
               id: newlyCreatedWindow.id,
               type: 'EXERCISE',
-              style: 'TRANSLATE',
               clientId,
+              style: 'TRANSLATE',
               draftData: {},
             };
             setExerciseList(newList);
+            toast.success('Exercício criado com sucesso');
           },
         },
       );
@@ -116,7 +123,7 @@ export const FormExerciseFinalChallengePage = () => {
 
   return (
     <>
-      <ModuleHeader step={'Exercício'} />
+      <ModuleHeader step={'Exercício de Tradução'} />
       <div className="mx-auto mb-30 flex w-full max-w-300 flex-col px-4 pb-8">
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>

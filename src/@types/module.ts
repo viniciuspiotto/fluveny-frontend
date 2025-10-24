@@ -1,3 +1,5 @@
+import type { ExerciseStyle } from './exercise';
+
 export type Module = {
   id: string;
   title: string;
@@ -32,6 +34,7 @@ export interface GrammarRuleModuleWindow {
 
 export type WindowListDTO = {
   type: WindowType;
+  style?: ExerciseStyle;
   id?: string;
 };
 
@@ -50,14 +53,6 @@ type TextBlock = {
 export type GrammarRuleModuleIdAndTitle = {
   id: string;
   title: string;
-};
-
-export type Exercise = {
-  grammarRuleModuleId: string;
-  header: string;
-  phrase: string;
-  template: string;
-  justification: string;
 };
 
 export type Presentation = {

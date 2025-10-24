@@ -10,6 +10,7 @@ export const ROUTES = {
   grammarRuleModuleId: ':grammarRuleModuleId',
   presentation: 'presentation',
   exercise: 'exercise',
+  style: ':style',
   windowId: ':windowId',
   exerciseId: ':exerciseId',
   finalChallenge: 'finalChallenge',

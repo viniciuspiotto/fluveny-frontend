@@ -1,10 +1,10 @@
 import { api } from '@/app/libs/api';
 
-type ExercisesDTO = string;
+type ExercisesId = string;
 
 export interface GetFinalChallengeExercisesResponse {
   message: string;
-  data: ExercisesDTO[];
+  data: ExercisesId[];
 }
 
 interface GetFinalChallengeExercisesRequest {

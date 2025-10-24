@@ -1,15 +1,15 @@
+import type { ExerciseStyle } from '@/@types/exercise';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { BuildPhraseExerciseForm } from '../schemas/build-phrase-schema';
 import type { TranslateExerciseForm } from '../schemas/translate-exercise-schema';
-
-type ExerciseStyle = 'TRANSLATE';
 
 export type Exercise = {
   id?: string;
   clientId?: string;
-  style: ExerciseStyle;
   type: 'EXERCISE';
-  draftData?: Partial<TranslateExerciseForm>;
+  style: ExerciseStyle;
+  draftData?: Partial<TranslateExerciseForm> | Partial<BuildPhraseExerciseForm>;
 };
 
 type FinalChallengeExerciseStoreState = {
@@ -17,7 +17,7 @@ type FinalChallengeExerciseStoreState = {
   currentPosition: null | number;
   setExerciseList: (list: Exercise[]) => void;
   setCurrentPosition: (position: number) => void;
-  addExercise: (style: ExerciseStyle, index: number) => void;
+  addExercise: (index: number, style: ExerciseStyle) => void;
   moveExercise: (dragIndex: number, hoverIndex: number) => void;
   updateDraftData: (index: number, data: Exercise['draftData']) => void;
 };
@@ -36,13 +36,13 @@ export const useFinalChallengeExercise =
           set({ exerciseList: listWithClientIds });
         },
         setCurrentPosition: (position) => set({ currentPosition: position }),
-        addExercise: (style, index) =>
+        addExercise: (index, style) =>
           set((state) => {
             const newList = [...state.exerciseList];
             const newExerciseWithIds = {
-              style,
               type: 'EXERCISE',
               clientId: crypto.randomUUID(),
+              style: style,
               draftData: {},
             } as Exercise;
             newList.splice(index, 0, newExerciseWithIds);
