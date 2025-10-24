@@ -253,6 +253,10 @@ export const FormGrammarRuleBuildPhrasePage = () => {
             </div>
 
             <Button
+              disabled={
+                createBuildPhraseExercise.isPending ||
+                updateBuildPhraseExercise.isPending
+              }
               type="submit"
               className="mt-8 mb-24 w-full cursor-pointer py-8 text-xl font-bold"
               size="xl"
