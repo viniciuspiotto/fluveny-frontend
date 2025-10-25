@@ -4,11 +4,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NotFound } from '@/templates/not-found';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Trash2, X } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { toast } from 'sonner';
+import { DistractorModal } from '../components/distractor-modal';
 import { Distration } from '../components/distration';
 import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
@@ -114,19 +115,16 @@ export const FormGrammarRuleBuildPhrasePage = () => {
     setModalState({ open: false, index: null, value: '' });
   };
 
-  const handleSaveDistractor = () => {
-    if (modalState.value.trim() === '') return;
+  const handleSaveDistractor = (value: string) => {
+    if (value.trim() === '') return;
 
     const currentDistractors = methods.getValues('distractors') || [];
 
     if (modalState.index === null) {
-      methods.setValue('distractors', [
-        ...currentDistractors,
-        modalState.value,
-      ]);
+      methods.setValue('distractors', [...currentDistractors, value]);
     } else {
       const newList = [...currentDistractors];
-      newList[modalState.index] = modalState.value;
+      newList[modalState.index] = value;
       methods.setValue('distractors', newList);
     }
     handleCloseModal();
@@ -187,7 +185,7 @@ export const FormGrammarRuleBuildPhrasePage = () => {
 
   return (
     <>
-      <ModuleHeader step={'Exercício de Preenchimento de frase'} />
+      <ModuleHeader step={'Exercício de Construção de frase'} />
       <div className="mx-auto mb-30 flex w-full max-w-300 flex-col px-4 pb-8">
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -267,61 +265,21 @@ export const FormGrammarRuleBuildPhrasePage = () => {
         </FormProvider>
       </div>
 
-      {modalState.open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
-            <div className="flex justify-between">
-              <h3 className="mb-4 text-xl font-semibold">
-                {modalState.index === null
-                  ? `Distração ${distractors.length + 1}`
-                  : `Distração ${modalState.index + 1}`}
-              </h3>
-              <Button
-                className="bg-transparent text-black hover:bg-zinc-200"
-                onClick={handleCloseModal}
-              >
-                <X />
-              </Button>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="distractor-word" className="text-base">
-                Palavra
-              </Label>
-              <Input
-                id="distractor-word"
-                value={modalState.value}
-                onChange={(e) =>
-                  setModalState((prev) => ({ ...prev, value: e.target.value }))
-                }
-                className="py-6 text-lg"
-                placeholder="Digite a distração..."
-                autoFocus
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleSaveDistractor();
-                  }
-                }}
-              />
-            </div>
-
-            <div className="mt-6 flex justify-end gap-5">
-              {modalState.index !== null && (
-                <button
-                  className="bg- flex items-center"
-                  onClick={() => handleRemoveDistractor(modalState.index)}
-                >
-                  <Trash2 className="cursor-pointer text-zinc-400 hover:text-red-400" />
-                </button>
-              )}
-              <Button type="button" onClick={handleSaveDistractor} size="lg">
-                {modalState.index === null ? 'Criar' : 'Editar'}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DistractorModal
+        isOpen={modalState.open}
+        onClose={handleCloseModal}
+        onSave={handleSaveDistractor}
+        onDelete={
+          modalState.index !== null
+            ? () => handleRemoveDistractor(modalState.index)
+            : undefined
+        }
+        initialData={{
+          index: modalState.index,
+          value: modalState.value,
+        }}
+        distractorsCount={distractors.length}
+      />
     </>
   );
 };

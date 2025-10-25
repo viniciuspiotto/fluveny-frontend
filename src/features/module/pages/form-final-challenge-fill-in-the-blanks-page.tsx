@@ -12,16 +12,16 @@ import FormExercisePageSkeleton from '../components/exercise-page-skeleton';
 import { FillInTheBlankEditor } from '../components/fill-in-the-blank-editor';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
-import { useCreateGrammarRuleExercise } from '../hooks/api/mutations/use-create-grammar-rule-exercise';
-import { useUpdateGrammarRuleExercise } from '../hooks/api/mutations/use-update-grammar-rule-exercise';
-import { useGetExercise } from '../hooks/api/queries/use-get-exercise';
+import { useCreateFinalChallengeExercise } from '../hooks/api/mutations/use-create-final-challenge-exercise';
+import { useUpdateFinalChallengeExercise } from '../hooks/api/mutations/use-update-final-challenge-exercise';
+import { useGetFinalChallengeExercise } from '../hooks/api/queries/use-get-final-challenge-exercise';
 import {
   FillInTheBlankWithIDSchema,
   type FillInTheBlankSchemaForm,
   type FillInTheBlankSchemaWithIDForm,
   type PhraseElement,
 } from '../schemas/fill-in-the-blanks-schema';
-import { useGrammarRuleModuleWindows } from '../stores/use-grammar-rule-module-windows';
+import { useFinalChallengeExercise } from '../stores/use-final-challenge-exercises';
 
 const getDefaultPhrase = (): PhraseElement[] => {
   const initialState = [
@@ -30,15 +30,16 @@ const getDefaultPhrase = (): PhraseElement[] => {
   return processPhrase(initialState);
 };
 
-export const FormGrammarRuleExerciseFillInTheBlankPage = () => {
-  const { windowId, moduleId, grammarRuleId } = useParams();
-  const { windowsList, currentPosition, setWindowsList, updateDraftData } =
-    useGrammarRuleModuleWindows();
+export const FormFinalChallengeFillInTheBlankPage = () => {
+  const { moduleId, exerciseId } = useParams();
 
-  const isEditMode = !!windowId;
+  const { exerciseList, setExerciseList, currentPosition, updateDraftData } =
+    useFinalChallengeExercise();
+
+  const isEditMode = !!exerciseId;
 
   const currentWindow =
-    currentPosition !== null ? windowsList[currentPosition] : undefined;
+    currentPosition !== null ? exerciseList[currentPosition] : undefined;
   const draftData =
     currentWindow?.type === 'EXERCISE'
       ? (currentWindow.draftData as Partial<FillInTheBlankSchemaForm>)
@@ -52,11 +53,11 @@ export const FormGrammarRuleExerciseFillInTheBlankPage = () => {
     },
   });
 
-  const { data: FillInTheBlankExerciseContent, isLoading } = useGetExercise({
-    moduleId,
-    grammarRuleId,
-    windowId,
-  });
+  const { data: FillInTheBlankExerciseContent, isLoading } =
+    useGetFinalChallengeExercise({
+      moduleId,
+      exerciseId,
+    });
 
   useEffect(() => {
     if (isEditMode && FillInTheBlankExerciseContent) {
@@ -89,8 +90,8 @@ export const FormGrammarRuleExerciseFillInTheBlankPage = () => {
     }
   }, [FillInTheBlankExerciseContent, isEditMode, methods, draftData]);
 
-  const updateFillInTheBlankExercise = useUpdateGrammarRuleExercise();
-  const createFillInTheBlankExercise = useCreateGrammarRuleExercise();
+  const updateFillInTheBlankExercise = useUpdateFinalChallengeExercise();
+  const createFillInTheBlankExercise = useCreateFinalChallengeExercise();
 
   const handleSaveDraftOnBlur = () => {
     if (!isEditMode && currentPosition !== null) {
@@ -99,7 +100,7 @@ export const FormGrammarRuleExerciseFillInTheBlankPage = () => {
     }
   };
 
-  if (!moduleId || !grammarRuleId) {
+  if (!moduleId) {
     return <NotFound />;
   }
 
@@ -120,8 +121,7 @@ export const FormGrammarRuleExerciseFillInTheBlankPage = () => {
       updateFillInTheBlankExercise.mutate(
         {
           moduleId,
-          grammarRuleId,
-          windowId,
+          exerciseId,
           data: dataWithStyle,
         },
         {
@@ -132,13 +132,12 @@ export const FormGrammarRuleExerciseFillInTheBlankPage = () => {
       createFillInTheBlankExercise.mutate(
         {
           moduleId,
-          grammarRuleId,
           data: dataWithStyle,
         },
         {
           onSuccess: (newlyCreatedWindow) => {
             if (currentPosition === null) return;
-            const newList = [...windowsList];
+            const newList = [...exerciseList];
 
             const clientId = newList[currentPosition]?.clientId;
 
@@ -150,7 +149,7 @@ export const FormGrammarRuleExerciseFillInTheBlankPage = () => {
               draftData: {},
             };
 
-            setWindowsList(newList);
+            setExerciseList(newList);
 
             toast.success('Exercício criado com sucesso!');
           },

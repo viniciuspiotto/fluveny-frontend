@@ -84,12 +84,17 @@ export const FormFinalChallengeExerciseTranslatePage = () => {
   }
 
   const onSubmit = (formData: TranslateExerciseForm) => {
+    const dataWithStyle = {
+      ...formData,
+      style: 'TRANSLATE',
+    };
+
     if (isEditMode) {
       updateExercise.mutate(
         {
           moduleId,
           exerciseId,
-          data: formData,
+          data: dataWithStyle,
         },
         {
           onSuccess: () => toast.success('Exercício atualizado com sucesso'),
@@ -99,7 +104,7 @@ export const FormFinalChallengeExerciseTranslatePage = () => {
       createExercise.mutate(
         {
           moduleId,
-          data: formData,
+          data: dataWithStyle,
         },
         {
           onSuccess: (newlyCreatedWindow) => {

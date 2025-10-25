@@ -120,7 +120,11 @@ export const FinalChallengeLayout = () => {
 
       const pathSegments = [];
 
-      pathSegments.push(currentExercise.style.toLowerCase());
+      if (currentExercise) {
+        console.log(currentExercise.style);
+        pathSegments.push(currentExercise.style.toLowerCase());
+        console.log('passei aqui tb');
+      }
 
       if (currentExercise.id) {
         pathSegments.push(currentExercise.id);

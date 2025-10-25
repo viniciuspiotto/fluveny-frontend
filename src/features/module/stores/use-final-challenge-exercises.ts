@@ -2,6 +2,7 @@ import type { ExerciseStyle } from '@/@types/exercise';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { BuildPhraseExerciseForm } from '../schemas/build-phrase-schema';
+import type { FillInTheBlankSchemaForm } from '../schemas/fill-in-the-blanks-schema';
 import type { TranslateExerciseForm } from '../schemas/translate-exercise-schema';
 
 export type Exercise = {
@@ -9,7 +10,10 @@ export type Exercise = {
   clientId?: string;
   type: 'EXERCISE';
   style: ExerciseStyle;
-  draftData?: Partial<TranslateExerciseForm> | Partial<BuildPhraseExerciseForm>;
+  draftData?:
+    | Partial<TranslateExerciseForm>
+    | Partial<BuildPhraseExerciseForm>
+    | Partial<FillInTheBlankSchemaForm>;
 };
 
 type FinalChallengeExerciseStoreState = {

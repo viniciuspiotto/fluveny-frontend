@@ -4,6 +4,7 @@ import type React from 'react';
 import { useParams } from 'react-router';
 import { FormGrammarRuleBuildPhrasePage } from '../pages/form-grammar-rule-build-phrase-page';
 import { FormGrammarRuleExerciseTranslatePage } from '../pages/form-grammar-rule-exercise-translate-page';
+import { FormGrammarRuleExerciseFillInTheBlankPage } from '../pages/form-grammar-rule-fill-in-the-blanks-page';
 
 type LowercaseExerciseStyle = Lowercase<ExerciseStyle>;
 
@@ -18,6 +19,7 @@ export const ExerciseGrammarRuleOrchestrator = () => {
   > = {
     translate: FormGrammarRuleExerciseTranslatePage,
     organize: FormGrammarRuleBuildPhrasePage,
+    fill_in_the_blank: FormGrammarRuleExerciseFillInTheBlankPage,
   };
 
   const ExerciseFormComponent = style

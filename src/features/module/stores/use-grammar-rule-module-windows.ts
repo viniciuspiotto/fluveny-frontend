@@ -3,6 +3,7 @@ import type { WindowType } from '@/@types/module';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { BuildPhraseExerciseForm } from '../schemas/build-phrase-schema';
+import type { FillInTheBlankSchemaForm } from '../schemas/fill-in-the-blanks-schema';
 import type { PresentationForm } from '../schemas/presentation-schema';
 import type { TranslateExerciseForm } from '../schemas/translate-exercise-schema';
 
@@ -18,7 +19,10 @@ type ExerciseWindow = {
   type: 'EXERCISE';
   style: ExerciseStyle;
   clientId?: string;
-  draftData?: Partial<TranslateExerciseForm> | Partial<BuildPhraseExerciseForm>;
+  draftData?:
+    | Partial<TranslateExerciseForm>
+    | Partial<BuildPhraseExerciseForm>
+    | Partial<FillInTheBlankSchemaForm>;
 };
 
 export type WindowsType = PresentationWindow | ExerciseWindow;
