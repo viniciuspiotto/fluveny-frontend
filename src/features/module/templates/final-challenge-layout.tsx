@@ -120,7 +120,7 @@ export const FinalChallengeLayout = () => {
 
       const pathSegments = [];
 
-      pathSegments.push(currentExercise.style);
+      pathSegments.push(currentExercise.style.toLowerCase());
 
       if (currentExercise.id) {
         pathSegments.push(currentExercise.id);

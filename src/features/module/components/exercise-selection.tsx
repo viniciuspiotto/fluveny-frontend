@@ -1,8 +1,5 @@
-import type {
-  ExerciseStyle,
-  LinguisticAbility,
-  WindowType,
-} from '@/@types/module';
+import type { ExerciseStyle } from '@/@types/exercise';
+import type { LinguisticAbility, WindowType } from '@/@types/module';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

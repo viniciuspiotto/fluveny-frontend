@@ -99,7 +99,7 @@ export const GrammarRuleLayout = () => {
       const pathSegments = [currentWindow.type.toLowerCase()];
 
       if (currentWindow.type === 'EXERCISE' && currentWindow.style) {
-        pathSegments.push(currentWindow.style);
+        pathSegments.push(currentWindow.style.toLowerCase());
       }
 
       if (currentWindow.id) {

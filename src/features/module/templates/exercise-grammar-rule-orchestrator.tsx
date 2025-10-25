@@ -4,17 +4,20 @@ import type React from 'react';
 import { useParams } from 'react-router';
 import { FormGrammarRuleBuildPhrasePage } from '../pages/form-grammar-rule-build-phrase-page';
 import { FormGrammarRuleExerciseTranslatePage } from '../pages/form-grammar-rule-exercise-translate-page';
+
+type LowercaseExerciseStyle = Lowercase<ExerciseStyle>;
+
 export const ExerciseGrammarRuleOrchestrator = () => {
   const { style } = useParams<{
-    style: ExerciseStyle;
+    style: LowercaseExerciseStyle;
   }>();
 
   const EXERCISE_COMPONENTS_MAP: Record<
-    ExerciseStyle,
+    LowercaseExerciseStyle,
     React.ComponentType<any>
   > = {
-    TRANSLATE: FormGrammarRuleExerciseTranslatePage,
-    ORGANIZE: FormGrammarRuleBuildPhrasePage,
+    translate: FormGrammarRuleExerciseTranslatePage,
+    organize: FormGrammarRuleBuildPhrasePage,
   };
 
   const ExerciseFormComponent = style

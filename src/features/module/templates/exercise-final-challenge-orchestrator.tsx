@@ -5,17 +5,19 @@ import { useParams } from 'react-router';
 import { FormFinalChallengeBuildPhrasePage } from '../pages/form-final-challenge-build-phrase-page';
 import { FormFinalChallengeExerciseTranslatePage } from '../pages/form-final-challenge-exercise-translate-page';
 
+type LowercaseExerciseStyle = Lowercase<ExerciseStyle>;
+
 export const ExerciseFinalChallengeOrchestrator = () => {
   const { style } = useParams<{
-    style: ExerciseStyle;
+    style: LowercaseExerciseStyle;
   }>();
 
   const EXERCISE_COMPONENTS_MAP: Record<
-    ExerciseStyle,
+    LowercaseExerciseStyle,
     React.ComponentType<any>
   > = {
-    TRANSLATE: FormFinalChallengeExerciseTranslatePage,
-    ORGANIZE: FormFinalChallengeBuildPhrasePage,
+    translate: FormFinalChallengeExerciseTranslatePage,
+    organize: FormFinalChallengeBuildPhrasePage,
   };
 
   const ExerciseFormComponent = style
