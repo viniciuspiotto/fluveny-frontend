@@ -12,7 +12,7 @@ export type ExerciseStyle =
   | 'TRANSCRIPTION'
   | 'IDENTIFY_WORD';
 
-interface ExerciseBaseResponse {
+export interface ExerciseBaseResponse {
   id: string;
   style: ExerciseStyle;
 }

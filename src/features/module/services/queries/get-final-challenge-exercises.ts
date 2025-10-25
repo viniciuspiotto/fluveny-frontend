@@ -1,10 +1,9 @@
+import type { ExerciseBaseResponse } from '@/@types/exercise';
 import { api } from '@/app/libs/api';
-
-type ExercisesId = string;
 
 export interface GetFinalChallengeExercisesResponse {
   message: string;
-  data: ExercisesId[];
+  data: ExerciseBaseResponse[];
 }
 
 interface GetFinalChallengeExercisesRequest {

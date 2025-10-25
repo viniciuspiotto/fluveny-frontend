@@ -74,18 +74,18 @@ export const FinalChallengeLayout = () => {
   useEffect(() => {
     if (exercises) {
       const exercisesWithClientId = exercises.map(
-        (exerciseId) =>
+        (e) =>
           ({
-            id: exerciseId,
-            clientId: crypto.randomUUID(),
-            type: 'EXERCISE',
+            ...e,
+            clientId: e.id,
           }) as Exercise,
       );
 
       if (exercisesWithClientId.length > 0) {
+        console.log(exercisesWithClientId);
         setExerciseList(exercisesWithClientId);
         setCurrentPosition(0);
-        navigate(`${exercises[0]}`, { replace: true });
+        navigate(`${exercises[0].style}/${exercises[0]}`, { replace: true });
       } else {
         setExerciseList([
           {
@@ -118,7 +118,15 @@ export const FinalChallengeLayout = () => {
     ) {
       const currentExercise = exerciseList[currentPosition];
 
-      const path = currentExercise.id ?? currentExercise.style;
+      const pathSegments = [];
+
+      pathSegments.push(currentExercise.style);
+
+      if (currentExercise.id) {
+        pathSegments.push(currentExercise.id);
+      }
+
+      const path = pathSegments.join('/');
 
       if (path) {
         navigate(path, { replace: true });
