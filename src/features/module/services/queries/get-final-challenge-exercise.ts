@@ -1,9 +1,9 @@
-import type { Exercise } from '@/@types/module';
+import type { ExerciseResponse } from '@/@types/exercise';
 import { api } from '@/app/libs/api';
 
 export interface GetFinalChallengeExerciseResponse {
   message: string;
-  data: Exercise;
+  data: ExerciseResponse;
 }
 
 export interface GetFinalChallengeExerciseRequest {

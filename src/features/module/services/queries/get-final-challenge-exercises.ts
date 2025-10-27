@@ -1,10 +1,9 @@
+import type { ExerciseBaseResponse } from '@/@types/exercise';
 import { api } from '@/app/libs/api';
-
-type ExercisesDTO = string;
 
 export interface GetFinalChallengeExercisesResponse {
   message: string;
-  data: ExercisesDTO[];
+  data: ExerciseBaseResponse[];
 }
 
 interface GetFinalChallengeExercisesRequest {

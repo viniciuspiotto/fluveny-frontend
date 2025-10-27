@@ -6,12 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
+import { toast } from 'sonner';
 import { Back } from '../../../components/back';
 import { BannerUpload } from '../components/banner-upload';
 import { DescriptionField } from '../components/description-field';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { GrammarRulesField } from '../components/grammar-rules-field';
-import DeleteModal from '../components/module-delete-modal';
+import { DeleteModal } from '../components/module-delete-modal';
 import FormModulePageSkeleton from '../components/module-page-skeleton';
 import { TitleInput } from '../components/title-input';
 import { useCreateModule } from '../hooks/api/mutations/use-create-module';
@@ -59,6 +60,7 @@ export const FormModulePage = () => {
         { moduleId, data: formData },
         {
           onSuccess: () => {
+            toast.success('Módulo atualizado com sucesso!');
             navigate(
               `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
             );
@@ -68,6 +70,7 @@ export const FormModulePage = () => {
     } else {
       createModuleMutation.mutate(formData, {
         onSuccess: (data) => {
+          toast.success('Módulo criado com sucesso!');
           const newModuleId = data.id;
           navigate(
             `${ROUTES.modules}/${ROUTES.create}/${newModuleId}/${ROUTES.introduction}`,

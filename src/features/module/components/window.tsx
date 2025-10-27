@@ -1,7 +1,7 @@
 import type { WindowType } from '@/@types/module';
 import { cn } from '@/app/utils/cn';
 import type { Identifier, XYCoord } from 'dnd-core';
-import { BowArrow, Presentation } from 'lucide-react';
+import { BowArrow, Presentation, Trash2 } from 'lucide-react';
 import { useRef } from 'react';
 import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
 import { AddWindow } from './add-window';
@@ -15,6 +15,7 @@ interface WindowProps {
   isDraft: boolean;
   type: WindowType;
   moveWindow: (dragIndex: number, hoverIndex: number) => void;
+  handleDeleteWindow: (contentId: string | undefined, isDraft: boolean) => void;
 }
 
 interface DragItem {
@@ -37,6 +38,7 @@ export const Window = ({
   type,
   selectWindow,
   moveWindow,
+  handleDeleteWindow,
 }: WindowProps) => {
   const ref = useRef<HTMLLIElement>(null);
   const index = position - 1;
@@ -130,6 +132,14 @@ export const Window = ({
           <span className="absolute bottom-0 left-2 lg:text-lg">
             {position}
           </span>
+          {isCurrent && (
+            <button
+              className="absolute right-3 bottom-2 cursor-pointer text-zinc-400 hover:text-red-400"
+              onClick={() => handleDeleteWindow(id, isDraft)}
+            >
+              <Trash2 />
+            </button>
+          )}
         </li>
 
         {!isDragging && (

@@ -4,6 +4,7 @@ import { useGetGrammarRuleContent } from '@/features/module/hooks/api/queries/us
 import { NotFound } from '@/templates/not-found';
 import { useEffect } from 'react';
 import { Outlet, useBlocker, useNavigate, useParams } from 'react-router';
+import { toast } from 'sonner';
 import { GrammarRuleWindowList } from '../components/grammar-rule-window-list';
 import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';
 import { useUpdateGrammarRuleWindows } from '../hooks/api/mutations/use-update-grammar-rule-windows';
@@ -94,9 +95,19 @@ export const GrammarRuleLayout = () => {
       windowsList[currentPosition]
     ) {
       const currentWindow = windowsList[currentPosition];
-      const path = `${currentWindow.type.toLowerCase()}${
-        currentWindow.id ? `/${currentWindow.id}` : ''
-      }`;
+
+      const pathSegments = [currentWindow.type.toLowerCase()];
+
+      if (currentWindow.type === 'EXERCISE' && currentWindow.style) {
+        pathSegments.push(currentWindow.style.toLowerCase());
+      }
+
+      if (currentWindow.id) {
+        pathSegments.push(currentWindow.id);
+      }
+
+      const path = pathSegments.join('/');
+
       navigate(path, { replace: true });
     }
   }, [currentPosition, windowsList, navigate]);
@@ -110,15 +121,18 @@ export const GrammarRuleLayout = () => {
   const onSendWindowsPosition = (data: WindowsType[]) => {
     const windowsWithId = data
       .filter((w) => w.id)
-      .map(({ id, type }) => ({
-        id,
-        type,
-      }));
+      .map((w) => {
+        if (w.type === 'EXERCISE') {
+          return { id: w.id, type: w.type, style: w.style };
+        }
+        return { id: w.id, type: w.type };
+      });
 
     updateGrammarRuleWindows.mutate(
       { moduleId, data: windowsWithId, grammarRuleId },
       {
-        onSuccess: () => {},
+        onSuccess: () =>
+          toast.success('Ordem das janelas alteradas com sucesso!'),
       },
     );
   };
