@@ -1,9 +1,23 @@
+import type { ExerciseStyle } from './exercise';
+
 export type Module = {
   id: string;
   title: string;
   description: string;
   level: Level;
+  estimatedTime: number;
   grammarRules: GrammarRule[];
+};
+
+export type ModuleStudent = {
+  id: string;
+  title: string;
+  description: string;
+  level: Level;
+  estimatedTime: number;
+  grammarRules: GrammarRule[];
+  progressPercentage: number;
+  isFavorite: boolean;
 };
 
 export type Level = {
@@ -31,6 +45,7 @@ export interface GrammarRuleModuleWindow {
 
 export type WindowListDTO = {
   type: WindowType;
+  style?: ExerciseStyle;
   id?: string;
 };
 
@@ -51,17 +66,11 @@ export type GrammarRuleModuleIdAndTitle = {
   title: string;
 };
 
-export type Exercise = {
-  grammarRuleModuleId: string;
-  header: string;
-  phrase: string;
-  template: string;
-  justification: string;
-};
-
 export type Presentation = {
   title: string;
   textBlock: {
     content: string;
   };
 };
+
+export type LinguisticAbility = 'WRITE' | 'READ' | 'LISTEN';

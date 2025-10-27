@@ -1,5 +1,5 @@
 export const ROUTES = {
-  dashboard: '/',
+  dashboard: '/dashboard',
   modules: '/modules',
   introduction: 'introduction',
   drafts: 'drafts',
@@ -10,5 +10,8 @@ export const ROUTES = {
   grammarRuleModuleId: ':grammarRuleModuleId',
   presentation: 'presentation',
   exercise: 'exercise',
+  style: ':style',
   windowId: ':windowId',
+  exerciseId: ':exerciseId',
+  finalChallenge: 'finalChallenge',
 };

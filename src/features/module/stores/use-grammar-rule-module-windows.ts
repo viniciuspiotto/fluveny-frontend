@@ -1,6 +1,9 @@
+import type { ExerciseStyle } from '@/@types/exercise';
 import type { WindowType } from '@/@types/module';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { BuildPhraseExerciseForm } from '../schemas/build-phrase-schema';
+import type { FillInTheBlankSchemaForm } from '../schemas/fill-in-the-blanks-schema';
 import type { PresentationForm } from '../schemas/presentation-schema';
 import type { TranslateExerciseForm } from '../schemas/translate-exercise-schema';
 
@@ -14,20 +17,25 @@ type PresentationWindow = {
 type ExerciseWindow = {
   id?: string;
   type: 'EXERCISE';
+  style: ExerciseStyle;
   clientId?: string;
-  draftData?: Partial<TranslateExerciseForm>;
+  draftData?:
+    | Partial<TranslateExerciseForm>
+    | Partial<BuildPhraseExerciseForm>
+    | Partial<FillInTheBlankSchemaForm>;
 };
 
-export type WindowList = PresentationWindow | ExerciseWindow;
+export type WindowsType = PresentationWindow | ExerciseWindow;
 
 type GrammarRuleModuleWindowsStoreState = {
-  windowsList: WindowList[];
+  windowsList: WindowsType[];
   currentPosition: null | number;
-  setWindowsList: (list: WindowList[]) => void;
+  setWindowsList: (list: WindowsType[]) => void;
   setCurrentPosition: (position: number) => void;
-  addWindow: (window: WindowType, index: number) => void;
+  addWindow: (index: number, window: WindowType, style?: ExerciseStyle) => void;
   moveWindow: (dragIndex: number, hoverIndex: number) => void;
-  updateDraftData: (index: number, data: WindowList['draftData']) => void;
+  updateDraftData: (index: number, data: WindowsType['draftData']) => void;
+  removeWindow: (indexToRemove: number) => void;
 };
 
 export const useGrammarRuleModuleWindows =
@@ -44,15 +52,27 @@ export const useGrammarRuleModuleWindows =
           set({ windowsList: listWithClientIds });
         },
         setCurrentPosition: (position) => set({ currentPosition: position }),
-        addWindow: (type, index) =>
+        addWindow: (index, type, style) =>
           set((state) => {
             const newList = [...state.windowsList];
-            const newWindowWithIds = {
-              type,
-              clientId: crypto.randomUUID(),
-              draftData: {},
-            };
-            newList.splice(index, 0, newWindowWithIds);
+            let newWindow: WindowsType;
+
+            if (type === 'EXERCISE') {
+              newWindow = {
+                type: 'EXERCISE',
+                style: style || 'TRANSLATE',
+                clientId: crypto.randomUUID(),
+                draftData: {},
+              };
+            } else {
+              newWindow = {
+                type: 'PRESENTATION',
+                clientId: crypto.randomUUID(),
+                draftData: {},
+              };
+            }
+
+            newList.splice(index, 0, newWindow);
             return { windowsList: newList, currentPosition: index };
           }),
         moveWindow: (dragIndex, hoverIndex) =>
@@ -70,6 +90,30 @@ export const useGrammarRuleModuleWindows =
               newList[index].draftData = data;
             }
             return { windowsList: newList };
+          }),
+        removeWindow: (indexToRemove) =>
+          set((state) => {
+            const oldPosition = state.currentPosition;
+            const newList = state.windowsList.filter(
+              (_, index) => index !== indexToRemove,
+            );
+
+            if (newList.length === 0) {
+              return { windowsList: [], currentPosition: null };
+            }
+
+            if (oldPosition === null) {
+              return { windowsList: newList };
+            }
+
+            let newPosition = oldPosition;
+            if (indexToRemove < oldPosition) {
+              newPosition = oldPosition - 1;
+            } else if (indexToRemove === oldPosition) {
+              newPosition = Math.max(0, oldPosition - 1);
+            }
+
+            return { windowsList: newList, currentPosition: newPosition };
           }),
       }),
       {

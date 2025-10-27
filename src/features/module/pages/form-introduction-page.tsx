@@ -1,11 +1,12 @@
 import { ROUTES } from '@/app/configs/routes';
 import { Editor } from '@/components/editor';
-import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
+import { NotFound } from '@/templates/not-found';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
+import { toast } from 'sonner';
 import FormIntroductionPageSkeleton from '../components/introduction-page-skeleton';
 import { ModuleHeader } from '../components/module-header';
 import { useCreateIntroduction } from '../hooks/api/mutations/use-create-introduction';
@@ -42,6 +43,10 @@ export const FormIntroductionPage = () => {
     }
   }, [introductionData, isEditMode, methods]);
 
+  if (isLoading) {
+    return <FormIntroductionPageSkeleton />;
+  }
+
   if (!moduleId || !grammarRuleModuleInfo) {
     return <NotFound />;
   }
@@ -52,6 +57,7 @@ export const FormIntroductionPage = () => {
         { moduleId, data: formData },
         {
           onSuccess: () => {
+            toast.success('Introdução atualizada com sucesso!');
             const firstGrammarRule = grammarRuleModuleInfo[0];
             if (firstGrammarRule) {
               navigate(
@@ -66,6 +72,7 @@ export const FormIntroductionPage = () => {
         { moduleId, data: formData },
         {
           onSuccess: () => {
+            toast.success('Introdução criada com sucesso!');
             const firstGrammarRule = grammarRuleModuleInfo[0];
             if (firstGrammarRule) {
               navigate(
@@ -77,10 +84,6 @@ export const FormIntroductionPage = () => {
       );
     }
   };
-
-  if (isLoading) {
-    return <FormIntroductionPageSkeleton />;
-  }
 
   return (
     <>
@@ -96,6 +99,9 @@ export const FormIntroductionPage = () => {
               }
             />
             <Button
+              disabled={
+                createIntroduction.isPending || updateIntroduction.isPending
+              }
               type="submit"
               className="mt-8 mb-20 w-full cursor-pointer py-8 text-xl font-bold"
               size="xl"

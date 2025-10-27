@@ -20,7 +20,7 @@ export const NavigationSections = () => {
 
   return (
     <footer className="custom-scrollbar bg-primary fixed bottom-0 left-0 w-full overflow-x-auto">
-      <div className="flex w-max items-center justify-center gap-4 px-8 py-4 xl:w-full">
+      <div className="flex w-full items-center justify-center gap-4 px-8 py-4">
         <SectionButton variant="introduction" title="Introdução" />
         {data.map((gr, index) => {
           return (
@@ -32,6 +32,7 @@ export const NavigationSections = () => {
             />
           );
         })}
+        <SectionButton title="Desafio Final" variant="finalChallenge" />
       </div>
     </footer>
   );

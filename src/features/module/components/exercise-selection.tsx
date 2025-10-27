@@ -1,13 +1,15 @@
-import type { WindowType } from '@/@types/module';
+import type { ExerciseStyle } from '@/@types/exercise';
+import type { LinguisticAbility, WindowType } from '@/@types/module';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogFooter,
+  DialogHeader,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Toggle } from '@/components/ui/toggle';
-import { DialogTitle } from '@radix-ui/react-dialog';
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import {
   AudioLines,
   Boxes,
@@ -18,160 +20,191 @@ import {
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import { SkillToggle } from './exercise-toggle';
 
-const exercisesStyles = [
-  [
+const linguisticSkills = [
+  {
+    id: 'WRITE',
+    label: 'Escrita',
+    icon: <PencilLine className="size-8" />,
+  },
+  {
+    id: 'LISTEN',
+    label: 'Audição',
+    icon: <AudioLines className="size-8" />,
+  },
+  {
+    id: 'READ',
+    label: 'Leitura',
+    icon: <Eye className="size-8" />,
+  },
+] as const;
+
+const exercisesBySkill: Record<
+  LinguisticAbility,
+  { icon: ReactNode; title: string; style: ExerciseStyle }[]
+> = {
+  WRITE: [
     {
       icon: <Boxes className="size-8" />,
-      title: 'construção de frase',
+      title: 'Construção de frase',
+      style: 'ORGANIZE',
     },
     {
       icon: <Languages className="size-8" />,
-      title: 'tradução de frase',
+      title: 'Tradução de frase',
+      style: 'TRANSLATE',
     },
     {
       icon: <Puzzle className="size-8" />,
-      title: 'preenchimento de frase',
+      title: 'Preenchimento de frase',
+      style: 'FILL_IN_THE_BLANK',
     },
   ],
-  [
+  READ: [
     {
       icon: <Boxes className="size-8" />,
-      title: 'placeholder 1',
+      title: 'Interpretação',
+      style: 'INTERPRETATION',
     },
     {
       icon: <Languages className="size-8" />,
-      title: 'placeholder 1',
+      title: 'Encontrar sinônimos',
+      style: 'FIND_SYNONYMS',
     },
     {
       icon: <Puzzle className="size-8" />,
-      title: 'placeholder 1',
+      title: 'Completar o parágrafo',
+      style: 'COMPLETE_PARAGRAPH',
     },
   ],
-  [
+  LISTEN: [
     {
       icon: <Boxes className="size-8" />,
-      title: 'placeholder 2',
+      title: 'Ditado',
+      style: 'DICTATION',
     },
     {
       icon: <Languages className="size-8" />,
-      title: 'placeholder 2',
+      title: 'Transcrição',
+      style: 'TRANSCRIPTION',
     },
     {
       icon: <Puzzle className="size-8" />,
-      title: 'placeholder 2',
+      title: 'Identificar palavra',
+      style: 'IDENTIFY_WORD',
     },
   ],
-];
+};
 
 interface ExerciseSelectorProps {
   children: ReactNode;
-  handleAddNewWindow: (type: WindowType) => void;
+  handleAddNewWindow: (type: WindowType, style?: ExerciseStyle) => void;
 }
 
 export default function ExerciseSelector({
   handleAddNewWindow,
   children,
 }: ExerciseSelectorProps) {
-  const [languageSkill, setLanguageSkill] = useState(0);
-  const [exerciseStyle, setExerciseStyle] = useState(1);
+  const [languageSkill, setLanguageSkill] = useState<
+    LinguisticAbility | undefined
+  >();
 
-  function handleSkillToggle(pressed: boolean, i: number) {
-    if (pressed) {
-      setLanguageSkill(i);
-      setExerciseStyle(-1);
-    }
+  const [exerciseStyle, setExerciseStyle] = useState<
+    ExerciseStyle | undefined
+  >();
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handleSkillToggle(ability: LinguisticAbility) {
+    setLanguageSkill((current) => (current === ability ? undefined : ability));
+    setExerciseStyle(undefined);
   }
 
-  function handleExerciseToggle(pressed: boolean, i: number) {
-    if (pressed) {
-      setExerciseStyle(i);
-    } else {
-      setExerciseStyle(-1);
-    }
+  function handleExerciseToggle(style: ExerciseStyle) {
+    setExerciseStyle(style);
   }
 
   function handleConfirm() {
-    if (exerciseStyle === 1) handleAddNewWindow('EXERCISE');
+    if (languageSkill && exerciseStyle) {
+      handleAddNewWindow('EXERCISE', exerciseStyle);
+    }
+  }
+
+  function resetSelection() {
+    setLanguageSkill(undefined);
+    setExerciseStyle(undefined);
+  }
+
+  function handleOpenChange(open: boolean) {
+    setIsOpen(open);
+    if (!open) {
+      resetSelection();
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <div className="flex flex-col items-center rounded-md border py-8 lg:m-2">
+        <DialogHeader className="hidden">
+          <DialogTitle>Selecione o tipo do exercício</DialogTitle>
+          <DialogDescription>
+            Escolha uma habilidade para praticar e, em seguida, um estilo de
+            exercício correspondente.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-6 pt-4">
           <section className="flex w-full flex-col items-center">
-            <DialogTitle className="text-l font-bold">
+            <h3 className="mb-4 text-lg font-semibold">
               Habilidade Linguística
-            </DialogTitle>
-            <div className="flex h-full w-full justify-between">
-              <div className="m-2 flex flex-1 flex-col items-center">
-                <Toggle
-                  className="data-[state=on]:border-primary border-2 px-4 py-8 text-2xl"
-                  onPressedChange={(pressed) => handleSkillToggle(pressed, 0)}
-                  pressed={languageSkill === 0}
-                >
-                  <PencilLine className="size-8" />
-                </Toggle>
-                <p className="text-center text-sm">escrita</p>
-              </div>
-              <div className="m-2 flex flex-1 flex-col items-center">
-                <Toggle
-                  className="data-[state=on]:border-primary border-2 px-4 py-8 text-2xl"
-                  disabled // Not Implemented
-                  onPressedChange={(pressed) => handleSkillToggle(pressed, 1)}
-                  pressed={languageSkill === 1}
-                >
-                  <AudioLines className="size-8" />
-                </Toggle>
-                <p className="text-center text-sm">audição</p>
-              </div>
-              <div className="m-2 flex flex-1 flex-col items-center">
-                <Toggle
-                  className="data-[state=on]:border-primary border-2 px-4 py-8 text-2xl"
-                  disabled // Not Implemented
-                  onPressedChange={(pressed) => handleSkillToggle(pressed, 2)}
-                  pressed={languageSkill === 2}
-                >
-                  <Eye className="size-8" />
-                </Toggle>
-                <p className="text-center text-sm">leitura</p>
-              </div>
-            </div>
-          </section>
-          <section className="flex w-full flex-col items-center">
-            <DialogTitle>
-              <h2 className="text-l font-bold">Estilo de exercício</h2>
-            </DialogTitle>
-            <div className="flex h-full w-full justify-between">
-              {exercisesStyles[languageSkill].map((exercise, i) => (
-                <div
-                  key={'' + languageSkill + i}
-                  className="m-2 flex flex-1 flex-col items-center"
-                >
-                  <Toggle
-                    className="data-[state=on]:border-primary border-2 px-4 py-8 text-2xl"
-                    disabled={languageSkill !== 0 || i !== 1} // Not Implemented
-                    onPressedChange={(pressed) =>
-                      handleExerciseToggle(pressed, i)
-                    }
-                    pressed={exerciseStyle === i}
-                  >
-                    {exercise.icon}
-                  </Toggle>
-                  <p className="text-center text-sm">{exercise.title}</p>
-                </div>
+            </h3>
+            <div className="flex h-full w-full justify-around">
+              {linguisticSkills.map((skill) => (
+                <SkillToggle
+                  key={skill.id}
+                  onClick={() =>
+                    handleSkillToggle(skill.id as LinguisticAbility)
+                  }
+                  isPressed={languageSkill === skill.id}
+                  icon={skill.icon}
+                  label={skill.label}
+                />
               ))}
             </div>
           </section>
+
+          {languageSkill && (
+            <section className="flex w-full flex-col items-center">
+              <h3 className="mb-4 text-lg font-semibold">
+                Estilo de Exercício
+              </h3>
+              <div className="flex h-full w-full justify-around">
+                {exercisesBySkill[languageSkill].map((exercise) => (
+                  <SkillToggle
+                    key={exercise.style}
+                    onClick={() => handleExerciseToggle(exercise.style)}
+                    isPressed={exerciseStyle === exercise.style}
+                    icon={exercise.icon}
+                    label={exercise.title}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
-        <div className="mt-4 flex w-full justify-end">
+
+        <DialogFooter>
           <DialogClose asChild>
-            <Button onClick={handleConfirm}>
-              <p>Confirmar</p>
+            <Button
+              className="text-md cursor-pointer"
+              onClick={handleConfirm}
+              disabled={!languageSkill || !exerciseStyle}
+            >
+              Confirmar
             </Button>
           </DialogClose>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

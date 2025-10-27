@@ -1,16 +1,18 @@
 import { ROUTES } from '@/app/configs/routes';
 import { LevelSelect } from '@/components/level-select';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
+import { toast } from 'sonner';
 import { Back } from '../../../components/back';
 import { BannerUpload } from '../components/banner-upload';
 import { DescriptionField } from '../components/description-field';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { GrammarRulesField } from '../components/grammar-rules-field';
-import DeleteModal from '../components/module-delete-modal';
+import { DeleteModal } from '../components/module-delete-modal';
 import FormModulePageSkeleton from '../components/module-page-skeleton';
 import { TitleInput } from '../components/title-input';
 import { useCreateModule } from '../hooks/api/mutations/use-create-module';
@@ -30,12 +32,6 @@ export const FormModulePage = () => {
 
   const methods = useForm<ModuleForm>({
     resolver: zodResolver(moduleFormSchema),
-    defaultValues: {
-      description: '',
-      id_level: '',
-      title: '',
-      id_grammarRules: [],
-    },
   });
 
   const createModuleMutation = useCreateModule();
@@ -46,38 +42,43 @@ export const FormModulePage = () => {
       methods.reset({
         title: moduleData.title,
         description: moduleData.description,
-        id_grammarRules: moduleData.grammarRules.map((rule) => rule.id),
+        id_grammarRules: moduleData.grammarRules.map((rule) => String(rule.id)),
         id_level: moduleData.level.id,
+        estimatedTime: moduleData.estimatedTime,
       });
     }
-  }, [moduleData, isEditMode, methods]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditMode, moduleData]);
+
+  if (isEditMode && isLoading) {
+    return <FormModulePageSkeleton />;
+  }
 
   const onSubmit = (formData: ModuleForm) => {
     if (isEditMode) {
-      updateModuleMutation.mutate({ moduleId, data: formData },
-      {
-        onSuccess: () => {
-          navigate(
-            `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
-          );
+      updateModuleMutation.mutate(
+        { moduleId, data: formData },
+        {
+          onSuccess: () => {
+            toast.success('Módulo atualizado com sucesso!');
+            navigate(
+              `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
+            );
+          },
         },
-      },
-    );
+      );
     } else {
       createModuleMutation.mutate(formData, {
-      onSuccess: (data) => {
-        const newModuleId = data.id;
-        navigate(
-          `${ROUTES.modules}/${ROUTES.create}/${newModuleId}/${ROUTES.introduction}`,
-        );
-      },
-    });
-  }
+        onSuccess: (data) => {
+          toast.success('Módulo criado com sucesso!');
+          const newModuleId = data.id;
+          navigate(
+            `${ROUTES.modules}/${ROUTES.create}/${newModuleId}/${ROUTES.introduction}`,
+          );
+        },
+      });
+    }
   };
-
-  if (isLoading) {
-    return <FormModulePageSkeleton />;
-  }
 
   return (
     <FormProvider {...methods}>
@@ -93,7 +94,19 @@ export const FormModulePage = () => {
           <TitleInput />
           <GrammarRulesField />
           <FormSectionWrapper label="Nível de dificuldade" htmlFor="id_level">
-            <LevelSelect />
+            <LevelSelect name="id_level" level={moduleData?.level.id} />
+          </FormSectionWrapper>
+          <FormSectionWrapper label="Tempo estimado" htmlFor="estimatedTime">
+            <div className="flex items-center gap-2">
+              <Input
+                {...methods.register('estimatedTime', { valueAsNumber: true })}
+                type="number"
+                className="w-18 py-6 text-center"
+                max={600}
+                min={1}
+              />
+              <span className="">min</span>
+            </div>
           </FormSectionWrapper>
           <FormSectionWrapper label="Descrição" htmlFor="description">
             <DescriptionField />

@@ -11,7 +11,7 @@ import {
 export const BlockTypeSelect = () => {
   const { editor } = useCurrentEditor();
 
-  if (!editor) return;
+  if (!editor) return null;
 
   const current = editor.isActive('heading', { level: 1 })
     ? 'h1'

@@ -12,7 +12,7 @@ import {
 export const TextAlignSelect = () => {
   const { editor } = useCurrentEditor();
 
-  if (!editor) return;
+  if (!editor) return null;
 
   const current = (() => {
     if (editor.isActive({ textAlign: 'left' })) return 'left';

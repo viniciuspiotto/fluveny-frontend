@@ -1,13 +1,14 @@
 import { cn } from '@/app/utils/cn';
 import { Editor } from '@/components/editor';
-import { NotFound } from '@/components/not-found';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { NotFound } from '@/templates/not-found';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Info } from 'lucide-react';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
+import { toast } from 'sonner';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { ModuleHeader } from '../components/module-header';
 import FormPresentationPageSkeleton from '../components/presentation-page-skeleton';
@@ -77,12 +78,18 @@ export const FormPresentationPage = () => {
 
   const onSubmit = (formData: PresentationForm) => {
     if (isEditMode && presentationData) {
-      updatePresentation.mutate({
-        moduleId,
-        grammarRuleId,
-        windowId,
-        data: formData,
-      });
+      updatePresentation.mutate(
+        {
+          moduleId,
+          grammarRuleId,
+          windowId,
+          data: formData,
+        },
+        {
+          onSuccess: () =>
+            toast.success('Apresentação atualizada com sucesso!'),
+        },
+      );
     } else {
       createPresentation.mutate(
         { moduleId, grammarRuleId, data: formData },
@@ -101,6 +108,8 @@ export const FormPresentationPage = () => {
             };
 
             setWindowsList(newList);
+
+            toast.success('Apresentação criada com sucesso!');
           },
         },
       );

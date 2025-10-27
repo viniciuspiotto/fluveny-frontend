@@ -1,59 +1,111 @@
-import { NotFound } from '@/components/not-found';
+import { LoginPage } from '@/features/authentication/pages/login';
+import { RegisterPage } from '@/features/authentication/pages/register';
 import { DashboardPage } from '@/features/dashboard/pages/dashboard-page';
 import { DraftsPage } from '@/features/module/pages/drafts-page';
-import { FormExercisePage } from '@/features/module/pages/form-exercise-page';
 import { FormIntroductionPage } from '@/features/module/pages/form-introduction-page';
 import { FormModulePage } from '@/features/module/pages/form-module-page';
 import { FormPresentationPage } from '@/features/module/pages/form-presentation-page';
+import { ModuleVisualizationPage } from '@/features/module/pages/module-visualization-page';
 import { PanelPage } from '@/features/module/pages/panel-page';
 import { CreateModuleLayout } from '@/features/module/templates/create-module-layout';
+import { ExerciseFinalChallengeOrchestrator } from '@/features/module/templates/exercise-final-challenge-orchestrator';
+import { ExerciseGrammarRuleOrchestrator } from '@/features/module/templates/exercise-grammar-rule-orchestrator';
+import { FinalChallengeLayout } from '@/features/module/templates/final-challenge-layout';
 import { GrammarRuleLayout } from '@/features/module/templates/grammar-rule-layout';
-import { PrivateLayout } from '@/templates/private-layout';
+import { Layout } from '@/templates/layout';
+import { NotFound } from '@/templates/not-found';
+import { ProtectedRoute } from '@/templates/private-route';
+import { PublicRoute } from '@/templates/public-route';
 import { createBrowserRouter } from 'react-router';
 import { ROUTES } from '../configs/routes';
 
 export const router = createBrowserRouter([
   {
-    element: <PrivateLayout />,
+    element: <Layout />,
     children: [
-      { path: ROUTES.dashboard, element: <DashboardPage /> },
+      {
+        path: ROUTES.dashboard,
+        element: (
+          <ProtectedRoute
+            permittedRoles={['STUDENT', 'CONTENT_CREATOR', 'ADMIN']}
+            redirect="/login"
+          >
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: ROUTES.modules,
         children: [
-          { index: true, element: <PanelPage /> },
-          { path: ROUTES.drafts, element: <DraftsPage /> },
-          { path: ROUTES.create, element: <FormModulePage /> },
           {
-            path: `${ROUTES.create}/${ROUTES.moduleId}`,
-            element: <FormModulePage />,
+            element: (
+              <ProtectedRoute
+                permittedRoles={['STUDENT', 'CONTENT_CREATOR', 'ADMIN']}
+                redirect="/login"
+              />
+            ),
+            children: [
+              { index: true, element: <PanelPage /> },
+              { path: ROUTES.moduleId, element: <ModuleVisualizationPage /> },
+            ],
           },
           {
-            path: `${ROUTES.create}/${ROUTES.moduleId}`,
-            element: <CreateModuleLayout />,
+            element: (
+              <ProtectedRoute
+                permittedRoles={['CONTENT_CREATOR']}
+                redirect="/dashboard"
+              />
+            ),
             children: [
+              { path: ROUTES.drafts, element: <DraftsPage /> },
+              { path: ROUTES.create, element: <FormModulePage /> },
               {
-                path: ROUTES.introduction,
-                element: <FormIntroductionPage />,
+                path: `${ROUTES.create}/${ROUTES.moduleId}`,
+                element: <FormModulePage />,
               },
               {
-                path: `${ROUTES.grammarRule}/${ROUTES.grammarRuleId}`,
-                element: <GrammarRuleLayout />,
+                path: `${ROUTES.create}/${ROUTES.moduleId}`,
+                element: <CreateModuleLayout />,
                 children: [
                   {
-                    path: `${ROUTES.presentation}`,
-                    element: <FormPresentationPage />,
+                    path: ROUTES.introduction,
+                    element: <FormIntroductionPage />,
                   },
                   {
-                    path: `${ROUTES.exercise}`,
-                    element: <FormExercisePage />,
+                    path: `${ROUTES.grammarRule}/${ROUTES.grammarRuleId}`,
+                    element: <GrammarRuleLayout />,
+                    children: [
+                      {
+                        path: `${ROUTES.presentation}`,
+                        element: <FormPresentationPage />,
+                      },
+                      {
+                        path: `${ROUTES.presentation}/${ROUTES.windowId}`,
+                        element: <FormPresentationPage />,
+                      },
+                      {
+                        path: `${ROUTES.exercise}/${ROUTES.style}`,
+                        element: <ExerciseGrammarRuleOrchestrator />,
+                      },
+                      {
+                        path: `${ROUTES.exercise}/${ROUTES.style}/${ROUTES.windowId}/`,
+                        element: <ExerciseGrammarRuleOrchestrator />,
+                      },
+                    ],
                   },
                   {
-                    path: `${ROUTES.presentation}/${ROUTES.windowId}`,
-                    element: <FormPresentationPage />,
-                  },
-                  {
-                    path: `${ROUTES.exercise}/${ROUTES.windowId}`,
-                    element: <FormExercisePage />,
+                    path: ROUTES.finalChallenge,
+                    element: <FinalChallengeLayout />,
+                    children: [
+                      {
+                        path: `${ROUTES.style}`,
+                        element: <ExerciseFinalChallengeOrchestrator />,
+                      },
+                      {
+                        path: `${ROUTES.style}/${ROUTES.exerciseId}`,
+                        element: <ExerciseFinalChallengeOrchestrator />,
+                      },
+                    ],
                   },
                 ],
               },
@@ -61,10 +113,26 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: '*',
+        element: <NotFound />,
+      },
+      {
+        path: 'register',
+        element: (
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        ),
+      },
+      {
+        path: 'login',
+        element: (
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        ),
+      },
     ],
-  },
-  {
-    path: '*',
-    element: <NotFound />,
   },
 ]);
