@@ -40,7 +40,7 @@ export const DraftsPage = () => {
       {modules.length > 0 ? (
         <ul className="grid grid-rows-4 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 lg:gap-6">
           {modules.map((module) => {
-            return <ModuleCard key={module.id} {...module} />;
+            return <ModuleCard key={module.id} {...module} isDraft />;
           })}
         </ul>
       ) : (

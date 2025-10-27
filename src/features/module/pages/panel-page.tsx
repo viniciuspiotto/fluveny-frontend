@@ -74,7 +74,7 @@ export const PanelPage = () => {
     return (
       <ul className="grid grid-rows-4 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 lg:gap-6">
         {modules.content.map((module) => (
-          <ModuleCard key={module.id} {...module} />
+          <ModuleCard key={module.id} {...module} isDraft={false} />
         ))}
       </ul>
     );

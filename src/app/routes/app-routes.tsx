@@ -5,6 +5,7 @@ import { DraftsPage } from '@/features/module/pages/drafts-page';
 import { FormIntroductionPage } from '@/features/module/pages/form-introduction-page';
 import { FormModulePage } from '@/features/module/pages/form-module-page';
 import { FormPresentationPage } from '@/features/module/pages/form-presentation-page';
+import { ModuleVisualizationPage } from '@/features/module/pages/module-visualization-page';
 import { PanelPage } from '@/features/module/pages/panel-page';
 import { CreateModuleLayout } from '@/features/module/templates/create-module-layout';
 import { ExerciseFinalChallengeOrchestrator } from '@/features/module/templates/exercise-final-challenge-orchestrator';
@@ -37,15 +38,16 @@ export const router = createBrowserRouter([
         path: ROUTES.modules,
         children: [
           {
-            index: true,
             element: (
               <ProtectedRoute
                 permittedRoles={['STUDENT', 'CONTENT_CREATOR', 'ADMIN']}
                 redirect="/login"
-              >
-                <PanelPage />
-              </ProtectedRoute>
+              />
             ),
+            children: [
+              { index: true, element: <PanelPage /> },
+              { path: ROUTES.moduleId, element: <ModuleVisualizationPage /> },
+            ],
           },
           {
             element: (

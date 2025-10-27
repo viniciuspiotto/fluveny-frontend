@@ -4,11 +4,22 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router';
 import { Tag } from './tag';
 
-export const ModuleCard = ({ id, title, grammarRules }: Module) => {
+type ModuleCardProps = Module & { isDraft: boolean };
+
+export const ModuleCard = ({
+  id,
+  title,
+  grammarRules,
+  isDraft,
+}: ModuleCardProps) => {
   const navigate = useNavigate();
 
   const handleEnterModule = () => {
-    navigate(`${ROUTES.modules}/${ROUTES.create}/${id}`);
+    if (isDraft) {
+      navigate(`${ROUTES.modules}/${ROUTES.create}/${id}`);
+    } else {
+      navigate(`${ROUTES.modules}/${id}`);
+    }
   };
 
   return (
