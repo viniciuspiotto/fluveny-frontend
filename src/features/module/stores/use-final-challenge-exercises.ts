@@ -24,6 +24,7 @@ type FinalChallengeExerciseStoreState = {
   addExercise: (index: number, style: ExerciseStyle) => void;
   moveExercise: (dragIndex: number, hoverIndex: number) => void;
   updateDraftData: (index: number, data: Exercise['draftData']) => void;
+  removeExercise: (indexToRemove: number) => void;
 };
 
 export const useFinalChallengeExercise =
@@ -39,7 +40,9 @@ export const useFinalChallengeExercise =
           }));
           set({ exerciseList: listWithClientIds });
         },
-        setCurrentPosition: (position) => set({ currentPosition: position }),
+        setCurrentPosition: (position) => {
+          set({ currentPosition: position });
+        },
         addExercise: (index, style) =>
           set((state) => {
             const newList = [...state.exerciseList];
@@ -62,11 +65,41 @@ export const useFinalChallengeExercise =
           }),
         updateDraftData: (index, data) =>
           set((state) => {
-            const newList = [...state.exerciseList];
-            if (newList[index]) {
-              newList[index].draftData = data;
-            }
+            const newList = state.exerciseList.map((exercise, i) => {
+              if (i === index) {
+                return {
+                  ...exercise,
+                  draftData: data,
+                };
+              }
+              return exercise;
+            });
+
             return { exerciseList: newList };
+          }),
+        removeExercise: (indexToRemove) =>
+          set((state) => {
+            const oldPosition = state.currentPosition;
+            const newList = state.exerciseList.filter(
+              (_, index) => index !== indexToRemove,
+            );
+
+            if (newList.length === 0) {
+              return { exerciseList: [], currentPosition: null };
+            }
+
+            if (oldPosition === null) {
+              return { exerciseList: newList };
+            }
+
+            let newPosition = oldPosition;
+            if (indexToRemove < oldPosition) {
+              newPosition = oldPosition - 1;
+            } else if (indexToRemove === oldPosition) {
+              newPosition = Math.max(0, oldPosition - 1);
+            }
+
+            return { exerciseList: newList, currentPosition: newPosition };
           }),
       }),
       {

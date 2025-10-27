@@ -15,6 +15,7 @@ interface WindowProps {
   isDraft: boolean;
   type: WindowType;
   moveWindow: (dragIndex: number, hoverIndex: number) => void;
+  handleDeleteWindow: (contentId: string | undefined, isDraft: boolean) => void;
 }
 
 interface DragItem {
@@ -37,6 +38,7 @@ export const Window = ({
   type,
   selectWindow,
   moveWindow,
+  handleDeleteWindow,
 }: WindowProps) => {
   const ref = useRef<HTMLLIElement>(null);
   const index = position - 1;
@@ -133,7 +135,7 @@ export const Window = ({
           {isCurrent && (
             <button
               className="absolute right-3 bottom-2 cursor-pointer text-zinc-400 hover:text-red-400"
-              onClick={() => console.log('excluir window')}
+              onClick={() => handleDeleteWindow(id, isDraft)}
             >
               <Trash2 />
             </button>

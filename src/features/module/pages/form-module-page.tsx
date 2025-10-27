@@ -12,7 +12,7 @@ import { BannerUpload } from '../components/banner-upload';
 import { DescriptionField } from '../components/description-field';
 import { FormSectionWrapper } from '../components/form-section-wrapper';
 import { GrammarRulesField } from '../components/grammar-rules-field';
-import DeleteModal from '../components/module-delete-modal';
+import { DeleteModal } from '../components/module-delete-modal';
 import FormModulePageSkeleton from '../components/module-page-skeleton';
 import { TitleInput } from '../components/title-input';
 import { useCreateModule } from '../hooks/api/mutations/use-create-module';

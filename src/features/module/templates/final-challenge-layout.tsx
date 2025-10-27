@@ -82,10 +82,11 @@ export const FinalChallengeLayout = () => {
       );
 
       if (exercisesWithClientId.length > 0) {
-        console.log(exercisesWithClientId);
         setExerciseList(exercisesWithClientId);
         setCurrentPosition(0);
-        navigate(`${exercises[0].style}/${exercises[0]}`, { replace: true });
+        navigate(`${exercises[0].style.toLowerCase()}/${exercises[0].id}`, {
+          replace: true,
+        });
       } else {
         setExerciseList([
           {
@@ -120,10 +121,8 @@ export const FinalChallengeLayout = () => {
 
       const pathSegments = [];
 
-      if (currentExercise) {
-        console.log(currentExercise.style);
+      if (currentExercise.style) {
         pathSegments.push(currentExercise.style.toLowerCase());
-        console.log('passei aqui tb');
       }
 
       if (currentExercise.id) {

@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { AlertTriangle } from 'lucide-react'; // Ícone de alerta
+import { AlertTriangle } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
@@ -21,7 +21,7 @@ interface DeleteModalProps {
   children: ReactNode;
 }
 
-export default function DeleteModal({ children }: DeleteModalProps) {
+export const DeleteModal = ({ children }: DeleteModalProps) => {
   const [inputValue, setInputValue] = useState('');
   const [moduleTitle, setModuleTitle] = useState('');
   const { moduleId } = useParams<{ moduleId: string }>();
@@ -96,4 +96,4 @@ export default function DeleteModal({ children }: DeleteModalProps) {
       </DialogContent>
     </Dialog>
   );
-}
+};

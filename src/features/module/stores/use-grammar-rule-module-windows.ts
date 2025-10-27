@@ -35,6 +35,7 @@ type GrammarRuleModuleWindowsStoreState = {
   addWindow: (index: number, window: WindowType, style?: ExerciseStyle) => void;
   moveWindow: (dragIndex: number, hoverIndex: number) => void;
   updateDraftData: (index: number, data: WindowsType['draftData']) => void;
+  removeWindow: (indexToRemove: number) => void;
 };
 
 export const useGrammarRuleModuleWindows =
@@ -89,6 +90,30 @@ export const useGrammarRuleModuleWindows =
               newList[index].draftData = data;
             }
             return { windowsList: newList };
+          }),
+        removeWindow: (indexToRemove) =>
+          set((state) => {
+            const oldPosition = state.currentPosition;
+            const newList = state.windowsList.filter(
+              (_, index) => index !== indexToRemove,
+            );
+
+            if (newList.length === 0) {
+              return { windowsList: [], currentPosition: null };
+            }
+
+            if (oldPosition === null) {
+              return { windowsList: newList };
+            }
+
+            let newPosition = oldPosition;
+            if (indexToRemove < oldPosition) {
+              newPosition = oldPosition - 1;
+            } else if (indexToRemove === oldPosition) {
+              newPosition = Math.max(0, oldPosition - 1);
+            }
+
+            return { windowsList: newList, currentPosition: newPosition };
           }),
       }),
       {
