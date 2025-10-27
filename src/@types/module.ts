@@ -9,6 +9,17 @@ export type Module = {
   grammarRules: GrammarRule[];
 };
 
+export type ModuleStudent = {
+  id: string;
+  title: string;
+  description: string;
+  level: Level;
+  estimatedTime: number;
+  grammarRules: GrammarRule[];
+  progressPercentage: number;
+  isFavorite: boolean;
+};
+
 export type Level = {
   id: string;
   title: string;
