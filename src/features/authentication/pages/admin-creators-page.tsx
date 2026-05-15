@@ -1,11 +1,3 @@
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +8,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -25,25 +35,15 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import {
   createCreator,
   getCreators,
   toggleCreatorStatus,
   type Creator,
 } from '@/features/authentication/services/admin';
+import { LoadingScreen } from '@/templates/loading-screen';
 import { Copy, UserPlus, Users } from 'lucide-react';
 import { useEffect, useState, type SyntheticEvent } from 'react';
 import { toast } from 'sonner';
-import { LoadingScreen } from '@/templates/loading-screen';
 
 export function AdminCreatorsPage() {
   const [creators, setCreators] = useState<Creator[]>([]);
@@ -97,24 +97,22 @@ export function AdminCreatorsPage() {
       setEmail('');
       fetchCreators(page); // Refresh list
     } catch (error: any) {
-
       const apiResponse = error.response?.data;
       const specificError = apiResponse?.data?.error;
-      
+
       if (specificError && specificError.field) {
         if (specificError.field === 'email') {
-          toast.error('E-mail: Um usuário com esse e-mail já existe.');
+          toast.error('Um usuário com esse e-mail já existe.');
         } else if (specificError.field === 'username') {
-          toast.error('Usuário: Um usuário com esse login já existe.');
+          toast.error('Um usuário com esse username já existe.');
         } else {
           toast.error(`Erro no campo ${specificError.field}: dados inválidos.`);
         }
-      } 
-      
-      else {
-        toast.error('Erro ao criar criador de conteúdo. Verifique os dados inseridos.');
+      } else {
+        toast.error(
+          'Erro ao criar criador de conteúdo. Verifique os dados inseridos.',
+        );
       }
-
     } finally {
       setIsSubmitting(false);
     }
@@ -253,9 +251,9 @@ export function AdminCreatorsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Nome / Login</TableHead>
+              <TableHead>Usuário (nome)</TableHead>
               <TableHead>E-mail</TableHead>
-              <TableHead>Módulos</TableHead>
+              <TableHead>Módulos Criados</TableHead>
               <TableHead>Último Acesso</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Ações</TableHead>
@@ -272,12 +270,10 @@ export function AdminCreatorsPage() {
               creators.map((creator) => (
                 <TableRow key={creator.id}>
                   <TableCell className="font-medium">
-                    {creator.name || creator.username}
-                    {!creator.name && (
-                      <span className="text-muted-foreground ml-2 text-xs">
-                        (Sem nome)
-                      </span>
-                    )}
+                    {creator.username}
+                    <span className="text-muted-foreground ml-2 text-xs">
+                      ({creator.name || 'Sem nome'})
+                    </span>
                   </TableCell>
                   <TableCell>{creator.email}</TableCell>
                   <TableCell>{creator.modulesCount || 0}</TableCell>

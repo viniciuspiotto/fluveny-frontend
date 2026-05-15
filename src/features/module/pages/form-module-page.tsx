@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 import { Back } from '../../../components/back';
@@ -57,11 +57,25 @@ export const FormModulePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditMode, moduleData]);
 
+  const handleApiError = (error: any) => {
+    const errorMessage = error.response?.data?.message;
+
+    if (errorMessage === 'Another module with this title already exists') {
+      methods.setError('title', {
+        type: 'manual',
+        message:
+          'Já existe um módulo com este título. Por favor, escolha outro.',
+      });
+    } else {
+      toast.error('Ocorreu um erro ao salvar o módulo.');
+    }
+  };
+
   if (isEditMode && isLoading) {
     return <FormModulePageSkeleton />;
   }
 
-  const onSubmit = (formData: ModuleForm) => {
+  const onSubmit: SubmitHandler<ModuleForm> = (formData) => {
     if (isEditMode) {
       updateModuleMutation.mutate(
         { moduleId, data: formData },
@@ -72,6 +86,7 @@ export const FormModulePage = () => {
               `${ROUTES.modules}/${ROUTES.create}/${moduleId}/${ROUTES.introduction}`,
             );
           },
+          onError: handleApiError, // Adicionado tratamento de erro
         },
       );
     } else {
@@ -83,6 +98,7 @@ export const FormModulePage = () => {
             `${ROUTES.modules}/${ROUTES.create}/${newModuleId}/${ROUTES.introduction}`,
           );
         },
+        onError: handleApiError, // Adicionado tratamento de erro
       });
     }
   };
@@ -107,7 +123,9 @@ export const FormModulePage = () => {
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <Input
-                  {...methods.register('estimatedTime', { valueAsNumber: true })}
+                  {...methods.register('estimatedTime', {
+                    valueAsNumber: true,
+                  })}
                   type="number"
                   className="w-24 py-6 text-center"
                   max={600}
@@ -125,9 +143,17 @@ export const FormModulePage = () => {
           <FormSectionWrapper label="Descrição" htmlFor="description">
             <DescriptionField />
           </FormSectionWrapper>
-          <Button type="submit" className="mt-8 w-full py-8 text-xl font-bold">
-            <span>{isEditMode ? 'Editar' : 'Criar'}</span>
-          </Button>
+          <div className="mt-8 flex flex-col gap-2">
+            <Button
+              type="submit"
+              className="w-full py-8 text-xl font-bold"
+              disabled={
+                createModuleMutation.isPending || updateModuleMutation.isPending
+              }
+            >
+              <span>{isEditMode ? 'Editar' : 'Criar'}</span>
+            </Button>
+          </div>
           {isEditMode && (
             <div className="mt-4 flex justify-center">
               <DeleteModal>

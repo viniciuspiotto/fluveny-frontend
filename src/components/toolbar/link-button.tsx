@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/popover';
 import { useCurrentEditor } from '@tiptap/react';
 import { Link } from 'lucide-react';
-import { useRef, type FormEvent } from 'react';
+import { useRef } from 'react';
 import { Button } from '../ui/button';
 
 export default function LinkButton() {
@@ -16,7 +16,7 @@ export default function LinkButton() {
 
   if (!editor) return null;
 
-  const handleClick = (e: FormEvent<HTMLFormElement>) => {
+  const handleClick = (e: SubmitEvent) => {
     e.preventDefault();
     if (!linkRef.current) return;
 

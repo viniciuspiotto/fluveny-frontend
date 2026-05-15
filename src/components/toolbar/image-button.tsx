@@ -45,7 +45,7 @@ export const ImageButton = () => {
             </div>
           </div>
           <div className="flex justify-end">
-            <Button type="submit">Inserir</Button>
+            <Button type="button">Inserir</Button>
           </div>
         </form>
       </PopoverContent>

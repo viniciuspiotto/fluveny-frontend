@@ -104,7 +104,6 @@ export const FormIntroductionPage = () => {
               }
               type="submit"
               className="mt-8 mb-20 w-full cursor-pointer py-8 text-xl font-bold"
-              size="xl"
             >
               <span>{isEditMode ? 'Editar' : 'Criar'}</span>
             </Button>
